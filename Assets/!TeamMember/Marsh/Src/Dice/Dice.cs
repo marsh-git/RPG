@@ -4,68 +4,47 @@ public class Dice : MonoBehaviour {
     private Rigidbody rb;
     private bool isStopped = false;
     private int result = 0;
-
-    public bool cheatEnabled = false;
-    public int forcedResult = 0;
-
     private float stableTime = 0f;
-    private bool cheatApplied = false; // ★ 誘導は1回だけ
+
+    private float lifeTime = 0f;
+    public float maxLifeTime = 7.5f;
 
     void Awake() {
         rb = GetComponent<Rigidbody>();
     }
 
-    void Update() {
-        if (isStopped) return;
 
-        // ★ 速度が小さくなってきたら「止まりそう」
+    void Update() {
+
+        lifeTime += Time.deltaTime;
+        if (lifeTime >= maxLifeTime) {
+            Destroy(gameObject);
+            return;
+        }
+
+        if (isStopped) return;        
+        result = GetTopFace();
+
         bool almostStopped =
-            rb.velocity.magnitude < 0.4f &&
-            rb.angularVelocity.magnitude < 0.4f;
+            rb.velocity.magnitude < 0.1f &&
+            rb.angularVelocity.magnitude < 0.1f;
 
         if (almostStopped) {
 
             stableTime += Time.deltaTime;
 
-            // ★ 誘導は止まる直前の一瞬だけ
-            if (!cheatApplied && cheatEnabled && forcedResult != 0 && stableTime > 0.2f) {
-                ApplyCheatTorque(forcedResult);
-                cheatApplied = true;
-            }
-
-            // ★ 完全停止
-            if (stableTime > 0.8f) {
+            // 0.5秒以上静止 → 本当に止まった
+            if (stableTime > 0.5f) {
                 isStopped = true;
                 result = GetTopFace();
             }
         }
         else {
+            // 動いている間はリセット
             stableTime = 0f;
-            cheatApplied = false;
         }
     }
 
-    // ★ 自然な誘導トルク
-    void ApplyCheatTorque(int face) {
-        DiceFace target = null;
-        foreach (var f in GetComponentsInChildren<DiceFace>()) {
-            if (f.faceValue == face) {
-                target = f;
-                break;
-            }
-        }
-        if (target == null) return;
-
-        Vector3 desiredUp = target.transform.forward;
-
-        Vector3 axis = Vector3.Cross(transform.up, desiredUp);
-        float angle = Vector3.SignedAngle(transform.up, desiredUp, axis);
-
-        // ★ トルクは極小にする（これが自然さの秘密）
-        float torqueStrength = 0.02f;
-
-        rb.AddTorque(axis.normalized * angle * torqueStrength, ForceMode.VelocityChange);
-    }
 
     int GetTopFace() {
         DiceFace[] faces = GetComponentsInChildren<DiceFace>();

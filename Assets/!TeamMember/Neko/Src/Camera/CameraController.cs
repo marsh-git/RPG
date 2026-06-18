@@ -61,24 +61,17 @@ public class CameraController : MonoBehaviour
         if (mainCamera == null)
         {
             // 子オブジェクトから取得
-            mainCamera =
-                GetComponentInChildren<Camera>();
+            mainCamera = GetComponentInChildren<Camera>();
         }
 
         // 初期距離設定
-        currentDistance =
-            distance;
+        currentDistance = distance;
 
         // 目標距離設定
-        targetDistance =
-            distance;
+        targetDistance = distance;
 
         // カメラ角度設定
-        mainCamera.transform.localRotation =
-            Quaternion.Euler(
-                pitch,
-                0f,
-                0f);
+        mainCamera.transform.localRotation = Quaternion.Euler(pitch, 0f, 0f);
 
         // カメラ位置更新
         UpdateCameraPosition();
@@ -113,21 +106,13 @@ public class CameraController : MonoBehaviour
             Input.GetAxisRaw("Vertical");
 
         // 移動方向
-        Vector3 moveDirection =
-            new Vector3(
-                horizontal,
-                0f,
-                vertical);
+        Vector3 moveDirection = new Vector3(horizontal, 0f, vertical);
 
         // 正規化
-        moveDirection =
-            moveDirection.normalized;
+        moveDirection = moveDirection.normalized;
 
         // 移動
-        transform.position +=
-            moveDirection *
-            moveSpeed *
-            Time.deltaTime;
+        transform.position += moveDirection * moveSpeed * Time.deltaTime;
     }
 
     /// <summary>
@@ -139,25 +124,20 @@ public class CameraController : MonoBehaviour
         if (Input.GetMouseButtonDown(1))
         {
             // マウス位置保存
-            dragStartMousePosition =
-                Input.mousePosition;
+            dragStartMousePosition = Input.mousePosition;
 
             // カメラ位置保存
-            dragStartCameraPosition =
-                transform.position;
+            dragStartCameraPosition = transform.position;
         }
 
         // ドラッグ中
         if (Input.GetMouseButton(1))
         {
             // マウス差分取得
-            Vector3 mouseDelta =
-                Input.mousePosition -
-                dragStartMousePosition;
+            Vector3 mouseDelta = Input.mousePosition - dragStartMousePosition;
 
             // 右方向取得
-            Vector3 right =
-                transform.right;
+            Vector3 right = transform.right;
 
             // Y除外
             right.y = 0f;
@@ -166,8 +146,7 @@ public class CameraController : MonoBehaviour
             right.Normalize();
 
             // 前方向取得
-            Vector3 forward =
-                transform.forward;
+            Vector3 forward = transform.forward;
 
             // Y除外
             forward.y = 0f;
@@ -202,11 +181,7 @@ public class CameraController : MonoBehaviour
         targetDistance -= scroll * zoomSpeed;
 
         // 制限
-        targetDistance =
-            Mathf.Clamp(
-                targetDistance,
-                minDistance,
-                maxDistance);
+        targetDistance = Mathf.Clamp(targetDistance, minDistance, maxDistance);
     }
 
     /// <summary>
@@ -215,12 +190,7 @@ public class CameraController : MonoBehaviour
     private void UpdateZoom()
     {
         // スムーズ補間
-        currentDistance =
-            Mathf.SmoothDamp(
-                currentDistance,
-                targetDistance,
-                ref zoomVelocity,
-                zoomSmoothTime);
+        currentDistance = Mathf.SmoothDamp(currentDistance, targetDistance, ref zoomVelocity, zoomSmoothTime);
 
         // カメラ位置更新
         UpdateCameraPosition();

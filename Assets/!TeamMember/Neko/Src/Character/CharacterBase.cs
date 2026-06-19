@@ -5,6 +5,8 @@ using UnityEngine;
 public class CharacterBase : MonoBehaviour
 {
 
+    //  ネットワーク用のID
+    private int ID;
     //  ステータス
     private int hp;
     private int attack;

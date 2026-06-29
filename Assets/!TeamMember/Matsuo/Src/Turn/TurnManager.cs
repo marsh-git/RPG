@@ -52,7 +52,7 @@ public class TurnManager : MonoBehaviour
 
         if (enemy != null)
         {
-            enemy.StartTurn();
+            //enemy.StartTurn();
         }
     }
 

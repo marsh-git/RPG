@@ -8,7 +8,7 @@ public class TurnManager : MonoBehaviour
     public TurnState CurrentTurn { get; private set; }
 
     // 参照用
-    [SerializeField] private HexGridController gridController;
+    [SerializeField] private HexGridManager gridController;
     [SerializeField] private EnemyBase enemy;
 
     private void Awake()

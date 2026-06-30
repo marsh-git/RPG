@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HexGridController : MonoBehaviour {
+public class HexGridManager : MonoBehaviour {
     [SerializeField] private Camera mainCamera;
     [SerializeField] private LayerMask tileLayer;
     [SerializeField] private LayerMask unitLayer;
@@ -16,7 +16,7 @@ public class HexGridController : MonoBehaviour {
     private HexTile currentSelectedTile;
     private HexUnit currentSelectedUnit;
 
-    // ★★現在ハイライトしている移動範囲のタイル群を記憶★★
+    // 現在ハイライトしている移動範囲のタイル群
     private HashSet<HexTile> currentReachableTiles = new HashSet<HexTile>();
 
     void Start() {

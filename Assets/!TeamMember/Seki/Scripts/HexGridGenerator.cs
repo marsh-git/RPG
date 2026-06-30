@@ -13,7 +13,6 @@ public class HexGridGenerator : MonoBehaviour
 
     [Header("Grid Settings")]
     [SerializeField] private int mapWidth = 10;
-    [SerializeField] private int mapHeight = 10;
     [SerializeField] private float tileRadius = 1f;
 
     [Header("Terrain Colors")]

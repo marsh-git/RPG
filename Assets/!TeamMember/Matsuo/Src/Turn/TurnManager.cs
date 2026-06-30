@@ -8,7 +8,7 @@ public class TurnManager : MonoBehaviour
     public TurnState CurrentTurn { get; private set; }
 
     // 参照用
-    [SerializeField] private HexGridManager gridController;
+    [SerializeField] private HexGridManager gridManager;
     [SerializeField] private EnemyBase enemy;
 
     private void Awake()
@@ -30,8 +30,8 @@ public class TurnManager : MonoBehaviour
         CurrentTurn = TurnState.PlayerTurn;
 
         // プレイヤー操作開始
-        if (gridController != null)
-            gridController.enabled = true;
+        if (gridManager != null)
+            gridManager.enabled = true;
     }
 
     public void EndPlayerTurn()
@@ -39,8 +39,8 @@ public class TurnManager : MonoBehaviour
         if (CurrentTurn != TurnState.PlayerTurn)
             return;
 
-        if (gridController != null)
-            gridController.enabled = false;
+        if (gridManager != null)
+            gridManager.enabled = false;
 
         StartEnemyTurn();
     }

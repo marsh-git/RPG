@@ -18,6 +18,7 @@ public class HexTileManager : MonoBehaviour {
         // マスの生成
 
         // 部屋の生成
+
     }
     /// <summary>
     /// IDから2次元座標に変換
@@ -25,7 +26,7 @@ public class HexTileManager : MonoBehaviour {
     /// <param name="ID"></param>
     /// <param name="x"></param>
     /// <param name="y"></param>
-    private void GetTilePosition(int ID, out int x, out int y) {
+    private void GetTilePos(int ID, out int x, out int y) {
         // ここでの2次元座標に関しては3次元を疑似的な2次元整数座標で置き換えている
         x = -1;
         y = -1;
@@ -45,7 +46,7 @@ public class HexTileManager : MonoBehaviour {
     /// </summary>
     /// <param name="ID"></param>
     /// <returns></returns>
-    public HexTileData GetHexTileData(int ID) {
+    public HexTileData GetTileData(int ID) {
         // TODO: OutofIndex対策をする
         return _tileDataList[ID];
     }
@@ -54,7 +55,7 @@ public class HexTileManager : MonoBehaviour {
     /// </summary>
     /// <param name="ID"></param>
     /// <returns></returns>
-    public HexTileObject GetHexTileObject(int ID) {
+    public HexTileObject GetTileObject(int ID) {
         // TODO: OutofIndex対策をする
         return _tileObjectList[ID];
     }
@@ -67,7 +68,7 @@ public class HexTileManager : MonoBehaviour {
     public HexTileData GetHexTileData(int x, int y) {
         // タイルIDを取得
         int tileID = GetTileID(x, y);
-        return GetHexTileData(tileID);
+        return GetTileData(tileID);
     }
     /// <summary>
     /// 指定方向に隣接した座標のタイル取得

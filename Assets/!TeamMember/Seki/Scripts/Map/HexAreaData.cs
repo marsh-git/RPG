@@ -24,7 +24,7 @@ public class HexAreaData {
         tileIDList = setTileIDList;
         // タイルのエリアID, バイオームの設定
         for(int i = 0, max = tileIDList.Count; i < max; i++) {
-            HexTileData hexTile = HexTileManager.instance.GetHexTileData(tileIDList[i]);
+            HexTileData hexTile = HexTileManager.instance.GetTileData(tileIDList[i]);
             if(hexTile == null) continue;
 
             hexTile.SetAreaID(areaID);

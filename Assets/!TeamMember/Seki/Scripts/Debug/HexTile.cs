@@ -16,6 +16,16 @@ public class HexTile : MonoBehaviour {
     public Vector2Int axialCoordinate;
     public TerrainType terrainType;
 
+    // プレイヤーは複数重複できるためリストで管理
+    public List<HexUnit> playerUnits = new List<HexUnit>();
+
+    // 敵は重複できない（最大1体）なので単一の変数で管理
+    public HexUnit enemyUnit;
+
+    // 便利プロパティ
+    public bool HasPlayer => playerUnits.Count > 0;
+    public bool HasEnemy => enemyUnit != null;
+
     [Header("Visual Settings")]
     [SerializeField] private Renderer tileRenderer;
 

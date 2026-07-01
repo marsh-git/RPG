@@ -67,7 +67,8 @@ public class HexTile : MonoBehaviour {
     public void SetColor(Color color) {
         if(tileRenderer == null) return;
         tileRenderer.GetPropertyBlock(propertyBlock);
-        propertyBlock.SetColor("_Color", color);
+        //propertyBlock.SetColor("_Color", color);
+        GetComponent<Renderer>().material.color = color;
         tileRenderer.SetPropertyBlock(propertyBlock);
     }
     /// <summary>

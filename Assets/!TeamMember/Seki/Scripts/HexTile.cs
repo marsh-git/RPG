@@ -3,14 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public enum TerrainType {
-    Plains,
-    Desert,
-    Mountain,
-    Ocean
+    Plains,     // 平地
+    Desert,     // 丘陵
+    Mountain,   // 山岳
+    Ocean,      // 海
+
+    Max
 }
 
-public class HexTile : MonoBehaviour
-{
+public class HexTile : MonoBehaviour {
     [Header("Tile Data")]
     public Vector2Int axialCoordinate;
     public TerrainType terrainType;
@@ -21,35 +22,36 @@ public class HexTile : MonoBehaviour
     private Color originalColor;
     private MaterialPropertyBlock propertyBlock;
 
-    public int MovementCost
-    {
-        get
-        {
+    public int MovementCost {
+        get {
             // タイル自身の地形タイプ（terrainType）に応じて、厳格にコストを返す
-            switch (this.terrainType)
-            {
+            switch(this.terrainType) {
                 case TerrainType.Plains:
-                    return 1;   // 平原はコスト1
+                return 1;   // 平原はコスト1
                 case TerrainType.Desert:
-                    return 2;   // 砂漠はコスト2
+                return 2;   // 砂漠はコスト2
                 case TerrainType.Ocean:
-                    return 3;   // 海はコスト3（★★ここが1になっていたのが原因です★★）
+                return 3;   // 海はコスト3（★★ここが1になっていたのが原因です★★）
                 case TerrainType.Mountain:
-                    return 999; // 山岳は侵入不可
+                return 999; // 山岳は侵入不可
                 default:
-                    return 1;
+                return 1;
             }
         }
     }
-    void Awake()
-    {
-        if (tileRenderer == null) tileRenderer = GetComponent<Renderer>();
+    void Awake() {
+        if(tileRenderer == null) tileRenderer = GetComponent<Renderer>();
         propertyBlock = new MaterialPropertyBlock();
     }
 
-    // ★★自動生成用の初期化関数★★
-    public void Initialize(int q, int r, TerrainType type, Color defaultColor)
-    {
+    /// <summary>
+    /// 初期化処理
+    /// </summary>
+    /// <param name="q"></param>
+    /// <param name="r"></param>
+    /// <param name="type"></param>
+    /// <param name="defaultColor"></param>
+    public void Initialize(int q, int r, TerrainType type, Color defaultColor) {
         axialCoordinate = new Vector2Int(q, r);
         terrainType = type;
         gameObject.name = $"Hex_{q}_{r} ({type})";
@@ -58,18 +60,21 @@ public class HexTile : MonoBehaviour
         originalColor = defaultColor;
         SetColor(originalColor);
     }
-
-    public void SetColor(Color color)
-    {
-        if (tileRenderer == null) return;
+    /// <summary>
+    /// 色の設定
+    /// </summary>
+    /// <param name="color"></param>
+    public void SetColor(Color color) {
+        if(tileRenderer == null) return;
         tileRenderer.GetPropertyBlock(propertyBlock);
         //propertyBlock.SetColor("_Color", color);
         GetComponent<Renderer>().material.color = color;
         tileRenderer.SetPropertyBlock(propertyBlock);
     }
-
-    public void ResetColor()
-    {
+    /// <summary>
+    /// 色のリセット
+    /// </summary>
+    public void ResetColor() {
         SetColor(originalColor);
     }
 }

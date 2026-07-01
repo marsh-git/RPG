@@ -2,17 +2,33 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HexAreaData : MonoBehaviour
-{
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+public class HexAreaData {
+    // エリアID
+    public int areaID { get; private set; } = -1;
+    // バイオーム
+    public eBiome biome { get; private set; } = eBiome.None;
+    // エリア制圧フラグ
+    public bool isSubjugationArea { get; private set; } = false;
+    // エリア内のマスIDリスト
+    public List<int> tileIDList { get; private set; } = null;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+    /// <summary>
+    /// セットアップ処理
+    /// </summary>
+    /// <param name="setAreaID"></param>
+    /// <param name="setBiome"></param>
+    /// <param name="setTileIDList"></param>
+    public void Setup(int setAreaID, eBiome setBiome, List<int> setTileIDList) {
+        areaID = setAreaID;
+        biome = setBiome;
+        tileIDList = setTileIDList;
+        // タイルのエリアID, バイオームの設定
+        for(int i = 0, max = tileIDList.Count; i < max; i++) {
+            HexTileData hexTile = HexTileManager.instance.GetHexTileData(tileIDList[i]);
+            if(hexTile == null) continue;
+
+            hexTile.SetAreaID(areaID);
+            hexTile.SetBiome(biome);
+        }
     }
 }

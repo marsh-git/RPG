@@ -16,6 +16,8 @@ public class HexUnit : MonoBehaviour
 
     private bool isSelected = false;
 
+    public bool isEnemy = false;
+
     [Header("Dice Mechanics")]
     public int currentRollPoints = 0; // サイコロで出た現在の移動力
 

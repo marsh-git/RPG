@@ -3,33 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// タイルの地形 移動コストに関わる
-/// </summary>
-public enum eTerrain {
-    Invalid,    // 無効
-    Plain,      // 平原マス
-    Hill,       // 丘陵マス
-    Forest,     // 森林マス
-    Mountain,   // 山岳マス
-
-    Max
-}
-/// <summary>
-/// タイルの属性 現時点では平原、丘陵マスのみに属性付与、進行不可能マスは山岳マスに適応
-/// </summary>
-public enum eAttribute {
-    None = -1,  // 無し
-    Event,      // イベントマス
-    Crops,      // 作物マス
-    Town,       // 街マス
-    Outpost,    // 敵の前哨基地マス
-    CannotMove, // 進行不可能マス
-
-    Max
-}
-
-/// <summary>
-/// 六角形マスのデータクラス
+/// 六角形タイルのデータクラス
 /// </summary>
 public class HexTileData {
     // ユニークID
@@ -40,10 +14,12 @@ public class HexTileData {
     public int gridPosX { get; private set; } = -1;
     // マス上のY座標
     public int gridPosY { get; private set; } = -1;
-    // マスの地形
+    // タイルの地形
     public eTerrain terrain { get; private set; } = eTerrain.Invalid;
-    // マスの属性
+    // タイルの属性
     public eAttribute attribute { get; private set; } = eAttribute.None;
+    // タイルのバイオーム
+    public eBiome biome { get; private set; } = eBiome.None;
 
     /// <summary>
     /// 座標のセットアップ処理
@@ -55,8 +31,13 @@ public class HexTileData {
         ID = setID;
         gridPosX = setX;
         gridPosY = setY;
-        // TODO : オブジェクトのセットアップ
-
+    }
+    /// <summary>
+    /// エリアID設定
+    /// </summary>
+    /// <param name="setAreaID"></param>
+    public void SetAreaID(int setAreaID) {
+        areaID = setAreaID;
     }
     /// <summary>
     /// 地形の設定
@@ -71,6 +52,13 @@ public class HexTileData {
     /// <param name="setAttribute"></param>
     public void SetAttribute(eAttribute setAttribute) {
         attribute = setAttribute;
+    }
+    /// <summary>
+    /// バイオームの設定
+    /// </summary>
+    /// <param name="setBiome"></param>
+    public void SetBiome(eBiome setBiome) {
+        biome = setBiome;
     }
     /// <summary>
     /// 地形に応じた移動コストの取得

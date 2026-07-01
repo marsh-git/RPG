@@ -1,8 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class HexGridManager : MonoBehaviour {
+    public static HexGridManager instance { get; private set; } = null;
     [SerializeField] private Camera mainCamera;
     [SerializeField] private LayerMask tileLayer;
     [SerializeField] private LayerMask unitLayer;
@@ -20,6 +22,8 @@ public class HexGridManager : MonoBehaviour {
     private HashSet<HexTile> currentReachableTiles = new HashSet<HexTile>();
 
     void Start() {
+        if(instance == null) instance = this;
+
         if(mainCamera == null)
             mainCamera = Camera.main;
     }
@@ -72,7 +76,7 @@ public class HexGridManager : MonoBehaviour {
             HexTile clickedTile = tileHit.collider.GetComponent<HexTile>();
             if(clickedTile != null) {
                 if(currentSelectedUnit != null) {
-                    // ★★サイコロの移動範囲内に入っているタイルのみ移動を許可する★★
+                    // サイコロの移動範囲内に入っているタイルのみ移動を許可する
                     if(currentReachableTiles.Contains(clickedTile)) {
                         OrderUnitToMove(currentSelectedUnit, clickedTile);
                     } else {
@@ -95,7 +99,7 @@ public class HexGridManager : MonoBehaviour {
 
         Debug.Log($"【ユニット選択】 {unit.unitName} が選ばれました。現在の残り移動力: {unit.currentRollPoints}");
 
-        // ユニットを選択したら、即座に移動可能範囲を表示する★★
+        // ユニットを選択したら、即座に移動可能範囲を表示する
         if(unit.currentRollPoints > 0) {
             ShowMovementRange(unit);
         } else {
@@ -115,7 +119,7 @@ public class HexGridManager : MonoBehaviour {
             return;
 
         // パスファインディングから範囲を取得
-        currentReachableTiles = HexPathfinding.CalculateMovementRange(startTile, unit.currentRollPoints);
+        currentReachableTiles = HexPathfinding.CalculateMovementRange(startTile, unit.currentRollPoints, unit);
 
         // 範囲内のタイルを青く染める
         foreach(HexTile tile in currentReachableTiles) {
@@ -135,13 +139,20 @@ public class HexGridManager : MonoBehaviour {
     }
 
     private void OrderUnitToMove(HexUnit unit, HexTile destTile) {
+        // 1. ユニットが現在いるスタート地点のタイルを取得
         HexTile startTile = HexGridGenerator.Instance.GetTileAt(unit.axialCoordinate);
-        List<HexTile> path = HexPathfinding.FindPath(startTile, destTile);
+
+        // タイル情報をA* に渡す
+        List<HexTile> path = HexPathfinding.FindPath(startTile, destTile, unit);
 
         if(path != null && path.Count > 0) {
             ClearRangeHighlight();
             unit.MoveAlongPath(path);
 
+            // 移動を指示したら選択を解除する（お好みに合わせて）
+            if(currentSelectedUnit != null) {
+                currentSelectedUnit.SetSelected(false);
+            }
             currentSelectedUnit = null;
         }
     }

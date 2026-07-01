@@ -4,7 +4,8 @@ using UnityEngine;
 
 public static class HexPathfinding {
     // 軸座標における隣接6方向のオフセット
-    private static readonly Vector2Int[] HexDirections = new Vector2Int[]{
+    private static readonly Vector2Int[] HexDirections = new Vector2Int[]
+    {
         new Vector2Int(1, 0),   // 右
         new Vector2Int(0, 1),   // 右斜め上
         new Vector2Int(-1, 1),  // 左斜め上
@@ -13,14 +14,11 @@ public static class HexPathfinding {
         new Vector2Int(1, -1)   // 右斜め下
     };
 
-    // A*アルゴリズム本体：スタートからゴールまでのタイルのリストを返す
-    public static List<HexTile> FindPath(HexTile start, HexTile goal) {
-        if(!start || !goal)
-            return null;
-        if(goal.terrainType == TerrainType.Mountain)
-            return null; // 山岳は目的地にできない
+    // ★★ 引数に HexUnit movingUnit を追加 ★★
+    public static List<HexTile> FindPath(HexTile start, HexTile goal, HexUnit movingUnit) {
+        if(!start || !goal || !movingUnit) return null;
+        if(goal.terrainType == TerrainType.Mountain) return null;
 
-        // 探索用データ構造
         List<HexTile> openSet = new List<HexTile> { start };
         HashSet<HexTile> closedSet = new HashSet<HexTile>();
 
@@ -29,7 +27,6 @@ public static class HexPathfinding {
         Dictionary<HexTile, int> fScore = new Dictionary<HexTile, int> { [start] = HeuristicDistance(start, goal) };
 
         while(openSet.Count > 0) {
-            // openSetの中で最もfScore（トータル予測コスト）が低いタイルを選ぶ
             HexTile current = openSet[0];
             for(int i = 1; i < openSet.Count; i++) {
                 if(fScore.ContainsKey(openSet[i]) && fScore[openSet[i]] < fScore[current]) {
@@ -37,22 +34,27 @@ public static class HexPathfinding {
                 }
             }
 
-            // ゴールに到達した場合、経路を復元して返す
             if(current == goal) return RetracePath(start, goal, cameFrom);
 
             openSet.Remove(current);
             closedSet.Add(current);
 
-            // 隣接する6マスを調査
             foreach(Vector2Int dir in HexDirections) {
                 Vector2Int neighborCoord = current.axialCoordinate + dir;
                 HexTile neighbor = HexGridGenerator.Instance.GetTileAt(neighborCoord);
 
                 if(!neighbor || closedSet.Contains(neighbor)) continue;
+                if(neighbor.terrainType == TerrainType.Mountain) continue;
 
-                if(neighbor.terrainType == TerrainType.Mountain) continue; // 山は通れない
+                // ★★ 移動経路計算でも被りルールを完全に同期 ★★
+                if(neighbor != start) {
+                    if(movingUnit.isEnemy) {
+                        if(neighbor.HasPlayer || neighbor.HasEnemy) continue;
+                    } else {
+                        if(neighbor.HasEnemy) continue;
+                    }
+                }
 
-                // 移動コストの計算 (現在のコスト + 移動先のタイルの固有コスト)
                 int tentativeGScore = gScore[current] + neighbor.MovementCost;
 
                 if(!gScore.ContainsKey(neighbor) || tentativeGScore < gScore[neighbor]) {
@@ -66,38 +68,17 @@ public static class HexPathfinding {
                 }
             }
         }
-        return null; // 経路が見つからなかった場合
+        return null;
     }
 
-    // キューブ/軸座標系における2点間の直線距離（マンハッタン距離のHex版）
-    private static int HeuristicDistance(HexTile a, HexTile b) {
-        Vector2Int coordA = a.axialCoordinate;
-        Vector2Int coordB = b.axialCoordinate;
-
-        int az = -coordA.x - coordA.y;
-        int bz = -coordB.x - coordB.y;
-
-        return (Mathf.Abs(coordA.x - coordB.x) + Mathf.Abs(coordA.y - coordB.y) + Mathf.Abs(az - bz)) / 2;
-    }
-
-    // ゴールから親を辿ってスタートまでの経路を逆転させてリスト化する
-    private static List<HexTile> RetracePath(HexTile start, HexTile goal, Dictionary<HexTile, HexTile> cameFrom) {
-        List<HexTile> path = new List<HexTile>();
-        HexTile current = goal;
-
-        while(current != start) {
-            path.Add(current);
-            current = cameFrom[current];
-        }
-        path.Reverse(); // スタート→ゴールの順にする
-        return path;
-    }
-    public static HashSet<HexTile> CalculateMovementRange(HexTile start, int maxCost) {
+    // ★★ 引数に HexUnit movingUnit を追加してエラーを解消 ★★
+    public static HashSet<HexTile> CalculateMovementRange(HexTile start, int maxCost, HexUnit movingUnit) {
         HashSet<HexTile> reachableTiles = new HashSet<HexTile>();
         Dictionary<HexTile, int> costSoFar = new Dictionary<HexTile, int>();
         Queue<HexTile> frontier = new Queue<HexTile>();
 
-        // スタート地点を初期化
+        if(!start || !movingUnit) return reachableTiles;
+
         frontier.Enqueue(start);
         costSoFar[start] = 0;
 
@@ -109,18 +90,23 @@ public static class HexPathfinding {
                 Vector2Int neighborCoord = current.axialCoordinate + dir;
                 HexTile neighbor = HexGridGenerator.Instance.GetTileAt(neighborCoord);
 
-                // マップ外、または山岳なら進入不可
-                if(neighbor == null || neighbor.terrainType == TerrainType.Mountain)
-                    continue;
+                if(neighbor == null || neighbor.terrainType == TerrainType.Mountain) continue;
 
-                // 移動先タイルのコストを加算
+                // 核心部分：movingUnit を参照可能に修正
+                if(neighbor != start) {
+                    if(movingUnit.isEnemy) {
+                        // 敵：プレイヤーがいても、他の敵がいても進入不可
+                        if(neighbor.HasPlayer || neighbor.HasEnemy) continue;
+                    } else {
+                        // プレイヤー：敵がいるマスだけは進入不可（味方プレイヤーとの重複はOK）
+                        if(neighbor.HasEnemy) continue;
+                    }
+                }
+
                 int newCost = currentCost + neighbor.MovementCost;
 
-                // 計算されたコストが出目（maxCost）を超えるなら、絶対にそれ以上進ませない
-                if(newCost > maxCost)
-                    continue;
+                if(newCost > maxCost) continue;
 
-                // 出目の範囲内に収まる場合のみ、最短ルートを記録して登録
                 if(!costSoFar.ContainsKey(neighbor) || newCost < costSoFar[neighbor]) {
                     costSoFar[neighbor] = newCost;
                     frontier.Enqueue(neighbor);
@@ -128,6 +114,26 @@ public static class HexPathfinding {
                 }
             }
         }
+
         return reachableTiles;
+    }
+
+    private static int HeuristicDistance(HexTile a, HexTile b) {
+        Vector2Int coordA = a.axialCoordinate;
+        Vector2Int coordB = b.axialCoordinate;
+        int az = -coordA.x - coordA.y;
+        int bz = -coordB.x - coordB.y;
+        return (Mathf.Abs(coordA.x - coordB.x) + Mathf.Abs(coordA.y - coordB.y) + Mathf.Abs(az - bz)) / 2;
+    }
+
+    private static List<HexTile> RetracePath(HexTile start, HexTile goal, Dictionary<HexTile, HexTile> cameFrom) {
+        List<HexTile> path = new List<HexTile>();
+        HexTile current = goal;
+        while(current != start) {
+            path.Add(current);
+            current = cameFrom[current];
+        }
+        path.Reverse();
+        return path;
     }
 }

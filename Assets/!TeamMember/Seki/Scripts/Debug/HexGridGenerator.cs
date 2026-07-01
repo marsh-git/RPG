@@ -98,7 +98,7 @@ public class HexGridGenerator : MonoBehaviour
             Debug.LogError($"【エラー】 座標 {targetCoord} のタイルがマップ内に存在しないため、ユニットを配置できませんでした。");
         }
     }
-    // ★★外部から座標を指定してタイルを取得する安全なメソッド★★
+    // 外部から座標を指定してタイルを取得する安全なメソッド
     public HexTile GetTileAt(Vector2Int coordinate)
     {
         if (allTiles.TryGetValue(coordinate, out HexTile tile))

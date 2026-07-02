@@ -50,8 +50,8 @@ MonoBehaviour:
   dragSpeed: 0.02
   zoomSpeed: 3
   zoomSmoothTime: 0.15
-  minDistance: 15
-  maxDistance: 30
+  minDistance: 8
+  maxDistance: 20
   pitch: 60
   distance: 20
 --- !u!1 &1341357544687848354

@@ -7,6 +7,7 @@ public class JobData : ScriptableObject
 {
 
     [Header("Jobのステータス")]
+    [SerializeField] public string jobName;
     [SerializeField] public int maxHp;
     [SerializeField] public int attack;
     [SerializeField] public int defense;

@@ -76,7 +76,7 @@ public class HexGridGenerator : MonoBehaviour
                 //    _ => plainsColor
                 //};
 
-                //  プレハブで変えてる。くそ読みづらいから改善していいよ
+                //  プレハブで変えてる。
                 HexTile tilePrefabType = randomType switch
                 {
                     TerrainType.Plains => tilePrefab1,

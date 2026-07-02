@@ -29,7 +29,7 @@ public class PlayerBase : CharacterBase
         needExp = baseNeedExp;
 
         //  初期職業がnullなら初期職業に変更する
-        //if (jobData == null) SetJob(jobManager.START_JOB);
+        if (jobData == null) SetJob(jobManager.START_JOB);
     }
 
     private void Update()
@@ -41,6 +41,11 @@ public class PlayerBase : CharacterBase
             Debug.Log("現在のexp = " + Exp);
             Debug.Log("現在のlv = " + Lv);
             Debug.Log("次の経験値まで = " + NeedExp);
+        }
+        //  デバッグ用
+        if (Input.GetMouseButtonDown(1))
+        {
+            SetJob(1);
         }
     }
 
@@ -78,7 +83,7 @@ public class PlayerBase : CharacterBase
     /// <param name="jobNum"></param>
     private void SetJob(int jobNum)
     {
-        //jobData = jobManager.GetJobData(jobNum);
+        jobData = jobManager.GetJobData(jobNum);
 
         //  職業がnullなら初期職業に変更する
         if (jobData == null) SetJob(jobManager.START_JOB);
@@ -91,6 +96,8 @@ public class PlayerBase : CharacterBase
     /// </summary>
     private void SetStatus(JobData jobData)
     {
+        if (jobData == null) return;
+
         maxHp = jobData.maxHp;
         hp = maxHp;
         attack = jobData.attack;

@@ -77,14 +77,16 @@ public class HexGridGenerator : MonoBehaviour
                 //};
 
                 //  プレハブで変えてる。くそ読みづらいから改善していいよ
-                HexTile newTile = randomType switch
+                HexTile tilePrefabType = randomType switch
                 {
-                    TerrainType.Plains => Instantiate(tilePrefab1, spawnPosition, Quaternion.Euler(0, 30, 0), transform),
-                    TerrainType.Desert => Instantiate(tilePrefab2, spawnPosition, Quaternion.Euler(0, 30, 0), transform),
-                    TerrainType.Mountain => Instantiate(tilePrefab3, spawnPosition, Quaternion.Euler(0, 30, 0), transform),
-                    TerrainType.Ocean => Instantiate(tilePrefab4, spawnPosition, Quaternion.Euler(0, 30, 0), transform),
-                    _ => Instantiate(tilePrefab1, spawnPosition, Quaternion.Euler(0, 30, 0), transform)
+                    TerrainType.Plains => tilePrefab1,
+                    TerrainType.Desert => tilePrefab2,
+                    TerrainType.Mountain => tilePrefab3,
+                    TerrainType.Ocean => tilePrefab4,
+                    _ => tilePrefab1
                 };
+
+                HexTile newTile = Instantiate(tilePrefabType, spawnPosition, Quaternion.Euler(0, 30, 0), transform);
 
                 // q, r はマイナス値も持つようになります
                 //newTile.Initialize(q, r, randomType, tileColor);

@@ -546,7 +546,7 @@ MonoBehaviour:
   tilePrefab: {fileID: 709315947303836913, guid: e7779f7551533e24f8d6004aa8546d53, type: 3}
   unitPrefab: {fileID: 1106068724394652995, guid: 1cfb8d09c4dffe7438f9a7c71649a394, type: 3}
   mapWidth: 20
-  tileRadius: 1
+  tileRadius: 2
   plainsColor: {r: 0.3, g: 0.7, b: 0.3, a: 1}
   desertColor: {r: 0.85, g: 0.75, b: 0.5, a: 1}
   mountainColor: {r: 0.5, g: 0.4, b: 0.3, a: 1}

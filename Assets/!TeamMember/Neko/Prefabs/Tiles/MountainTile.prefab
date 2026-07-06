@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 8705097495837771255}
   - component: {fileID: 3650420647696348312}
   - component: {fileID: 1131223825451217967}
+  - component: {fileID: 5574118540698164771}
   m_Layer: 6
   m_Name: MountainTile
   m_TagString: Untagged
@@ -31,8 +32,8 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2, y: 2, z: 2}
-  m_ConstrainProportionsScale: 1
+  m_LocalScale: {x: 4, y: 2, z: 4}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5667740732948989844}
   - {fileID: 6051432435586355722}
@@ -677,6 +678,23 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 0}
+--- !u!114 &5574118540698164771
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4028603113544743077}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 98c4e7b9a4355e74dacb403d3a066eab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  axialCoordinate: {x: 0, y: 0}
+  terrainType: 2
+  playerUnits: []
+  enemyUnit: {fileID: 0}
+  tileRenderer: {fileID: 0}
 --- !u!1001 &6358946244190131352
 PrefabInstance:
   m_ObjectHideFlags: 0

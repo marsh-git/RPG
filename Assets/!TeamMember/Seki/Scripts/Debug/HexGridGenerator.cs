@@ -21,6 +21,12 @@ public class HexGridGenerator : MonoBehaviour
     [SerializeField] private Color mountainColor = new Color(0.5f, 0.4f, 0.3f);
     [SerializeField] private Color oceanColor = new Color(0.2f, 0.4f, 0.8f);
 
+    //  タイルプレハブ（命名は好きに変えておいて）
+    [SerializeField] private HexTile tilePrefab1;
+    [SerializeField] private HexTile tilePrefab2;
+    [SerializeField] private HexTile tilePrefab3;
+    [SerializeField] private HexTile tilePrefab4;
+
     // ★★座標からタイルを高速検索するための辞書★★
     private Dictionary<Vector2Int, HexTile> allTiles = new Dictionary<Vector2Int, HexTile>();
 
@@ -58,20 +64,35 @@ public class HexGridGenerator : MonoBehaviour
                 float z = tileRadius * (3f / 2f * r);
                 Vector3 spawnPosition = new Vector3(x, 0, z);
 
-                HexTile newTile = Instantiate(tilePrefab, spawnPosition, Quaternion.Euler(0, 30, 0), transform);
+                //HexTile newTile = Instantiate(tilePrefab, spawnPosition, Quaternion.Euler(0, 30, 0), transform);
 
                 TerrainType randomType = (TerrainType)Random.Range(0, 4);
-                Color tileColor = randomType switch
+                //Color tileColor = randomType switch
+                //{
+                //    TerrainType.Plains => plainsColor,
+                //    TerrainType.Desert => desertColor,
+                //    TerrainType.Mountain => mountainColor,
+                //    TerrainType.Ocean => oceanColor,
+                //    _ => plainsColor
+                //};
+
+                //  プレハブで変えてる。
+                HexTile tilePrefabType = randomType switch
                 {
-                    TerrainType.Plains => plainsColor,
-                    TerrainType.Desert => desertColor,
-                    TerrainType.Mountain => mountainColor,
-                    TerrainType.Ocean => oceanColor,
-                    _ => plainsColor
+                    TerrainType.Plains => tilePrefab1,
+                    TerrainType.Desert => tilePrefab2,
+                    TerrainType.Mountain => tilePrefab3,
+                    TerrainType.Ocean => tilePrefab4,
+                    _ => tilePrefab1
                 };
 
+                HexTile newTile = Instantiate(tilePrefabType, spawnPosition, Quaternion.Euler(0, 30, 0), transform);
+
                 // q, r はマイナス値も持つようになります
-                newTile.Initialize(q, r, randomType, tileColor);
+                //newTile.Initialize(q, r, randomType, tileColor);
+
+                //  基本テクスチャを適応しているマテリアルは白色で通るから決め打ち
+                newTile.Initialize(q, r, randomType, Color.white);
                 allTiles.Add(newTile.axialCoordinate, newTile);
             }
         }

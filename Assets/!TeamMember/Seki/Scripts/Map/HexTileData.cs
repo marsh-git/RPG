@@ -63,17 +63,41 @@ public class HexTileData {
     /// <summary>
     /// 地形に応じた移動コストの取得
     /// </summary>
-    public int GetMovementCost() {
+    public float GetMovementCost() {
+        float moveCost = 0.0f;
+
+        // 地形によるコスト計算
         switch(terrain) {
             case eTerrain.Plain:
-            return 1;
+            moveCost = 1.0f;
+            break;
             case eTerrain.Hill:
-            return 2;
+            moveCost = 2.0f;
+            break;
             case eTerrain.Forest:
-            return 2;
+            moveCost = 2.0f;
+            break;
             case eTerrain.Mountain:
-            return 999;
+            moveCost = 999.0f;     // 進行不可能
+            break;
         }
-        return -1;
+        // バイオームによる移動補正
+        switch(biome) {
+            case eBiome.Grassland:
+            break;
+            case eBiome.Savanna:
+            break;
+            case eBiome.Desert:
+            moveCost += 0.5f;
+            break;
+            case eBiome.Rainforest:
+            moveCost += 0.5f;
+            break;
+            case eBiome.Tundra:
+            break;
+            case eBiome.VolcanicZone:
+            break;
+        }
+        return moveCost;
     }
 }

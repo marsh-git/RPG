@@ -27,7 +27,7 @@ public class HexGridGenerator : MonoBehaviour
     [SerializeField] private HexTile tilePrefab3;
     [SerializeField] private HexTile tilePrefab4;
 
-    // ★★座標からタイルを高速検索するための辞書★★
+    // 座標からタイルを高速検索するための辞書
     private Dictionary<Vector2Int, HexTile> allTiles = new Dictionary<Vector2Int, HexTile>();
 
     void Awake()

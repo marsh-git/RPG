@@ -5,21 +5,45 @@ using UnityEngine;
 public class HexTileManager : MonoBehaviour {
     public static HexTileManager instance { get; private set; } = null;
 
-    private List<HexTileData> _tileDataList = null;
-    private List<HexTileObject> _tileObjectList = null;
+    private List<HexTileData> _tileDataList = new List<HexTileData>();
+    private List<HexTileObject> _tileObjectList = new List<HexTileObject>();
+    private List<HexAreaData> _areaDataList = new List<HexAreaData>();
+    private Dictionary<Vector2Int, int> _coordToIdMap = new Dictionary<Vector2Int, int>();
 
-    private List<HexAreaData> _areaDataList = null;
+    // TODO:そのうち、ゲームシーンステートクラスが持つようになる
+    [SerializeField] private HexMapGenerator mapGenerator;
+
+    public void Awake() {
+        instance = this;
+        // デバッグ用
+        mapGenerator.CreateDebugMap();
+    }
 
     /// <summary>
     /// 初期化処理
     /// </summary>
     public void Initialize() {
-        instance = this;
         // マスの生成
 
         // 部屋の生成
 
     }
+    /// <summary>
+    /// データとオブジェクトを一元管理に登録
+    /// </summary>
+    /// <param name="data"></param>
+    /// <param name="tileObject"></param>
+    public void AddTile(HexTileData data, HexTileObject tileObject) {
+        if(data == null || tileObject == null) return;
+
+        _tileDataList.Add(data);
+        _tileObjectList.Add(tileObject);
+
+        // 座標からIDを引けるように逆引き辞書に登録
+        Vector2Int coord = new Vector2Int(data.gridPosX, data.gridPosY);
+        _coordToIdMap[coord] = data.ID;
+    }
+
     /// <summary>
     /// IDから2次元座標に変換
     /// </summary>
@@ -27,9 +51,14 @@ public class HexTileManager : MonoBehaviour {
     /// <param name="x"></param>
     /// <param name="y"></param>
     private void GetTilePos(int ID, out int x, out int y) {
-        // ここでの2次元座標に関しては3次元を疑似的な2次元整数座標で置き換えている
-        x = -1;
-        y = -1;
+        HexTileData data = GetTileData(ID);
+        if(data != null) {
+            x = data.gridPosX;
+            y = data.gridPosY;
+        } else {
+            x = -1;
+            y = -1;
+        }
     }
     /// <summary>
     /// 2次元座標からIDに変換
@@ -38,8 +67,10 @@ public class HexTileManager : MonoBehaviour {
     /// <param name="y"></param>
     /// <returns></returns>
     private int GetTileID(int x, int y) {
-        // ここでの2次元座標に関しては3次元を疑似的な2次元整数座標で置き換えている
-        return -1;
+        Vector2Int coord = new Vector2Int(x, y);
+        if(_coordToIdMap.TryGetValue(coord, out int id)) return id;
+
+        return -1; // 存在しないマップ外の座標
     }
     /// <summary>
     /// ID指定のタイル情報取得
@@ -47,7 +78,7 @@ public class HexTileManager : MonoBehaviour {
     /// <param name="ID"></param>
     /// <returns></returns>
     public HexTileData GetTileData(int ID) {
-        // TODO: OutofIndex対策をする
+        if(!CommonModule.IsEnableIndex(_tileDataList, ID)) return null;
         return _tileDataList[ID];
     }
     /// <summary>
@@ -56,7 +87,7 @@ public class HexTileManager : MonoBehaviour {
     /// <param name="ID"></param>
     /// <returns></returns>
     public HexTileObject GetTileObject(int ID) {
-        // TODO: OutofIndex対策をする
+        if(!CommonModule.IsEnableIndex(_tileDataList, ID)) return null;
         return _tileObjectList[ID];
     }
     /// <summary>
@@ -106,7 +137,7 @@ public class HexTileManager : MonoBehaviour {
             case eDirectionHex.Left:        // 左
                 x--;
             break;
-            case eDirectionHex.UpLeft:      // 左下
+            case eDirectionHex.UpLeft:      // 左上
                 x--;
                 y++;
             break;

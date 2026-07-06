@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 3650420647696348312}
   - component: {fileID: 1131223825451217967}
   - component: {fileID: 1653526210855231243}
+  - component: {fileID: 6108452813158840557}
   m_Layer: 6
   m_Name: MeadowTile
   m_TagString: Untagged
@@ -696,6 +697,18 @@ MonoBehaviour:
   playerUnits: []
   enemyUnit: {fileID: 0}
   tileRenderer: {fileID: 0}
+--- !u!114 &6108452813158840557
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4028603113544743077}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e6b054205a4dd4419d2c307aa1b944a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &2300576967487098846
 PrefabInstance:
   m_ObjectHideFlags: 0

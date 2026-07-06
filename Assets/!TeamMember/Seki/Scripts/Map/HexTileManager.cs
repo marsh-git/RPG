@@ -43,7 +43,13 @@ public class HexTileManager : MonoBehaviour {
         Vector2Int coord = new Vector2Int(data.gridPosX, data.gridPosY);
         _coordToIdMap[coord] = data.ID;
     }
-
+    /// <summary>
+    /// エリアの追加
+    /// </summary>
+    /// <param name="area"></param>
+    public void AddArea(HexAreaData area) { 
+        _areaDataList.Add(area);
+    }
     /// <summary>
     /// IDから2次元座標に変換
     /// </summary>

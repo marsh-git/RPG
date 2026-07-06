@@ -5,6 +5,10 @@ using UnityEngine;
 public class HexAreaData {
     // エリアID
     public int areaID { get; private set; } = -1;
+    // エリアのX座標
+    public int areaGridX { get; private set; } = -1;
+    // エリアのY座標
+    public int areaGridY { get; private set; } = -1;
     // バイオーム
     public eBiome biome { get; private set; } = eBiome.None;
     // エリア制圧フラグ
@@ -18,8 +22,10 @@ public class HexAreaData {
     /// <param name="setAreaID"></param>
     /// <param name="setBiome"></param>
     /// <param name="setTileIDList"></param>
-    public void Setup(int setAreaID, eBiome setBiome, List<int> setTileIDList) {
+    public void Setup(int setAreaID, int setAreaX, int setAreaY, eBiome setBiome, List<int> setTileIDList) {
         areaID = setAreaID;
+        areaGridX = setAreaX; 
+        areaGridY = setAreaY;
         biome = setBiome;
         tileIDList = setTileIDList;
         // タイルのエリアID, バイオームの設定

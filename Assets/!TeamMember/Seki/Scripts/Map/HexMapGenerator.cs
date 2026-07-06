@@ -18,58 +18,89 @@ public class HexMapGenerator : MonoBehaviour{
     /// </summary>
     public void CreateDebugMap() {
         int mapRadius = 10;
-        int currentID = 0; // 通し番号としてのユニークID
+        int currentTileID = 0;
+        int currentAreaID = 0;
 
-        // 中心 (0,0) から半径 mapRadius の範囲を巡回するループ
-        for(int q = -mapRadius; q <= mapRadius; q++) {
-            int rStart = Mathf.Max(-mapRadius, -q - mapRadius);
-            int rEnd = Mathf.Min(mapRadius, -q + mapRadius);
+        // 生成したいエリア（大Hex）の座標リストを定義
+        // 画像の通り、エリア1(中央下)、エリア2(左上)、エリア3(右上)の3つを配置
+        List<Vector2Int> areasToCreate = new List<Vector2Int>() {
+            new Vector2Int(0, 0),   // エリア1
+            new Vector2Int(-1, 1),  // エリア2 (左上)
+            new Vector2Int(0, 1)    // エリア3 (右上)
+        };
 
-            for(int r = rStart; r <= rEnd; r++) {
-                // 1. 3D空間への変換計算
-                float x = 2f * (Mathf.Sqrt(3f) * q + Mathf.Sqrt(3f) / 2f * r);
-                float z = 2f * (3f / 2f * r);
-                Vector3 spawnPosition = new Vector3(x, 0f, z);
+        // エリアのループ
+        foreach(Vector2Int areaCoord in areasToCreate) {
+            // このエリアの中心となる、小Hex基準の絶対座標（オフセット）を計算
+            int areaCenterQ = areaCoord.x * (3 * mapRadius + 2) + areaCoord.y * (mapRadius + 1);
+            int areaCenterR = areaCoord.y * mapRadius;
 
-                // 2. ランダムな地形の決定 (Invalid, Maxを除外した有効レンジ)
-                eTerrain randomTerrain = (eTerrain)Random.Range((int)eTerrain.Plain, (int)eTerrain.Mountain + 1);
+            // このエリアに所属することになるタイルのIDリスト
+            List<int> registeredTileIDs = new List<int>();
 
-                // 3. 地形に応じた適切な3Dプレハブを選択
-                HexTileObject prefabToSpawn = randomTerrain switch {
-                    eTerrain.Plain => tilePrefabPlain,
-                    eTerrain.Hill => tilePrefabHill,
-                    eTerrain.Forest => tilePrefabForest,
-                    eTerrain.Mountain => tilePrefabMountain,
-                    _ => tilePrefabPlain
-                };
+            // エリア内部の小Hex生成ループ（中心 0,0 からの相対ロジックのまま）
+            for(int q = -mapRadius; q <= mapRadius; q++) {
+                int rStart = Mathf.Max(-mapRadius, -q - mapRadius);
+                int rEnd = Mathf.Min(mapRadius, -q + mapRadius);
 
-                if(prefabToSpawn == null) {
-                    Debug.LogError($"【生成エラー】{randomTerrain} に対応するプレハブがインスペクターで未設定です。");
-                    continue;
+                for(int r = rStart; r <= rEnd; r++) {
+                    // 内部の相対座標に、エリアの中心オフセットを足して「絶対座標」にする
+                    int globalQ = areaCenterQ + q;
+                    int globalR = areaCenterR + r;
+
+                    // 3D空間の物理位置の計算（絶対座標をベースにするので、自動的にズレて配置される）
+                    float x = 2f * (Mathf.Sqrt(3f) * globalQ + Mathf.Sqrt(3f) / 2f * globalR);
+                    float z = 2f * (3f / 2f * globalR);
+                    Vector3 spawnPosition = new Vector3(x, 0f, z);
+
+                    // 地形のランダム決定
+                    eTerrain randomTerrain = (eTerrain)Random.Range((int)eTerrain.Plain, (int)eTerrain.Mountain + 1);
+                    HexTileObject prefabToSpawn = GetTerrainPrefab(randomTerrain);
+
+                    // Viewの生成
+                    HexTileObject newTileObject = Instantiate(prefabToSpawn, Vector3.zero, Quaternion.Euler(0, 30, 0), this.transform);
+                    newTileObject.Setup(spawnPosition);
+                    newTileObject.name = $"Tile_[ID:{currentTileID}]_Area:{currentAreaID}_G({globalQ},{globalR})";
+
+                    // Model（データ）の生成
+                    HexTileData newTileData = new HexTileData();
+                    newTileData.Setup(currentTileID, globalQ, globalR); // 絶対座標を登録
+                    newTileData.SetTerrain(randomTerrain);
+
+                    // Managerへ登録
+                    HexTileManager.instance.AddTile(newTileData, newTileObject);
+
+                    // エリア管理用にIDをキープ
+                    registeredTileIDs.Add(currentTileID);
+                    currentTileID++;
                 }
-
-                // 4. View（3Dオブジェクト）の生成とセットアップ
-                HexTileObject newTileObject = Instantiate(prefabToSpawn, Vector3.zero, Quaternion.Euler(0, 30, 0), this.transform);
-                newTileObject.Setup(spawnPosition);
-                newTileObject.name = $"HexTile_[ID:{currentID}]_({q},{r})";
-
-                // 5. Model（純粋データクラス）の生成とセットアップ
-                HexTileData newTileData = new HexTileData();
-                newTileData.Setup(currentID, q, r);
-                newTileData.SetTerrain(randomTerrain);
-                // デバッグ用としてバイオームや属性の初期値を必要に応じて設定
-                newTileData.SetBiome(eBiome.Grassland);
-
-                // 6. 司令塔である Manager へデータとViewのペアを登録
-                HexTileManager.instance.AddTile(newTileData, newTileObject);
-
-                currentID++;
             }
+
+            // エリアデータの生成とセットアップ
+            HexAreaData newAreaData = new HexAreaData();
+            // 仮でエリアごとに異なるバイオームを割り振る
+            eBiome areaBiome = (eBiome)((currentAreaID % (int)eBiome.Max) + 1);
+
+            newAreaData.Setup(currentAreaID, areaCoord.x, areaCoord.y, areaBiome, registeredTileIDs);
+
+            // マネージャー側のリストにエリアデータを登録
+            HexTileManager.instance.AddArea(newAreaData);
+
+            currentAreaID++;
         }
 
-        Debug.Log($"【マップ生成完了】総タイル数: {currentID} マスが正常にデータ同期されました。");
+        Debug.Log($"【入れ子マップ生成完了】総エリア数: {currentAreaID} / 総タイル数: {currentTileID}");
     }
 
+    private HexTileObject GetTerrainPrefab(eTerrain terrain) {
+        return terrain switch {
+            eTerrain.Plain => tilePrefabPlain,
+            eTerrain.Hill => tilePrefabHill,
+            eTerrain.Forest => tilePrefabForest,
+            eTerrain.Mountain => tilePrefabMountain,
+            _ => tilePrefabPlain
+        };
+    }
     public static int DecideSeedByLevel() {
         // 難易度選択のみでゲームが開始されるときは、難易度に応じたシード値を決定する。
         return -1;

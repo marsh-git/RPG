@@ -71,7 +71,13 @@ public static class HexPathfinding {
         return null;
     }
 
-    // ★★ 引数に HexUnit movingUnit を追加してエラーを解消 ★★
+    /// <summary>
+    /// 移動可能タイルの計算
+    /// </summary>
+    /// <param name="start"></param>
+    /// <param name="maxCost"></param>
+    /// <param name="movingUnit"></param>
+    /// <returns></returns>
     public static HashSet<HexTile> CalculateMovementRange(HexTile start, int maxCost, HexUnit movingUnit) {
         HashSet<HexTile> reachableTiles = new HashSet<HexTile>();
         Dictionary<HexTile, int> costSoFar = new Dictionary<HexTile, int>();

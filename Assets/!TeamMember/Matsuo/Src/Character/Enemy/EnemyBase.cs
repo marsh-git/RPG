@@ -1,15 +1,27 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemyBase : CharacterBase
 {
-    [Header("Enemy Settings")]
-    [SerializeField] protected int moveRange = 1;
-    [SerializeField] protected int searchRange = 3;
-    [SerializeField] protected int expReward = 10;
+    // 敵の種類
+    [SerializeField]
+    protected EnemyType enemyType;
 
-    protected EnemyState currentState = EnemyState.Idle;
+    /// <summary>
+    /// 敵の初期化を行う
+    /// </summary>
+    protected override void Awake()
+    {
+        base.Awake();
+    }
 
-    protected Transform target;
+    /// <summary>
+    /// 死亡時の処理
+    /// </summary>
+    protected override void Die()
+    {
+        base.Die();
+
+        // ここらへんにドロップ処理や経験値付与などを実装する
+        Destroy(gameObject);
+    }
 }

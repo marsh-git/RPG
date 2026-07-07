@@ -4,10 +4,7 @@ using UnityEngine;
 using UnityEngine.UIElements;
 
 public class HexMapGenerator : MonoBehaviour{
-    /// <summary>
-    /// デバッグ用のマップ生成
-    /// </summary>
-    [Header("Tile Prefabs (View)")]
+    [Header("TilePrefabs")]
     [SerializeField] private HexTileObject tilePrefabPlain;
     [SerializeField] private HexTileObject tilePrefabHill;
     [SerializeField] private HexTileObject tilePrefabForest;
@@ -93,13 +90,17 @@ public class HexMapGenerator : MonoBehaviour{
     }
 
     private HexTileObject GetTerrainPrefab(eTerrain terrain) {
-        return terrain switch {
-            eTerrain.Plain => tilePrefabPlain,
-            eTerrain.Hill => tilePrefabHill,
-            eTerrain.Forest => tilePrefabForest,
-            eTerrain.Mountain => tilePrefabMountain,
-            _ => tilePrefabPlain
-        };
+        switch(terrain) {
+            case eTerrain.Plain:
+            return tilePrefabPlain;
+            case eTerrain.Hill:
+            return tilePrefabHill;
+            case eTerrain.Forest:
+            return tilePrefabForest;
+            case eTerrain.Mountain:
+            return tilePrefabMountain;
+        }
+        return null;
     }
     public static int DecideSeedByLevel() {
         // 難易度選択のみでゲームが開始されるときは、難易度に応じたシード値を決定する。

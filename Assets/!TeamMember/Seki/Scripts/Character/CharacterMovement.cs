@@ -7,24 +7,36 @@ using UnityEngine;
 
 public class CharacterMovement{
     /// <summary>
-    /// あらゆるキャラクターオブジェクトを経路に沿って非同期移動させる（純粋C#ロジック）
+    /// あらゆるキャラクターオブジェクトを経路に沿って非同期移動させる
     /// </summary>
-    /// <param name="targetTransform">動かしたい3DオブジェクトのTransform</param>
-    /// <param name="path">移動経路マスのデータリスト</param>
-    /// <param name="cancellationToken">連打・破棄連動用のトークン</param>
-    /// <param name="onStepTile">1マス進むごとに座標データを同期するためのコールバック</param>
+    /// <param name="targetTransform"></param>
+    /// <param name="path"></param>
+    /// <param name="cancellationToken"></param>
+    /// <param name="onStepTile"></param>
+    /// <returns></returns>
     public async UniTask MoveAlongPathAsync(
-        Transform targetTransform,
-        List<HexTile> path,
-        CancellationToken cancellationToken,
-        Action<HexTile> onStepTile = null) {
+            Transform targetTransform,
+            List<HexTileData> path,
+            CancellationToken cancellationToken,
+            Action<HexTileData> onStepTile = null) {
+
         if(targetTransform == null || path == null || path.Count == 0) return;
 
         try {
-            foreach(HexTile nextTile in path) {
+            foreach(HexTileData nextTile in path) {
+                if(nextTile == null) continue;
+
                 Vector3 startPos = targetTransform.position;
-                // マスの上に少し浮かせる位置を計算
-                Vector3 endPos = nextTile.transform.position + new Vector3(0, 0.5f, 0);
+
+                // 座標取得関数を使用し、高さをオフセット
+                Vector3 endPos = nextTile.GetTilePos() + new Vector3(0f, 0.5f, 0f);
+
+                // 進行方向への旋回ベクトルの計算
+                Vector3 moveDir = (endPos - startPos).normalized;
+                moveDir.y = 0; // 上下方向の傾きは無視して水平回転させる
+
+                Quaternion startRot = targetTransform.rotation;
+                Quaternion endRot = moveDir != Vector3.zero ? Quaternion.LookRotation(moveDir) : startRot;
 
                 float elapsedTime = 0f;
                 float duration = 0.2f; // 1マス移動にかかる時間
@@ -33,15 +45,22 @@ public class CharacterMovement{
                     cancellationToken.ThrowIfCancellationRequested();
 
                     elapsedTime += Time.deltaTime;
-                    targetTransform.position = Vector3.Lerp(startPos, endPos, elapsedTime / duration);
+                    float t = elapsedTime / duration;
+
+                    // 位置の線形補間
+                    targetTransform.position = Vector3.Lerp(startPos, endPos, t);
+
+                    // 向きの球面線形補間（滑らかに方向転換、少し早めに回転が終わるよう調整）
+                    targetTransform.rotation = Quaternion.Slerp(startRot, endRot, t * 2f);
 
                     await UniTask.Yield(PlayerLoopTiming.Update, cancellationToken);
                 }
 
-                // マスにぴったり座標を合わせる
+                // マスにぴったり座標と向きを合わせる
                 targetTransform.position = endPos;
+                targetTransform.rotation = endRot;
 
-                // 1マス移動が完了したら、外部（Character側）の座標データを即座に同期させる
+                // 1マス移動が完了したら、座標データを即座に同期させる
                 onStepTile?.Invoke(nextTile);
             }
         } catch(OperationCanceledException) {

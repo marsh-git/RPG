@@ -15,7 +15,7 @@ public class EnemySpawner : MonoBehaviour
     /// </summary>
     /// <param name="spawnTile">生成先のタイル</param>
     /// <returns>生成した敵</returns>
-    public EnemyBase Spawn(HexTile spawnTile)
+    public EnemyBase Spawn(int spawnTileID)
     {
         // 敵プレハブが設定されているか確認する
         if (enemyPrefab == null)
@@ -29,17 +29,13 @@ public class EnemySpawner : MonoBehaviour
             return null;
         }
 
-        // タイルが存在しない場合は生成しない
-        if (spawnTile == null)
-        {
-            return null;
-        }
+        if(spawnTileID < 0) return null;
 
         // 敵を生成する
         EnemyBase enemy = Instantiate(enemyPrefab);
 
         // タイルへ配置する
-        enemy.SetTile(spawnTile);
+        enemy.SetTile(spawnTileID);
 
         // 管理対象へ登録する
         characterManager.Register(enemy);

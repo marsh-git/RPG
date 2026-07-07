@@ -53,11 +53,11 @@ public class CharacterManager : MonoBehaviour
     /// </summary>
     /// <param name="tile">検索対象のタイル</param>
     /// <returns>存在しない場合はnull</returns>
-    public CharacterBase GetCharacter(HexTile tile)
+    public CharacterBase GetCharacter(int tileID)
     {
         foreach (CharacterBase character in characters)
         {
-            if (character.CurrentTile == tile)
+            if (character.GetTileID() == tileID)
             {
                 return character;
             }

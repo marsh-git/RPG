@@ -8,7 +8,7 @@ public abstract class CharacterBase : MonoBehaviour
     // ネットワークID
     protected int id;
     // 現在いるタイル
-    protected HexTile currentTile;
+    protected int tileID;
     // キャラクターの移動処理
     protected CharacterMovement movement = new();
     // 移動キャンセル用
@@ -27,9 +27,6 @@ public abstract class CharacterBase : MonoBehaviour
     public bool IsDead => hp <= 0;
     // 移動中か
     public bool IsMoving { get; private set; }
-    // 現在いるタイル
-    public HexTile CurrentTile => currentTile;
-
     /// <summary>
     /// キャラクターの初期化
     /// </summary>
@@ -37,26 +34,31 @@ public abstract class CharacterBase : MonoBehaviour
     {
         hp = maxHp;
     }
-
+    /// <summary>
+    /// タイルIDの取得
+    /// </summary>
+    /// <returns></returns>
+    public virtual int GetTileID() 
+    {
+        return tileID;
+    }
     /// <summary>
     /// キャラクターを指定したタイルへ配置
     /// </summary>
     /// <param name="tile">配置先のタイル</param>
-    public virtual void SetTile(HexTile tile)
+    public virtual void SetTile(int setTileID)
     {
-        currentTile = tile;
+        tileID = setTileID;
 
-        if (tile != null)
-        {
-            transform.position = tile.transform.position + Vector3.up * 0.5f;
-        }
+        HexTileData tileData = HexTileManager.instance.GetTileData(tileID);
+        if(tileData != null) transform.position = tileData.GetTilePos() + Vector3.up * 0.5f;
     }
 
     /// <summary>
     /// 指定した経路に沿ってキャラクターを移動
     /// </summary>
     /// <param name="path">移動経路</param>
-    public virtual async UniTask MoveAsync(List<HexTile> path)
+    public virtual async UniTask MoveAsync(List<HexTileData> path)
     {
         // すでに移動中なら何もしない
         if (IsMoving)
@@ -76,12 +78,9 @@ public abstract class CharacterBase : MonoBehaviour
             transform,
             path,
             moveCancellation.Token,
-            tile =>
-            {
-                // 1マス移動するたび現在位置を更新する
-                currentTile = tile;
+            tileData => {
+                if(tileData != null) tileID = tileData.ID;  // 1マス移動するたびにIDを抽出し、tileIDを更新する
             });
-
         IsMoving = false;
     }
 

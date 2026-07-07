@@ -15,19 +15,15 @@ public class PlayerSpawner : MonoBehaviour
     /// </summary>
     /// <param name="spawnTile">生成先タイル</param>
     /// <returns>生成したプレイヤー</returns>
-    public PlayerBase Spawn(HexTile spawnTile)
+    public PlayerBase Spawn(int spawnTileID)
     {
-        // タイルが存在しない場合は生成しない
-        if (spawnTile == null)
-        {
-            return null;
-        }
+        if(spawnTileID < 0) return null;
 
         // プレイヤーを生成する
         PlayerBase player = Instantiate(playerPrefab);
 
         // タイルへ配置する
-        player.SetTile(spawnTile);
+        player.SetTile(spawnTileID);
 
         // 管理対象へ登録する
         characterManager.Register(player);

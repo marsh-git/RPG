@@ -10,6 +10,8 @@ public class HexTileData {
     public int ID { get; private set; } = -1;
     // エリアID
     public int areaID { get; private set; } = -1;
+    // マス上にいるキャラクターID
+    public int characterID { get; private set; } = -1;
     // マス上のX座標
     public int gridPosX { get; private set; } = -1;
     // マス上のY座標
@@ -59,6 +61,16 @@ public class HexTileData {
     /// <param name="setBiome"></param>
     public void SetBiome(eBiome setBiome) {
         biome = setBiome;
+    }
+    /// <summary>
+    /// 対応するタイルオブジェクト取得
+    /// </summary>
+    /// <returns></returns>
+    private HexTileObject GetObject() {
+        return HexTileManager.instance.GetTileObject(ID);
+    }
+    public Vector3 GetTilePos() {
+        return (Vector3)(GetObject()?.transform.position);
     }
     /// <summary>
     /// 地形に応じた移動コストの取得

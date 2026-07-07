@@ -21,9 +21,9 @@ public class PlayerBase : CharacterBase
     [SerializeField] private JobData jobData = null;
     private JobManager jobManager = null;
 
-    protected override void Start()
+    protected override void Awake()
     {
-        base.Start();
+        base.Awake();
 
         jobManager = JobManager.instance;
         needExp = baseNeedExp;

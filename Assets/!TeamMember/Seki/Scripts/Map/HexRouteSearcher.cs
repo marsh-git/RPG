@@ -106,11 +106,16 @@ public static class HexRouteSearcher {
         return reachableTiles;
     }
 
-    // アキシアル座標系における直線ステップ数計算
-    private static int HeuristicDistance(HexTileData a, HexTileData b) {
-        int az = -a.gridPosX - a.gridPosY;
-        int bz = -b.gridPosX - b.gridPosY;
-        return (Mathf.Abs(a.gridPosX - b.gridPosX) + Mathf.Abs(a.gridPosY - b.gridPosY) + Mathf.Abs(az - bz)) / 2;
+    /// <summary>
+    /// アキシアル座標系における直線ステップ数計算
+    /// </summary>
+    /// <param name="start"></param>
+    /// <param name="goal"></param>
+    /// <returns></returns>
+    private static int HeuristicDistance(HexTileData start, HexTileData goal) {
+        int az = -start.gridPosX - start.gridPosY;
+        int bz = -goal.gridPosX - goal.gridPosY;
+        return (Mathf.Abs(start.gridPosX - goal.gridPosX) + Mathf.Abs(start.gridPosY - goal.gridPosY) + Mathf.Abs(az - bz)) / 2;
     }
 
     private static List<HexTileData> RetracePath(HexTileData start, HexTileData goal, Dictionary<HexTileData, HexTileData> cameFrom) {

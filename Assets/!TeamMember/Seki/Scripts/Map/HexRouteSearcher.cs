@@ -105,7 +105,6 @@ public static class HexRouteSearcher {
         }
         return reachableTiles;
     }
-
     /// <summary>
     /// アキシアル座標系における直線ステップ数計算
     /// </summary>
@@ -117,7 +116,14 @@ public static class HexRouteSearcher {
         int bz = -goal.gridPosX - goal.gridPosY;
         return (Mathf.Abs(start.gridPosX - goal.gridPosX) + Mathf.Abs(start.gridPosY - goal.gridPosY) + Mathf.Abs(az - bz)) / 2;
     }
-
+    /// <summary>
+    /// A* 探索の結果から、ゴールからスタートへ向かう親ノードのリンクを逆引きし、
+    /// 正しい移動順（スタートの隣接マス ～ ゴール）の経路リストに復元・反転
+    /// /// </summary>
+    /// <param name="start"></param>
+    /// <param name="goal"></param>
+    /// <param name="cameFrom"></param>
+    /// <returns></returns>
     private static List<HexTileData> RetracePath(HexTileData start, HexTileData goal, Dictionary<HexTileData, HexTileData> cameFrom) {
         List<HexTileData> path = new List<HexTileData>();
         HexTileData current = goal;

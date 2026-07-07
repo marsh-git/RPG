@@ -21,6 +21,9 @@ public class PlayerBase : CharacterBase
     [SerializeField] private JobData jobData = null;
     private JobManager jobManager = null;
 
+    // プレイヤーのダイス
+    private DiceManager diceManager;
+
     protected override void Awake()
     {
         base.Awake();

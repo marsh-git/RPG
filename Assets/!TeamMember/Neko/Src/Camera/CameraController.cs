@@ -40,6 +40,10 @@ public class CameraController : MonoBehaviour
     [SerializeField]
     private float distance = 20f;
 
+    // クリック可能なレイヤー
+    [SerializeField]
+    private LayerMask clickableLayer;
+
     // 現在距離
     private float currentDistance;
 
@@ -84,6 +88,9 @@ public class CameraController : MonoBehaviour
 
         // ドラッグ移動
         MoveByDrag();
+
+        // タイルクリック
+        HandleLeftClick();
 
         // ホイールズーム
         Zoom();
@@ -206,4 +213,20 @@ public class CameraController : MonoBehaviour
             Quaternion.Euler(pitch, 0f, 0f) * new Vector3(0f, 0f, -currentDistance);
     }
 
+    /// <summary>
+    /// 左クリック処理
+    /// </summary>
+    private void HandleLeftClick()
+    {
+        if(Input.GetMouseButtonDown(0)) {
+            Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
+
+            if(Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, clickableLayer)) {
+                // インターフェースを持っているコンポーネントがあれば、その固有の処理を実行して即終了
+                if(hit.collider.TryGetComponent<IClickable>(out var clickable)) {
+                    clickable.OnClick();
+                }
+            }
+        }
+    }
 }

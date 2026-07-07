@@ -56,7 +56,7 @@ public class HexMapGenerator : MonoBehaviour{
 
                     // Viewの生成
                     HexTileObject newTileObject = Instantiate(prefabToSpawn, Vector3.zero, Quaternion.Euler(0, 30, 0), this.transform);
-                    newTileObject.Setup(spawnPosition);
+                    newTileObject.Setup(currentTileID, spawnPosition);
                     newTileObject.name = $"Tile_[ID:{currentTileID}]_Area:{currentAreaID}_G({globalQ},{globalR})";
 
                     // Model（データ）の生成

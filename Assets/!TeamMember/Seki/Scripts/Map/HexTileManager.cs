@@ -8,7 +8,7 @@ public class HexTileManager : MonoBehaviour {
     private List<HexTileData> _tileDataList = new List<HexTileData>();
     private List<HexTileObject> _tileObjectList = new List<HexTileObject>();
     private List<HexAreaData> _areaDataList = new List<HexAreaData>();
-    private Dictionary<Vector2Int, int> _coordToIdMap = new Dictionary<Vector2Int, int>();
+    private List<int> _playerTileList = new List<int>();
 
     // TODO:そのうち、ゲームシーンステートクラスが持つようになる
     [SerializeField] private HexMapGenerator mapGenerator;
@@ -38,10 +38,6 @@ public class HexTileManager : MonoBehaviour {
 
         _tileDataList.Add(data);
         _tileObjectList.Add(tileObject);
-
-        // 座標からIDを引けるように逆引き辞書に登録
-        Vector2Int coord = new Vector2Int(data.gridPosX, data.gridPosY);
-        _coordToIdMap[coord] = data.ID;
     }
     /// <summary>
     /// エリアの追加
@@ -51,32 +47,45 @@ public class HexTileManager : MonoBehaviour {
         _areaDataList.Add(area);
     }
     /// <summary>
-    /// IDから2次元座標に変換
+    /// 指定プレイヤーのタイル取得
     /// </summary>
-    /// <param name="ID"></param>
-    /// <param name="x"></param>
-    /// <param name="y"></param>
-    private void GetTilePos(int ID, out int x, out int y) {
-        HexTileData data = GetTileData(ID);
-        if(data != null) {
-            x = data.gridPosX;
-            y = data.gridPosY;
-        } else {
-            x = -1;
-            y = -1;
-        }
+    /// <param name="playerID"></param>
+    /// <returns></returns>
+    public HexTileData GetPlayerTile(int playerID) {
+        HexTileData playerTile = GetTileData(_playerTileList[playerID]);
+        if(playerTile == null) return null;
+        return playerTile;
     }
     /// <summary>
-    /// 2次元座標からIDに変換
+    /// ランダムなプレイヤーのタイル取得
+    /// </summary>
+    /// <returns></returns>
+    public HexTileData GetRandomPlayerTile() {
+        int randomPlayerID = Random.Range(0, 5);
+        return GetPlayerTile(randomPlayerID);
+    }
+    /// <summary>
+    /// 指定プレイヤーがいるタイル設定
+    /// </summary>
+    /// <param name="playerID"></param>
+    /// <param name="tileID"></param>
+    public void SetPlayerTile(int playerID, int tileID) {
+        _playerTileList[playerID] = tileID;
+    }
+    /// <summary>
+    /// 座標指定のタイルID取得
     /// </summary>
     /// <param name="x"></param>
     /// <param name="y"></param>
     /// <returns></returns>
     private int GetTileID(int x, int y) {
-        Vector2Int coord = new Vector2Int(x, y);
-        if(_coordToIdMap.TryGetValue(coord, out int id)) return id;
-
-        return -1; // 存在しないマップ外の座標
+        // リスト全体をループして、座標が一致するタイルを探す
+        for(int i = 0, max = _tileDataList.Count; i < max; i++) {
+            if(_tileDataList[i].gridPosX != x || _tileDataList[i].gridPosY != y) continue;
+            // 一致したIDを返す
+            return _tileDataList[i].ID;
+        }
+        return -1; // マップ外
     }
     /// <summary>
     /// ID指定のタイル情報取得
@@ -103,7 +112,6 @@ public class HexTileManager : MonoBehaviour {
     /// <param name="y"></param>
     /// <returns></returns>
     public HexTileData GetHexTileData(int x, int y) {
-        // タイルIDを取得
         int tileID = GetTileID(x, y);
         return GetTileData(tileID);
     }

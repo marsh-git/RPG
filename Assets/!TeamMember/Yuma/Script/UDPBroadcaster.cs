@@ -1,0 +1,115 @@
+using UnityEngine;
+using System.Net;
+using System.Net.Sockets;
+using System.Text;
+
+/// <summary>
+/// 定期的にIPアドレスを送信する
+/// </summary>
+public class UDPBroadcaster : MonoBehaviour
+{
+    /// <summary>
+    /// UDP形式で送信するメッセージの構造体
+    /// </summary>
+    [System.Serializable]
+    public class UdpMessage {
+        public string ip;
+        public int port;
+        public string gameName;
+        public string hostName;
+        public bool gamePlaying;
+    }
+
+    private UdpClient client;
+    /// <summary>
+    /// メッセージの実体
+    /// </summary>
+    public UdpMessage message = new UdpMessage();
+    /// <summary>
+    /// 送るIPアドレスの文字列
+    /// </summary>
+    public string sendIPAddress = null;
+    /// <summary>
+    /// メッセージをjsonファイルに変更した時に保存する変数
+    /// </summary>
+    private string json = null;
+
+    private const string Room = "'s Room";
+    private void Awake() {
+        DontDestroyOnLoad(gameObject);
+    }
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        client = new UdpClient();
+        client.EnableBroadcast = true;
+        //送信するメッセージを初期化
+        MessageInitialized();   
+    }
+    /// <summary>
+    /// IPアドレスを送信
+    /// </summary>
+    public void StartSendIP() {
+        //定期的に送信
+        InvokeRepeating(nameof(SendMesseageToClient), 0.0f, 0.1f);
+    }
+
+    /// <summary>
+    /// メッセージの初期化
+    /// </summary>
+    private void MessageInitialized() {
+        message.ip = GetIpAddress();
+        message.port = 55555;//ポート番号を私的利用可能なものにする
+        message.gameName = "TPS";
+        message.hostName = PlayerSaveData.Load().playerName + Room;
+        message.gamePlaying = false;
+        Debug.Log(message.ip);
+    }
+
+    /// <summary>
+    /// IPアドレスを取得
+    /// </summary>
+    /// <returns></returns>
+    private string GetIpAddress() {
+        string hostName = Dns.GetHostName();
+        IPAddress[] ips = Dns.GetHostAddresses(hostName);
+
+        foreach (var sendIP in ips) {
+            if (sendIP.AddressFamily.Equals(AddressFamily.InterNetwork)) {
+                return sendIP.ToString();
+            }
+        }
+        return null;
+    }
+
+    /// <summary>
+    /// 定期的にクライアントにメッセージを送る
+    /// </summary>
+    public void SendMesseageToClient() {
+        IPEndPoint endPoint = new IPEndPoint(IPAddress.Broadcast,message.port);
+        //jsonファイルに変更
+        json = JsonUtility.ToJson(message);
+        byte[] data = Encoding.UTF8.GetBytes(json);
+
+        client.Send(data, data.Length, endPoint);
+
+    }
+
+    /// <summary>
+    /// 該当のゲーム進行状況を変更
+    /// </summary>
+    /// <param name="_isPlaying"></param>
+    public void SetGamePlaying(bool _isPlaying) {
+        message.gamePlaying = _isPlaying;
+    }
+
+    /// <summary>
+    /// IPアドレス送信終了
+    /// </summary>
+    public void StopBroadcast() {
+        CancelInvoke(nameof(SendMesseageToClient));
+        client?.Close();
+        client?.Dispose();
+    }
+}

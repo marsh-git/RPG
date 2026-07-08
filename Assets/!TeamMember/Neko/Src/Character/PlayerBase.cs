@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerBase : CharacterBase
+public class PlayerBase : CharacterBase, IClickable
 {
-
+    public bool isSelect { get; private set; } = false;
     //  経験値変数
     private int exp = 0;
     private int lv = 1;
@@ -37,19 +37,19 @@ public class PlayerBase : CharacterBase
 
     private void Update()
     {
-        // 左クリックで経験値取得(デバッグ用)
-        if (Input.GetMouseButtonDown(0))
-        {
-            GetExp(10);
-            Debug.Log("現在のexp = " + Exp);
-            Debug.Log("現在のlv = " + Lv);
-            Debug.Log("次の経験値まで = " + NeedExp);
-        }
-        //  デバッグ用
-        if (Input.GetMouseButtonDown(1))
-        {
-            SetJob(1);
-        }
+        // // 左クリックで経験値取得(デバッグ用)
+        // if (Input.GetMouseButtonDown(0))
+        // {
+        //     GetExp(10);
+        //     Debug.Log("現在のexp = " + Exp);
+        //     Debug.Log("現在のlv = " + Lv);
+        //     Debug.Log("次の経験値まで = " + NeedExp);
+        // }
+        // //  デバッグ用
+        // if (Input.GetMouseButtonDown(1))
+        // {
+        //     SetJob(1);
+        // }
     }
 
     /// <summary>
@@ -107,5 +107,36 @@ public class PlayerBase : CharacterBase
         defense = jobData.defense;
         luck = jobData.luck;
     }
-
+    /// <summary>
+    /// 選択フラグの設定
+    /// </summary>
+    /// <param name="setFlag"></param>
+    public void SetIsSelect(bool setFlag) {
+        isSelect = setFlag;
+    }
+    /// <summary>
+    /// クリックされたときの処理
+    /// </summary>
+    public void OnClick() {
+        var ClickableHighlight = ClickableSelectionManager.instance;
+        if(isSelect) {
+            // ハイライトのクリア
+            ClickableHighlight.ClearHighlights();
+            // 選択フラグの変更
+            isSelect = false;
+        } else {
+            List<HexTileData> movementTileList = new List<HexTileData>();
+            // 現在いるマスを取得
+            HexTileData targetTile = HexTileManager.instance.GetTileData(tileID);
+            // 自身のマスを光らせる
+            ClickableHighlight.OnTileHighlight(targetTile, true, eTileHighlight.PlayerHighlight);
+            // 移動可能範囲の取得
+            var rangeSet = HexRouteSearcher.CalculateMovementRange(targetTile, 3, false);
+            movementTileList = new List<HexTileData>(rangeSet);
+            // 移動可能範囲を光らせる
+            ClickableHighlight.HighlightRangeTile(movementTileList, false);
+            // 選択フラグの変更
+            isSelect = true;
+        }
+    }
 }

@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using System.Collections;
 using System.Collections.Generic;
 using System.Security.Cryptography;
@@ -35,9 +36,25 @@ public class HexTileObject : MonoBehaviour, IClickable {
     /// クリックされたときの処理
     /// </summary>
     public void OnClick() {
+        var ClickableHighlight = ClickableSelectionManager.instance;
+        var MovementManager = CharacterMovementManager.instance;
         // タイルデータを取得
         HexTileData targetTile = HexTileManager.instance.GetTileData(ID);
-        // クリック管理クラスに伝える
-        ClickableSelectionManager.instance.OnTileHighlight(targetTile);
+        switch(targetTile.tileState) {
+            case eTileState.Normal:
+            // クリック管理クラスに伝える
+            ClickableHighlight.OnTileHighlight(targetTile);
+            break;
+            case eTileState.Movable:
+            // ハイライトの解除
+            ClickableHighlight.ClearHighlights();
+            // 移動ルートの決定
+            MovementManager.DecideMoveRoute(targetTile);
+            // 移動処理
+            UniTask task = MovementManager.MoveCharacter();
+            break;
+            case eTileState.Selected:
+            break;
+        }
     }
 }

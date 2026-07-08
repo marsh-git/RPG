@@ -77,3 +77,13 @@ public enum eTileHighlight {
 
     Max
 }
+/// <summary>
+/// タイルのステート
+/// </summary>
+public enum eTileState {
+    Normal,         // 通常
+    Movable,        // 移動可能
+    Selected,       // 選択状態
+
+    Max
+}

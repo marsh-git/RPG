@@ -16,6 +16,8 @@ public class HexTileData {
     public int gridPosX { get; private set; } = -1;
     // マス上のY座標
     public int gridPosY { get; private set; } = -1;
+    // タイルの状態
+    public eTileState tileState { get; private set; } = eTileState.Normal;
     // タイルの地形
     public eTerrain terrain { get; private set; } = eTerrain.Invalid;
     // タイルの属性
@@ -40,6 +42,13 @@ public class HexTileData {
     /// <param name="setAreaID"></param>
     public void SetAreaID(int setAreaID) {
         areaID = setAreaID;
+    }
+    /// <summary>
+    /// タイル状態の設定
+    /// </summary>
+    /// <param name="setState"></param>
+    public void SetTileState(eTileState setState) {
+        tileState = setState;
     }
     /// <summary>
     /// 地形の設定

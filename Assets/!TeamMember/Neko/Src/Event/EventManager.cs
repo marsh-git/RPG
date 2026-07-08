@@ -5,6 +5,6 @@ using UnityEngine;
 public class EventManager : MonoBehaviour
 {
 
-    //  ゲーム内で使用するイベントテーブルとイベントデータの2重配列
+    //  ゲーム内で使用するイベントデータの配列
 
 }

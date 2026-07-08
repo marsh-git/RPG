@@ -35,23 +35,6 @@ public class PlayerBase : CharacterBase, IClickable
         if (jobData == null) SetJob(jobManager.START_JOB);
     }
 
-    private void Update()
-    {
-        // // 左クリックで経験値取得(デバッグ用)
-        // if (Input.GetMouseButtonDown(0))
-        // {
-        //     GetExp(10);
-        //     Debug.Log("現在のexp = " + Exp);
-        //     Debug.Log("現在のlv = " + Lv);
-        //     Debug.Log("次の経験値まで = " + NeedExp);
-        // }
-        // //  デバッグ用
-        // if (Input.GetMouseButtonDown(1))
-        // {
-        //     SetJob(1);
-        // }
-    }
-
     /// <summary>
     /// 敵から得れる経験値を引数に呼び出す
     /// </summary>
@@ -107,6 +90,7 @@ public class PlayerBase : CharacterBase, IClickable
         defense = jobData.defense;
         luck = jobData.luck;
     }
+
     /// <summary>
     /// 選択フラグの設定
     /// </summary>

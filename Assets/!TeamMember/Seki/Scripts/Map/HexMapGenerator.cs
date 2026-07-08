@@ -21,33 +21,8 @@ public class HexMapGenerator : MonoBehaviour{
         int currentAreaID = 0;
 
         List<HexTileObject> spawnTileList = new List<HexTileObject>();
-
         // 生成するエリアの中心アキシアル座標を管理するリスト
-        List<Vector2Int> areaCentersToCreate = new List<Vector2Int>();
-
-        // エリア1（中央）は必ず(0, 0)
-        areaCentersToCreate.Add(new Vector2Int(0, 0));
-
-        // 半径10のPointy-Topped大Hexが完全密着するための数学的に正しい6方向の相対座標リスト
-        Vector2Int[] bigHexOffsets = new Vector2Int[] {
-            new Vector2Int(11, 10),   // 右上
-            new Vector2Int(21, -10),  // 右下
-            new Vector2Int(1, -21),   // 真下
-            new Vector2Int(-11, -10), // 左下
-            new Vector2Int(-21, 10),  // 左上
-            new Vector2Int(-1, 21)    // 真上
-        };
-
-        // ランダムに2つの方向インデックスを選択（重複なし）
-        List<int> directionIndices = new List<int> { 0, 1, 2, 3, 4, 5 };
-        for(int i = 0; i < 2; i++) {
-            int randIdx = Random.Range(0, directionIndices.Count);
-            int chosenDirIdx = directionIndices[randIdx];
-            directionIndices.RemoveAt(randIdx);
-
-            // 確定した隣接エリアの中心座標を追加
-            areaCentersToCreate.Add(bigHexOffsets[chosenDirIdx]);
-        }
+        List<Vector2Int> areaCentersToCreate = DecideDirArea();
 
         // エリアのループ
         foreach(Vector2Int areaCenter in areaCentersToCreate) {
@@ -166,5 +141,34 @@ public class HexMapGenerator : MonoBehaviour{
 
         // ※そのため、街マスの中心は端マスより1マス内側でなければいけない
     }
+    /// <summary>
+    /// 中心エリアから隣接するエリアをランダムに決定する
+    /// </summary>
+    /// <returns></returns>
+    private static List<Vector2Int> DecideDirArea() {
+        // 生成するエリアの中心アキシアル座標を管理するリスト
+        List<Vector2Int> areaCentersToCreate = new List<Vector2Int>();
+        // エリア1は必ず(0, 0)
+        areaCentersToCreate.Add(new Vector2Int(0, 0));
+        // 半径10のPointy-Topped大Hexが完全密着するための数学的に正しい6方向の相対座標リスト
+        Vector2Int[] bigHexOffsets = new Vector2Int[] {
+            new Vector2Int(11, 10),   // 右上
+            new Vector2Int(21, -10),  // 右下
+            new Vector2Int(1, -21),   // 真下
+            new Vector2Int(-11, -10), // 左下
+            new Vector2Int(-21, 10),  // 左上
+            new Vector2Int(-1, 21)    // 真上
+        };
+        // ランダムに2つの方向インデックスを選択（重複なし）
+        List<int> directionIndices = new List<int> { 0, 1, 2, 3, 4, 5 };
+        for(int i = 0; i < 2; i++) {
+            int randIdx = Random.Range(0, directionIndices.Count);
+            int chosenDirIdx = directionIndices[randIdx];
+            directionIndices.RemoveAt(randIdx);
 
+            // 確定した隣接エリアの中心座標を追加
+            areaCentersToCreate.Add(bigHexOffsets[chosenDirIdx]);
+        }
+        return areaCentersToCreate;
+    }
 }

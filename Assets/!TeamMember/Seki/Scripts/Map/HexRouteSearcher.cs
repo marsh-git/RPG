@@ -76,37 +76,62 @@ public static class HexRouteSearcher {
     /// <param name="isEnemy"></param>
     /// <returns></returns>
     public static HashSet<HexTileData> CalculateMovementRange(HexTileData start, int maxCost, bool isEnemy) {
+        // 最終的に戻す「移動可能なタイル」を格納するハッシュセット
         HashSet<HexTileData> reachableTiles = new HashSet<HexTileData>();
+
+        // 各タイルに到達するまでにかかった「最小累積コスト」を記録する辞書
         Dictionary<HexTileData, int> costSoFar = new Dictionary<HexTileData, int>();
+
+        // 次に探索するべきタイルを入れておくキュー（探索のフロントライン）
         Queue<HexTileData> frontier = new Queue<HexTileData>();
 
+        // スタート地点がヌルなら空のリストを返す（防衛策）
         if(start == null) return reachableTiles;
 
+        // 初期化：スタート地点を探索キューに入れ、そのコストを0に設定
         frontier.Enqueue(start);
         costSoFar[start] = 0;
 
+        // 探索すべきタイルがある限りループを回す
         while(frontier.Count > 0) {
+            // キューから現在調査するタイルを1つ取り出す
             HexTileData current = frontier.Dequeue();
             int currentCost = costSoFar[current];
 
+            // 現在のタイルから周囲6方向（Hexの隣接方向）を順に調べる
             foreach(eDirectionHex dir in Directions) {
+                // 隣接するタイルのデータをマネージャーから取得
                 HexTileData neighbor = HexTileManager.instance.GetToDirTile(current.gridPosX, current.gridPosY, dir);
 
+                // 隣が存在しない、または「山」、または「移動不可属性」ならスキップ
                 if(neighbor == null || neighbor.terrain == eTerrain.Mountain || neighbor.attribute == eAttribute.CannotMove) continue;
 
+                // 隣マスの地形に応じた移動コストを取得
                 int movementCost = (int)neighbor.GetMovementCost();
+                // コストがマイナス（通行不能設定など）ならスキップ
                 if(movementCost < 0) continue;
 
+                // スタート地点からその隣マスへ行くための「累積コスト」を計算
                 int newCost = currentCost + movementCost;
+
+                // 累積コストが最大移動力を超えてしまうならスキップ
                 if(newCost > maxCost) continue;
 
+                // 移動可能判定されたマスの処理
+                // まだその隣マスに到達したことがない、または、以前調べたルートより少ないコストで到達できる場合
                 if(!costSoFar.ContainsKey(neighbor) || newCost < costSoFar[neighbor]) {
+                    // そのマスの最小移動コストを更新・記録する
                     costSoFar[neighbor] = newCost;
+                    // そのマスの先にも移動できる可能性があるので、次の探索キューに追加する
                     frontier.Enqueue(neighbor);
+                    // 移動可能範囲のリスト（戻り値）にこのタイルを登録する
                     reachableTiles.Add(neighbor);
+                    // タイル状態を選択可能にする
+                    neighbor.SetTileState(eTileState.Movable);
                 }
             }
         }
+        // 最終的に溜まった移動可能なタイル群を返す
         return reachableTiles;
     }
     /// <summary>

@@ -103,9 +103,12 @@ public class PlayerBase : CharacterBase, IClickable
     /// </summary>
     public void OnClick() {
         var ClickableHighlight = ClickableSelectionManager.instance;
+        var MovementManager = CharacterMovementManager.instance;
         if(isSelect) {
             // ハイライトのクリア
             ClickableHighlight.ClearHighlights();
+            // 選択キャラの解除
+            MovementManager.SetMovementCharacter(null);
             // 選択フラグの変更
             isSelect = false;
         } else {
@@ -115,10 +118,14 @@ public class PlayerBase : CharacterBase, IClickable
             // 自身のマスを光らせる
             ClickableHighlight.OnTileHighlight(targetTile, true, eTileHighlight.PlayerHighlight);
             // 移動可能範囲の取得
-            var rangeSet = HexRouteSearcher.CalculateMovementRange(targetTile, 3, false);
+            HashSet<HexTileData> rangeSet = HexRouteSearcher.CalculateMovementRange(targetTile, 3, false);
             movementTileList = new List<HexTileData>(rangeSet);
             // 移動可能範囲を光らせる
             ClickableHighlight.HighlightRangeTile(movementTileList, false);
+            // 移動可能リストの設定
+            MovementManager.SetMovableTileList(movementTileList);
+            // 自身を移動キャラクターに設定
+            MovementManager.SetMovementCharacter(this);
             // 選択フラグの変更
             isSelect = true;
         }

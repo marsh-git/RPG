@@ -4,53 +4,72 @@ using UnityEngine;
 using UnityEngine.UIElements;
 
 public class HexMapGenerator : MonoBehaviour{
+    // TODO:ここのタイルに関してはのちにScriptableObjectに紐づけて
+    // TODO:バイオームによってタイルの見た目を変えられるようにする
     [Header("TilePrefabs")]
-    [SerializeField] private HexTileObject tilePrefabPlain;
-    [SerializeField] private HexTileObject tilePrefabHill;
-    [SerializeField] private HexTileObject tilePrefabForest;
-    [SerializeField] private HexTileObject tilePrefabMountain;
+    [SerializeField] private HexTileObject tilePrefabPlain = null;
+    [SerializeField] private HexTileObject tilePrefabHill = null;
+    [SerializeField] private HexTileObject tilePrefabForest = null;
+    [SerializeField] private HexTileObject tilePrefabMountain = null;
+    // TODO:ここのキャラクターに関してものちにScriptableObjectに紐づけてすっきりしたい
+    [Header("UnitPrefabs")]
+    [SerializeField] private PlayerBase playerPrefab = null;
 
-    /// <summary>
-    /// デバッグ用のマップ生成 (データとオブジェクトを同時に生成してManagerへ登録)
-    /// </summary>
     public void CreateDebugMap() {
         int mapRadius = 10;
         int currentTileID = 0;
         int currentAreaID = 0;
 
-        // 生成したいエリア（大Hex）の座標リストを定義
-        // 画像の通り、エリア1(中央下)、エリア2(左上)、エリア3(右上)の3つを配置
-        List<Vector2Int> areasToCreate = new List<Vector2Int>() {
-            new Vector2Int(0, 0),   // エリア1
-            new Vector2Int(-1, 1),  // エリア2 (左上)
-            new Vector2Int(0, 1)    // エリア3 (右上)
+        List<HexTileObject> spawnTileList = new List<HexTileObject>();
+
+        // 生成するエリアの中心アキシアル座標を管理するリスト
+        List<Vector2Int> areaCentersToCreate = new List<Vector2Int>();
+
+        // エリア1（中央）は必ず(0, 0)
+        areaCentersToCreate.Add(new Vector2Int(0, 0));
+
+        // 半径10のPointy-Topped大Hexが完全密着するための数学的に正しい6方向の相対座標リスト
+        Vector2Int[] bigHexOffsets = new Vector2Int[] {
+            new Vector2Int(11, 10),   // 右上
+            new Vector2Int(21, -10),  // 右下
+            new Vector2Int(1, -21),   // 真下
+            new Vector2Int(-11, -10), // 左下
+            new Vector2Int(-21, 10),  // 左上
+            new Vector2Int(-1, 21)    // 真上
         };
 
-        // エリアのループ
-        foreach(Vector2Int areaCoord in areasToCreate) {
-            // このエリアの中心となる、小Hex基準の絶対座標（オフセット）を計算
-            int areaCenterQ = areaCoord.x * (3 * mapRadius + 2) + areaCoord.y * (mapRadius + 1);
-            int areaCenterR = areaCoord.y * mapRadius;
+        // ランダムに2つの方向インデックスを選択（重複なし）
+        List<int> directionIndices = new List<int> { 0, 1, 2, 3, 4, 5 };
+        for(int i = 0; i < 2; i++) {
+            int randIdx = Random.Range(0, directionIndices.Count);
+            int chosenDirIdx = directionIndices[randIdx];
+            directionIndices.RemoveAt(randIdx);
 
-            // このエリアに所属することになるタイルのIDリスト
+            // 確定した隣接エリアの中心座標を追加
+            areaCentersToCreate.Add(bigHexOffsets[chosenDirIdx]);
+        }
+
+        // エリアのループ
+        foreach(Vector2Int areaCenter in areaCentersToCreate) {
+            int areaCenterQ = areaCenter.x;
+            int areaCenterR = areaCenter.y;
+
             List<int> registeredTileIDs = new List<int>();
 
-            // エリア内部の小Hex生成ループ（中心 0,0 からの相対ロジックのまま）
+            // エリア内部の小Hex生成ループ
             for(int q = -mapRadius; q <= mapRadius; q++) {
                 int rStart = Mathf.Max(-mapRadius, -q - mapRadius);
                 int rEnd = Mathf.Min(mapRadius, -q + mapRadius);
 
                 for(int r = rStart; r <= rEnd; r++) {
-                    // 内部の相対座標に、エリアの中心オフセットを足して「絶対座標」にする
                     int globalQ = areaCenterQ + q;
                     int globalR = areaCenterR + r;
 
-                    // 3D空間の物理位置の計算（絶対座標をベースにするので、自動的にズレて配置される）
+                    // 3D物理空間への座標変換（Pointy-Toppedの正しい変換式）
                     float x = 2f * (Mathf.Sqrt(3f) * globalQ + Mathf.Sqrt(3f) / 2f * globalR);
                     float z = 2f * (3f / 2f * globalR);
                     Vector3 spawnPosition = new Vector3(x, 0f, z);
 
-                    // 地形のランダム決定
                     eTerrain randomTerrain = (eTerrain)Random.Range((int)eTerrain.Plain, (int)eTerrain.Mountain + 1);
                     HexTileObject prefabToSpawn = GetTerrainPrefab(randomTerrain);
 
@@ -61,13 +80,15 @@ public class HexMapGenerator : MonoBehaviour{
 
                     // Model（データ）の生成
                     HexTileData newTileData = new HexTileData();
-                    newTileData.Setup(currentTileID, globalQ, globalR); // 絶対座標を登録
+                    newTileData.Setup(currentTileID, globalQ, globalR);
                     newTileData.SetTerrain(randomTerrain);
 
                     // Managerへ登録
                     HexTileManager.instance.AddTile(newTileData, newTileObject);
 
-                    // エリア管理用にIDをキープ
+                    if(randomTerrain != eTerrain.Mountain && currentAreaID == 0) {
+                        spawnTileList.Add(newTileObject);
+                    }
                     registeredTileIDs.Add(currentTileID);
                     currentTileID++;
                 }
@@ -75,18 +96,40 @@ public class HexMapGenerator : MonoBehaviour{
 
             // エリアデータの生成とセットアップ
             HexAreaData newAreaData = new HexAreaData();
-            // 仮でエリアごとに異なるバイオームを割り振る
             eBiome areaBiome = (eBiome)((currentAreaID % (int)eBiome.Max) + 1);
-
-            newAreaData.Setup(currentAreaID, areaCoord.x, areaCoord.y, areaBiome, registeredTileIDs);
-
-            // マネージャー側のリストにエリアデータを登録
+            newAreaData.Setup(currentAreaID, areaCenterQ, areaCenterR, areaBiome, registeredTileIDs);
             HexTileManager.instance.AddArea(newAreaData);
-
             currentAreaID++;
         }
 
-        Debug.Log($"【入れ子マップ生成完了】総エリア数: {currentAreaID} / 総タイル数: {currentTileID}");
+        Debug.Log($"【マップ生成完了】総エリア数: {currentAreaID} / 総タイル数: {currentTileID}");
+
+        // プレイヤーの生成
+        SpawnPlayer(spawnTileList);
+    }
+    /// <summary>
+    /// 候補タイルリストからランダムな位置にプレイヤーを生成・配置する
+    /// </summary>
+    private void SpawnPlayer(List<HexTileObject> candidateTiles) {
+        // 湧き候補が1つもない場合は処理を中断
+        if(candidateTiles == null || candidateTiles.Count == 0 || playerPrefab == null) {
+            Debug.Log("プレイヤーの生成に失敗しました（候補タイルがない、またはPrefabが未設定です）");
+            return;
+        }
+
+        // リストの要素数からランダムタイルを取得
+        int randomIndex = UnityEngine.Random.Range(0, candidateTiles.Count);
+        HexTileObject targetTileObj = candidateTiles[randomIndex];
+
+        // 選択されたタイルの3D空間上の座標を取得
+        Vector3 spawnPos = targetTileObj.transform.position;
+
+        // プレイヤー生成
+        PlayerBase player = Instantiate(playerPrefab, spawnPos, Quaternion.identity);
+        player.name = "Player_Debug";
+        // プレイヤーのタイルID設定
+        player.SetTile(targetTileObj.ID);
+        Debug.Log($"【プレイヤー生成成功】タイルID: {targetTileObj.name} の位置に配置しました。");
     }
 
     private HexTileObject GetTerrainPrefab(eTerrain terrain) {

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 8005701373990402146}
   - component: {fileID: 697326836541867343}
   - component: {fileID: 1216609168133056257}
-  - component: {fileID: 1106068724394652995}
+  - component: {fileID: 8455049079611734360}
   m_Layer: 7
   m_Name: Unit
   m_TagString: Untagged
@@ -109,7 +109,7 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &1106068724394652995
+--- !u!114 &8455049079611734360
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -118,15 +118,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 3890454379274389212}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 28ba8f6d783c0e84c950eadb3d32ab9a, type: 3}
+  m_Script: {fileID: 11500000, guid: 4db9170631450734498f6f74e44ac09b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  unitName: Settler
-  axialCoordinate: {x: 0, y: 0}
-  movementPoints: 3
-  unitRenderer: {fileID: 0}
-  isEnemy: 0
-  currentRollPoints: 0
+  jobData: {fileID: 11400000, guid: b5c9ecdacf12543478ef2b320c4b806d, type: 2}
 --- !u!1001 &1134602050100677850
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -138,6 +133,10 @@ PrefabInstance:
     - target: {fileID: 2847958354937256230, guid: dc7d785b427b0a9489f6893c6ddf5323, type: 3}
       propertyPath: m_Name
       value: M_Fighter_prePosed
+      objectReference: {fileID: 0}
+    - target: {fileID: 2847958354937256230, guid: dc7d785b427b0a9489f6893c6ddf5323, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 3228565968319169436, guid: dc7d785b427b0a9489f6893c6ddf5323, type: 3}
       propertyPath: m_LocalPosition.x

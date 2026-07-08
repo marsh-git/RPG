@@ -7,7 +7,7 @@ public class HexTileObject : MonoBehaviour, IClickable {
     public int ID { get; private set; } = -1;
 
     [Header("Visuals")]
-    [SerializeField] private GameObject highlightEffect;
+    [SerializeField] private GameObject[] _highlightEffectList = null;
 
     /// <summary>
     /// 座標のセットアップ
@@ -25,16 +25,19 @@ public class HexTileObject : MonoBehaviour, IClickable {
     /// ハイライトの設定
     /// </summary>
     /// <param name="isActive"></param>
-    public void SetHighlight(bool isActive) {
-        if(highlightEffect != null) highlightEffect.SetActive(isActive);
+    public void SetHighlight(bool isActive, eTileHighlight setHighlight) {
+        int highlightIndex = (int)setHighlight;
+        if(!CommonModule.IsEnableIndex(_highlightEffectList, highlightIndex)) return;
+
+        if(_highlightEffectList != null) _highlightEffectList[highlightIndex].SetActive(isActive);
     }
     /// <summary>
     /// クリックされたときの処理
     /// </summary>
     public void OnClick() {
         // タイルデータを取得
-        HexTileData data = HexTileManager.instance.GetTileData(ID);
+        HexTileData targetTile = HexTileManager.instance.GetTileData(ID);
         // クリック管理クラスに伝える
-        ClickableSelectionManager.instance.OnTileClicked(data);
+        ClickableSelectionManager.instance.OnTileHighlight(targetTile);
     }
 }

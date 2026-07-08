@@ -8,7 +8,6 @@ public class HexTileManager : MonoBehaviour {
     private List<HexTileData> _tileDataList = new List<HexTileData>();
     private List<HexTileObject> _tileObjectList = new List<HexTileObject>();
     private List<HexAreaData> _areaDataList = new List<HexAreaData>();
-    private List<int> _playerTileList = new List<int>();
 
     // TODO:そのうち、ゲームシーンステートクラスが持つようになる
     [SerializeField] private HexMapGenerator mapGenerator;
@@ -45,32 +44,6 @@ public class HexTileManager : MonoBehaviour {
     /// <param name="area"></param>
     public void AddArea(HexAreaData area) { 
         _areaDataList.Add(area);
-    }
-    /// <summary>
-    /// 指定プレイヤーのタイル取得
-    /// </summary>
-    /// <param name="playerID"></param>
-    /// <returns></returns>
-    public HexTileData GetPlayerTile(int playerID) {
-        HexTileData playerTile = GetTileData(_playerTileList[playerID]);
-        if(playerTile == null) return null;
-        return playerTile;
-    }
-    /// <summary>
-    /// ランダムなプレイヤーのタイル取得
-    /// </summary>
-    /// <returns></returns>
-    public HexTileData GetRandomPlayerTile() {
-        int randomPlayerID = Random.Range(0, 5);
-        return GetPlayerTile(randomPlayerID);
-    }
-    /// <summary>
-    /// 指定プレイヤーがいるタイル設定
-    /// </summary>
-    /// <param name="playerID"></param>
-    /// <param name="tileID"></param>
-    public void SetPlayerTile(int playerID, int tileID) {
-        _playerTileList[playerID] = tileID;
     }
     /// <summary>
     /// 座標指定のタイルID取得
@@ -111,7 +84,7 @@ public class HexTileManager : MonoBehaviour {
     /// <param name="x"></param>
     /// <param name="y"></param>
     /// <returns></returns>
-    public HexTileData GetHexTileData(int x, int y) {
+    public HexTileData GetTileData(int x, int y) {
         int tileID = GetTileID(x, y);
         return GetTileData(tileID);
     }
@@ -125,7 +98,7 @@ public class HexTileManager : MonoBehaviour {
     public HexTileData GetToDirTile(int x, int y, eDirectionHex dir) {
         // 隣接タイルの取得
         ToDirPos(ref x, ref y, dir);
-        return GetHexTileData(x, y);
+        return GetTileData(x, y);
     }
     /// <summary>
     /// 指定方向に隣接した座標取得

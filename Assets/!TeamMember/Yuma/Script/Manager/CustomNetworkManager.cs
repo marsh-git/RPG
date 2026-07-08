@@ -119,43 +119,6 @@ public class CustomNetworkManager : NetworkManager
     {
 
     }
-    /// <summary>
-    /// シーンが変わった時に発火
-    /// 主にルール系の変更とかを担当させるべき
-    /// </summary>
-    /// <param name="newSceneName"></param>
-    public override void OnServerChangeScene(string newSceneName)
-    {
-        
-    }
-
-    /// <summary>
-    /// シーンが完全に切り替わってから呼ばれる関数、主にゲームスタートを担う
-    /// </summary>
-    /// <param name="sceneName"></param>
-    public override void OnServerSceneChanged(string sceneName)
-    {
-       
-    }
-
-    /// <summary>
-    /// シーンが変わった時に
-    /// </summary>
-    /// <param name="newSceneName"></param>
-    /// <param name="sceneOperation"></param>
-    /// <param name="customHandling"></param>
-    public override void OnClientChangeScene(string newSceneName, SceneOperation sceneOperation, bool customHandling)
-    {
-        base.OnClientChangeScene(newSceneName, sceneOperation, customHandling);
-       
-    }
-
-    public override void OnClientSceneChanged()
-    {
-        base.OnClientSceneChanged();
-
-        
-    }
 
     /// <summary>
     /// クライアントが止まった時の処理

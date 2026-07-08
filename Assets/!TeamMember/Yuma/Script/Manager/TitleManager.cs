@@ -84,7 +84,7 @@ public class TitleManager : MonoBehaviour {
     /// <summary>
     /// ホストになるボタンを押下した時の処理
     /// </summary>
-    public void OnStartHostButton() {
+    public async void OnStartHostButton() {
         if (!onButtonOnce) {
             //もしホスト検索コルーチンが走っていたら止める
             if (waitCorutine != null && runningCorutine) {
@@ -96,7 +96,7 @@ public class TitleManager : MonoBehaviour {
             //明示的にホスト状態をtrueにし、ロビーシーンに移行
             isHost = true;
             sender.StartSendIP();
-            SceneManager.LoadScene(lobbySceneName);
+            await PartManager.instance.TransitionPart(GameEnum.eGamePart.Title);
             isTitle = false;
             onButtonOnce = true;
         }

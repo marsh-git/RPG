@@ -152,12 +152,12 @@ public class HexMapGenerator : MonoBehaviour{
         areaCentersToCreate.Add(new Vector2Int(0, 0));
         // 半径10のPointy-Topped大Hexが完全密着するための数学的に正しい6方向の相対座標リスト
         Vector2Int[] bigHexOffsets = new Vector2Int[] {
-            new Vector2Int(11, 10),   // 右上
-            new Vector2Int(21, -10),  // 右下
-            new Vector2Int(1, -21),   // 真下
-            new Vector2Int(-11, -10), // 左下
-            new Vector2Int(-21, 10),  // 左上
-            new Vector2Int(-1, 21)    // 真上
+            new Vector2Int(21, -10),  // 東南東 (右下)
+            new Vector2Int(10, 11),   // 南 (真下方向)
+            new Vector2Int(-11, 21),  // 南西南 (左下)
+            new Vector2Int(-21, 10),  // 西北西 (左上)
+            new Vector2Int(-10, -11), // 北 (真上方向)
+            new Vector2Int(11, -21)   // 北東北 (右上)
         };
         // ランダムに2つの方向インデックスを選択（重複なし）
         List<int> directionIndices = new List<int> { 0, 1, 2, 3, 4, 5 };

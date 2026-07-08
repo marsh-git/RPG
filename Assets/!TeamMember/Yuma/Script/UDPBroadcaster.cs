@@ -62,7 +62,7 @@ public class UDPBroadcaster : MonoBehaviour
         message.ip = GetIpAddress();
         message.port = 55555;//ポート番号を私的利用可能なものにする
         message.gameName = "TPS";
-        message.hostName = PlayerSaveData.Load().playerName + Room;
+        //message.hostName = PlayerSaveData.Load().playerName + Room;
         message.gamePlaying = false;
         Debug.Log(message.ip);
     }

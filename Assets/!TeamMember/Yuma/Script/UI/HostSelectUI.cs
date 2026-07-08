@@ -29,8 +29,8 @@ public class HostSelectUI : MonoBehaviour {
             var buttonObj = Instantiate(selectHostButton, UIRoot);
             var hostBuuton = buttonObj.GetComponent<HostButton>();
 
-            hostBuuton.Setup(hostData,OnHostButtonClicked);
-                
+            hostBuuton.Setup(hostData, OnHostButtonClicked);
+
         }
     }
 

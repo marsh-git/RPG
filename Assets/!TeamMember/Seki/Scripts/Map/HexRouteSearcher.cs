@@ -71,6 +71,10 @@ public static class HexRouteSearcher {
     /// <summary>
     /// ダイクストラ法：移動可能範囲のタイルデータ群を返す
     /// </summary>
+    /// <param name="start"></param>
+    /// <param name="maxCost"></param>
+    /// <param name="isEnemy"></param>
+    /// <returns></returns>
     public static HashSet<HexTileData> CalculateMovementRange(HexTileData start, int maxCost, bool isEnemy) {
         HashSet<HexTileData> reachableTiles = new HashSet<HexTileData>();
         Dictionary<HexTileData, int> costSoFar = new Dictionary<HexTileData, int>();

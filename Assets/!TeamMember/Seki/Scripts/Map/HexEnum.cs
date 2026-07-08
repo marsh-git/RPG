@@ -66,3 +66,14 @@ public enum eDirectionHex {
 
     Max
 }
+/// <summary>
+/// タイルハイライトの種類
+/// </summary>
+public enum eTileHighlight {
+    Invalid = -1,
+    LineHighlight,      // 枠線
+    TileHighlight,      // 内側
+    PlayerHighlight,    // プレイヤー
+
+    Max
+}

@@ -14,6 +14,7 @@ public class HexMapGenerator : MonoBehaviour{
     // TODO:ここのキャラクターに関してものちにScriptableObjectに紐づけてすっきりしたい
     [Header("UnitPrefabs")]
     [SerializeField] private PlayerBase playerPrefab = null;
+    [SerializeField] private PlayerSpawner playerSpawner = null;
     [SerializeField] private EnemySpawner enemySpawner = null;
     public void CreateDebugMap() {
         int mapRadius = 10;
@@ -95,17 +96,7 @@ public class HexMapGenerator : MonoBehaviour{
 
         // リストの要素数からランダムタイルを取得
         int randomIndex = UnityEngine.Random.Range(0, candidateTiles.Count);
-        HexTileObject targetTileObj = candidateTiles[randomIndex];
-
-        // 選択されたタイルの3D空間上の座標を取得
-        Vector3 spawnPos = targetTileObj.transform.position;
-
-        // プレイヤー生成
-        PlayerBase player = Instantiate(playerPrefab, spawnPos, Quaternion.identity);
-        player.name = "Player_Debug";
-        // プレイヤーのタイルID設定
-        player.SetTile(targetTileObj.ID);
-        Debug.Log($"【プレイヤー生成成功】タイルID: {targetTileObj.name} の位置に配置しました。");
+        playerSpawner.Spawn(randomIndex);
     }
 
     private HexTileObject GetTerrainPrefab(eTerrain terrain) {

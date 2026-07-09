@@ -7,6 +7,10 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField]
     private EnemyBase enemyPrefab = null;
 
+    // キャラクター管理クラス
+    [SerializeField]
+    private CharacterManager characterManager = null;
+
     /// <summary>
     /// 候補タイルからランダムな位置へ敵を生成する
     /// </summary>
@@ -47,6 +51,11 @@ public class EnemySpawner : MonoBehaviour
 
             // 敵の現在タイルを設定する
             enemy.SetTile(targetTile.ID);
+
+            Debug.Log($"【敵生成】{enemy.name} を {targetTile.name} に配置しました。");
+
+            // キャラクター管理へ登録する
+            characterManager.Register(enemy);
         }
     }
 }

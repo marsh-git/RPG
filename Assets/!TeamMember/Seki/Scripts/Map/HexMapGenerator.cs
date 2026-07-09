@@ -14,7 +14,7 @@ public class HexMapGenerator : MonoBehaviour{
     // TODO:ここのキャラクターに関してものちにScriptableObjectに紐づけてすっきりしたい
     [Header("UnitPrefabs")]
     [SerializeField] private PlayerBase playerPrefab = null;
-
+    [SerializeField] private EnemySpawner enemySpawner = null;
     public void CreateDebugMap() {
         int mapRadius = 10;
         int currentTileID = 0;
@@ -81,6 +81,7 @@ public class HexMapGenerator : MonoBehaviour{
 
         // プレイヤーの生成
         SpawnPlayer(spawnTileList);
+        enemySpawner.SpawnEnemy(spawnTileList, 5);
     }
     /// <summary>
     /// 候補タイルリストからランダムな位置にプレイヤーを生成・配置する

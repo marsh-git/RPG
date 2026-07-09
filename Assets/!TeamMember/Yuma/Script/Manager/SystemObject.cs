@@ -1,11 +1,12 @@
 using Cysharp.Threading.Tasks;
+using Mirror;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 /// <summary>
 /// システムオブジェクトの基底クラス
 /// </summary>
-public abstract class SystemObject : MonoBehaviour{
+public abstract class SystemObject : NetworkBehaviour{
 
     /// <summary>
     /// 初期化処理

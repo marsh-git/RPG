@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1039470837006599052}
   - component: {fileID: 3248639904869975024}
+  - component: {fileID: -6019723121142685}
   m_Layer: 0
   m_Name: PartManager
   m_TagString: Untagged
@@ -44,9 +45,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 410d22ed3331c3c449e00d68158f896d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0
   partOrigin:
   - {fileID: 8483008510173411228, guid: 584747c31651fde45babfb118f51b454, type: 3}
   - {fileID: 5539004771963951950, guid: e738c22371290604eac9d7b9c15afe92, type: 3}
   - {fileID: 3134132774758282733, guid: 72d85ae6b9ffb174bbdcdc1412706c52, type: 3}
   - {fileID: 7891293063533913873, guid: 5c7bb2c9eed02bc46a639fbaa38232c8, type: 3}
   - {fileID: 9046035698215291641, guid: 47c2bcc31cd69754fba7b0076bf39310, type: 3}
+  eGamePart: 0
+--- !u!114 &-6019723121142685
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7888420221979097403}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneId: 0
+  _assetId: 3462901790
+  serverOnly: 0
+  visibility: 0
+  hasSpawned: 0

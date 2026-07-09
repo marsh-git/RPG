@@ -74,6 +74,7 @@ public enum eTileHighlight {
     LineHighlight,      // 枠線
     TileHighlight,      // 内側
     PlayerHighlight,    // プレイヤー
+    BattleHighlight,
 
     Max
 }
@@ -84,7 +85,8 @@ public enum eTileState {
     Normal,         // 通常
     Movable,        // 移動可能
     CharacterIn,    // 選択状態
-    Reserved,       // 他のキャラが移動中
+    Reserved,       // 他のキャラの移動予約
+    Building,       // 建物
 
     Max
 }

@@ -71,6 +71,9 @@ public class HexTileObject : MonoBehaviour, IClickable {
             // 移動処理
             UniTask task = MovementManager.MoveCharacter();
             break;
+            case eTileState.CharacterIn:
+
+            break;
         }
     }
 }

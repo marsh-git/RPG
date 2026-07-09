@@ -6,7 +6,20 @@ using UnityEngine;
 /// ヘックスグリッドマップにおける経路探索および移動範囲計算を行う静的クラス
 /// </summary>
 public static class HexRouteSearcher {
+    /// <summary>
+    /// 移動範囲および攻撃可能マスの計算結果を格納する構造体
+    /// </summary>
+    public struct MovementRangeResult {
+        // プレイヤーが移動して立ち止まれるマスの集合
+        public HashSet<HexTileData> MovableTiles;
+        // 移動範囲内に存在し、攻撃対象となる（敵がいる）マスの集合
+        public HashSet<HexTileData> AttackableTiles;
 
+        public MovementRangeResult(HashSet<HexTileData> movable, HashSet<HexTileData> attackable) {
+            MovableTiles = movable;
+            AttackableTiles = attackable;
+        }
+    }
     // アキシアル座標系におけるPointy-Toppedの隣接6方向（右上、右、右下、左下、左、左上）
     private static readonly eDirectionHex[] Directions = new eDirectionHex[] {
         eDirectionHex.UpRight, eDirectionHex.Right, eDirectionHex.DownRight,
@@ -93,60 +106,64 @@ public static class HexRouteSearcher {
     }
 
     /// <summary>
-    /// ダイクストラ法：最大移動コストの範囲内で、到達可能なすべてのタイル群を計算して返す
+    /// ダイクストラ法：最大移動コストの範囲内で、到達可能なマスと攻撃可能な（敵がいる）マスを計算して返す
     /// </summary>
-    /// <param name="start">探索の起点（現在地）となるタイルデータ</param>
-    /// <param name="maxCost">消費可能な最大移動力（総コスト限界値）</param>
-    /// <param name="isEnemy">実行者が敵ユニットかどうか（拡張用パラメータ）</param>
-    /// <returns>到達可能なタイルデータのハッシュセット</returns>
-    public static HashSet<HexTileData> CalculateMovementRange(HexTileData start, int maxCost, bool isEnemy) {
-        HashSet<HexTileData> reachableTiles = new HashSet<HexTileData>();
+    /// <param name="start">探索の起点（現在地）のタイルデータ</param>
+    /// <param name="maxCost">消費可能な最大移動力</param>
+    /// <param name="isEnemy">実行者が敵ユニットかどうか（敵から見た場合はプレイヤーが攻撃対象になる）</param>
+    /// <returns>移動可能マスと攻撃可能マスを分離したコンテナ構造体</returns>
+    public static MovementRangeResult CalculateMovementRange(HexTileData start, int maxCost, bool isEnemy) {
+        HashSet<HexTileData> movableTileList = new HashSet<HexTileData>();
+        HashSet<HexTileData> attackableTileList = new HashSet<HexTileData>();
+
         Dictionary<HexTileData, int> costSoFar = new Dictionary<HexTileData, int>();
         Queue<HexTileData> frontier = new Queue<HexTileData>();
 
-        if(start == null) return reachableTiles;
+        if(start == null) return new MovementRangeResult(movableTileList, attackableTileList);
 
-        // 起点ノードの初期化と探索キューへの蓄積
         frontier.Enqueue(start);
         costSoFar[start] = 0;
 
-        // 幅優先探索ベースで周囲へのコスト伝播ループを実行
         while(frontier.Count > 0) {
             HexTileData current = frontier.Dequeue();
             int currentCost = costSoFar[current];
 
-            // 現在のノードから6方向への探索を展開
             foreach(eDirectionHex dir in Directions) {
                 HexTileData neighbor = HexTileManager.instance.GetToDirTile(current.gridPosX, current.gridPosY, dir);
 
                 // 基本的な進入不可判定（マップ外、山岳、移動不可属性）
                 if(neighbor == null || neighbor.terrain == eTerrain.Mountain || neighbor.attribute == eAttribute.CannotMove) continue;
 
-                // 自身の足元（startノード）を除き、すでに他のキャラクターが立っているマスは通行・停止ともに不可能なためスキップ
-                if(neighbor != start && neighbor.tileState == eTileState.CharacterIn) continue;
-
-                // 地形の通行コスト取得
                 int movementCost = (int)neighbor.GetMovementCost();
                 if(movementCost < 0) continue;
 
-                // 当該マスへ到達するための総累積コストを算出
                 int newCost = currentCost + movementCost;
 
-                // 累積コストが最大移動力を超える場合は、その先の探索を打ち切り
+                // 累積コストが最大移動力を超える場合はスキップ
                 if(newCost > maxCost) continue;
 
-                // 未到達、または従来の計算経路より低コストで到達可能な場合に情報を更新
+                // 自分自身の足元(start)以外で、キャラがいるマスを発見した場合
+                if(neighbor != start && neighbor.tileState == eTileState.CharacterIn) {
+                    // TODO : 現在は敵味方問わずに、変えるが、後ほどCharacterManager等で
+                    // キャラクターが載っているマスからキャラクターを取得し、それが敵か判別する
+
+                    // 攻撃可能マスとしてハッシュセットに登録
+                    attackableTileList.Add(neighbor);
+
+                    continue;
+                }
+
+                // 通常の移動可能マスの更新処理
                 if(!costSoFar.ContainsKey(neighbor) || newCost < costSoFar[neighbor]) {
                     costSoFar[neighbor] = newCost;
                     frontier.Enqueue(neighbor);
-                    reachableTiles.Add(neighbor);
+                    movableTileList.Add(neighbor);
 
-                    // プレイヤーの視覚的フィードバック（UI表示）のためにタイル状態を移動可能に変更
                     neighbor.SetTileState(eTileState.Movable);
                 }
             }
         }
-        return reachableTiles;
+        return new MovementRangeResult(movableTileList, attackableTileList);
     }
 
     /// <summary>

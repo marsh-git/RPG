@@ -18,8 +18,8 @@ public class ClickableSelectionManager : MonoBehaviour {
         /// <param name="obj"></param>
         /// <param name="highlight"></param>
         public HighlightData(HexTileObject obj, eTileHighlight highlight) {
-            this.hexTileObject = obj;
-            this.tileHighlight = highlight;
+            hexTileObject = obj;
+            tileHighlight = highlight;
         }
     }
 

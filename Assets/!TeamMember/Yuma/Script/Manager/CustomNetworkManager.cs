@@ -6,36 +6,12 @@ using UnityEngine.SceneManagement;
 /// </summary>
 public class CustomNetworkManager : NetworkManager
 {
-   
-    /// <summary>
-    /// タイトルからロビーに行ったか
-    /// </summary>
-    private static bool titleToLobby = true;
-    /// <summary>
-    /// タイトルシーンから移動してきたときに通る処理
-    /// </summary>
-    public override void Start()
+    public static CustomNetworkManager instance;
+
+    public override void Awake()
     {
-#if DEBUG
-        if (TitleManager.instance == null)
-        {
-            base.Start();
-            return;
-        }
-#endif
-        if (TitleManager.instance.isHost)
-        {
-            //ホストとして開始
-            StartHost();
-        }
-        else if (TitleManager.instance.isClient)
-        {
-            //クライアントとして開始
-            networkAddress = TitleManager.instance.ipAddress;
-            StartClient();
-        }
-        //サーバー参加時にカーソルロック
-        Cursor.lockState = CursorLockMode.Locked;
+        base.Awake();
+        instance = this;
     }
 
     /// <summary>
@@ -143,7 +119,6 @@ public class CustomNetworkManager : NetworkManager
         // サーバー or クライアントとして接続中なら安全に終了
         if (NetworkServer.active || NetworkClient.isConnected)
         {
-            titleToLobby = true;
             StopHost();
         }
     }

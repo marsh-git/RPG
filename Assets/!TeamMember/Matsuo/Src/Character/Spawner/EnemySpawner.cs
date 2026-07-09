@@ -21,6 +21,7 @@ public class EnemySpawner : MonoBehaviour
         // 候補タイルまたはプレハブが存在しない場合は処理しない
         if (candidateTiles == null || candidateTiles.Count == 0 || enemyPrefab == null)
         {
+            Debug.LogError("敵の生成に失敗しました（候補タイルがない、またはPrefabが未設定です）");
             return;
         }
 

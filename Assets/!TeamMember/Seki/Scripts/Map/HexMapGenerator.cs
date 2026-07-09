@@ -13,7 +13,6 @@ public class HexMapGenerator : MonoBehaviour{
     [SerializeField] private HexTileObject tilePrefabMountain = null;
     // TODO:ここのキャラクターに関してものちにScriptableObjectに紐づけてすっきりしたい
     [Header("UnitPrefabs")]
-    [SerializeField] private PlayerBase playerPrefab = null;
     [SerializeField] private PlayerSpawner playerSpawner = null;
     [SerializeField] private EnemySpawner enemySpawner = null;
     public void CreateDebugMap() {
@@ -80,23 +79,9 @@ public class HexMapGenerator : MonoBehaviour{
 
         Debug.Log($"【マップ生成完了】総エリア数: {currentAreaID} / 総タイル数: {currentTileID}");
 
-        // プレイヤーの生成
-        SpawnPlayer(spawnTileList);
+        // プレイヤーと敵の生成
+        playerSpawner.Spawn(spawnTileList);
         enemySpawner.SpawnEnemy(spawnTileList, 5);
-    }
-    /// <summary>
-    /// 候補タイルリストからランダムな位置にプレイヤーを生成・配置する
-    /// </summary>
-    private void SpawnPlayer(List<HexTileObject> candidateTiles) {
-        // 湧き候補が1つもない場合は処理を中断
-        if(candidateTiles == null || candidateTiles.Count == 0 || playerPrefab == null) {
-            Debug.Log("プレイヤーの生成に失敗しました（候補タイルがない、またはPrefabが未設定です）");
-            return;
-        }
-
-        // リストの要素数からランダムタイルを取得
-        int randomIndex = UnityEngine.Random.Range(0, candidateTiles.Count);
-        playerSpawner.Spawn(randomIndex);
     }
 
     private HexTileObject GetTerrainPrefab(eTerrain terrain) {

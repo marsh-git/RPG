@@ -35,10 +35,7 @@ public class PlayerSpawner : MonoBehaviour
         tileData.SetTileState(eTileState.CharacterIn);
 
         // プレイヤーを生成する
-        PlayerBase player = Instantiate(
-            playerPrefab,
-            targetTile.transform.position,
-            Quaternion.identity);
+        PlayerBase player = Instantiate(playerPrefab, targetTile.transform.position, Quaternion.identity);
 
         // デバッグ用の名前を設定する
         player.name = "Player_Debug";

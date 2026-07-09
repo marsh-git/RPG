@@ -28,6 +28,7 @@ public abstract class BasePart : MonoBehaviour {
 
     /// <summary>
     /// パート実行中に呼ばれる
+    /// ※UI等Host、Client共通処理※
     /// </summary>
     /// <returns></returns>
     public abstract UniTask Execute();
@@ -40,4 +41,16 @@ public abstract class BasePart : MonoBehaviour {
         gameObject.SetActive(false);
         await UniTask.CompletedTask;
     }
+
+    /// <summary>
+    /// サーバー専用実行処理
+    /// </summary>
+    /// <returns></returns>
+    public virtual async UniTask ServerExecute() { }
+
+    /// <summary>
+    /// クライアント専用実行処理
+    /// </summary>
+    /// <returns></returns>
+    public virtual async UniTask ClientExecute() { }
 }

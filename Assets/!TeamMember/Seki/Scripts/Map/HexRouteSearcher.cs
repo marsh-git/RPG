@@ -104,22 +104,19 @@ public static class HexRouteSearcher {
         // すべての探索候補を消費してもゴールに到達できなかった場合は経路なしとしてnullを返す
         return null;
     }
-
     /// <summary>
-    /// ダイクストラ法：最大移動コストの範囲内で、到達可能なマスと攻撃可能な（敵がいる）マスを計算して返す
+    /// ハイブリッドダイクストラ法：
+    /// 最大移動コストの範囲内で、到達可能なマス（移動用）と、手が届く範囲の全候補マス（攻撃検索用）を計算して返す
     /// </summary>
-    /// <param name="start">探索の起点（現在地）のタイルデータ</param>
-    /// <param name="maxCost">消費可能な最大移動力</param>
-    /// <param name="isEnemy">実行者が敵ユニットかどうか（敵から見た場合はプレイヤーが攻撃対象になる）</param>
-    /// <returns>移動可能マスと攻撃可能マスを分離したコンテナ構造体</returns>
-    public static MovementRangeResult CalculateMovementRange(HexTileData start, int maxCost, bool isEnemy) {
+    public static MovementRangeResult CalculateMovementRange(HexTileData start, int maxCost) {
         HashSet<HexTileData> movableTileList = new HashSet<HexTileData>();
-        HashSet<HexTileData> attackableTileList = new HashSet<HexTileData>();
+        // コストの範囲内ですべてのマスの集合（敵がいるマスも含む）
+        HashSet<HexTileData> scannedAllTiles = new HashSet<HexTileData>();
 
         Dictionary<HexTileData, int> costSoFar = new Dictionary<HexTileData, int>();
         Queue<HexTileData> frontier = new Queue<HexTileData>();
 
-        if(start == null) return new MovementRangeResult(movableTileList, attackableTileList);
+        if(start == null) return new MovementRangeResult(movableTileList, scannedAllTiles);
 
         frontier.Enqueue(start);
         costSoFar[start] = 0;
@@ -131,7 +128,7 @@ public static class HexRouteSearcher {
             foreach(eDirectionHex dir in Directions) {
                 HexTileData neighbor = HexTileManager.instance.GetToDirTile(current.gridPosX, current.gridPosY, dir);
 
-                // 基本的な進入不可判定（マップ外、山岳、移動不可属性）
+                // 基本的な進入不可判定（マップ外、山岳地形、移動不可属性）
                 if(neighbor == null || neighbor.terrain == eTerrain.Mountain || neighbor.attribute == eAttribute.CannotMove) continue;
 
                 int movementCost = (int)neighbor.GetMovementCost();
@@ -139,17 +136,14 @@ public static class HexRouteSearcher {
 
                 int newCost = currentCost + movementCost;
 
-                // 累積コストが最大移動力を超える場合はスキップ
+                // 累積コストが最大移動力を超える場合はその先へ進めない
                 if(newCost > maxCost) continue;
 
-                // 自分自身の足元(start)以外で、キャラがいるマスを発見した場合
-                if(neighbor != start && neighbor.tileState == eTileState.CharacterIn) {
-                    // TODO : 現在は敵味方問わずに、変えるが、後ほどCharacterManager等で
-                    // キャラクターが載っているマスからキャラクターを取得し、それが敵か判別する
+                // コスト的に届くマスであれば、敵の有無に関わらず「スキャン済（攻撃候補）」に登録
+                scannedAllTiles.Add(neighbor);
 
-                    // 攻撃可能マスとしてハッシュセットに登録
-                    attackableTileList.Add(neighbor);
-
+                // ユニット衝突判定：敵や味方がいるマスは、探索の末端とする（frontierに入れないことで奥へのすり抜けを防ぐ）
+                if(neighbor.tileState == eTileState.CharacterIn || neighbor.tileState == eTileState.Reserved) {
                     continue;
                 }
 
@@ -163,9 +157,92 @@ public static class HexRouteSearcher {
                 }
             }
         }
-        return new MovementRangeResult(movableTileList, attackableTileList);
+        // 移動できるマスと、手が届いた全マス（敵含む）のペアを返す
+        return new MovementRangeResult(movableTileList, scannedAllTiles);
     }
+    /// <summary>
+    /// 純粋ダイクストラ法：攻撃対象のスキャンを行わず、自ユニットが通行・着地可能なマスの集合を計算する
+    /// </summary>
+    /// <param name="start">探索の起点（現在地）</param>
+    /// <param name="maxCost">最大移動力</param>
+    /// <returns>着地可能なタイルのハッシュセット</returns>
+    public static HashSet<HexTileData> CalculatePureMovementRange(HexTileData start, int maxCost) {
+        HashSet<HexTileData> movableTileList = new HashSet<HexTileData>();
+        Dictionary<HexTileData, int> costSoFar = new Dictionary<HexTileData, int>();
+        Queue<HexTileData> frontier = new Queue<HexTileData>();
 
+        if(start == null) return movableTileList;
+
+        frontier.Enqueue(start);
+        costSoFar[start] = 0;
+
+        while(frontier.Count > 0) {
+            HexTileData current = frontier.Dequeue();
+            int currentCost = costSoFar[current];
+
+            foreach(eDirectionHex dir in Directions) {
+                HexTileData neighbor = HexTileManager.instance.GetToDirTile(current.gridPosX, current.gridPosY, dir);
+
+                // 基本的な進入不可判定（マップ外・山岳・移動不可属性）
+                if(neighbor == null || neighbor.terrain == eTerrain.Mountain || neighbor.attribute == eAttribute.CannotMove) continue;
+
+                // ユニット衝突判定：他キャラや移動予約があるマスは、侵入もすり抜けも不可（壁扱い）
+                if(neighbor.tileState == eTileState.CharacterIn || neighbor.tileState == eTileState.Reserved) continue;
+
+                int movementCost = (int)neighbor.GetMovementCost();
+                if(movementCost < 0) continue;
+
+                int newCost = currentCost + movementCost;
+                if(newCost > maxCost) continue;
+
+                // 未到達、またはより低コストな最適経路を発見した場合に更新
+                if(!costSoFar.ContainsKey(neighbor) || newCost < costSoFar[neighbor]) {
+                    costSoFar[neighbor] = newCost;
+                    frontier.Enqueue(neighbor);
+                    movableTileList.Add(neighbor);
+
+                    // UI表示などのためにタイルのステートを更新
+                    neighbor.SetTileState(eTileState.Movable);
+                }
+            }
+        }
+        return movableTileList;
+    }
+    /// <summary>
+    /// 指定された候補マスリストの中から、攻撃対象（敵ユニット）が存在するマスを抽出して返す
+    /// </summary>
+    /// <param name="start">起点となるマス（自身を除外するため）</param>
+    /// <param name="searchTargetTiles">検索対象となるマスのコレクション（移動範囲、スキル範囲など）</param>
+    /// <param name="isAttackerEnemy">攻撃を実行する側が敵ユニットかどうか</param>
+    /// <returns>攻撃対象が存在するタイルの集合</returns>
+    public static HashSet<HexTileData> FindAttackableTilesInCandidates(
+        HexTileData start,
+        IEnumerable<HexTileData> searchTargetTiles,
+        bool isAttackerEnemy) {
+        HashSet<HexTileData> attackableTiles = new HashSet<HexTileData>();
+
+        if(start == null || searchTargetTiles == null) return attackableTiles;
+
+        foreach(var tile in searchTargetTiles) {
+            if(tile == null) continue;
+
+            // 起点マス（自分自身の足元）は攻撃対象から除外
+            if(tile == start) continue;
+
+            // マスにキャラクターが存在する場合
+            if(tile.tileState == eTileState.CharacterIn) {
+
+                // TODO: キャラクターマネージャー等からタイル上のキャラクターデータを取得するロジック
+                // CharacterBase targetChara = CharacterManager.instance.GetCharacterOnTile(tile.ID);
+                // if (targetChara != null && targetChara.IsEnemy() != isAttackerEnemy) { ... }
+
+                // 現状は暫定的に「CharacterIn」であれば一律で対象とみなす（必要に応じて陣営チェックを有効化）
+                attackableTiles.Add(tile);
+            }
+        }
+
+        return attackableTiles;
+    }
     /// <summary>
     /// アキシアル座標系における2点間のハリスティック（直線ステップ数）距離を算出する
     /// </summary>

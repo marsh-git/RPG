@@ -113,22 +113,28 @@ public class PlayerBase : CharacterBase, IClickable
             // 選択フラグの変更
             isSelect = false;
         } else {
-            // 現在立っているマスを取得
             HexTileData targetTile = HexTileManager.instance.GetTileData(tileID);
-            // 自身の足元をプレイヤー用ハイライトで強調表示
+
             ClickableHighlight.OnTileHighlight(targetTile, false, eTileHighlight.PlayerHighlight);
-            // 拡張されたダイクストラ法により、移動可能範囲と攻撃可能範囲を同時に計算
-            MovementRangeResult rangeResult = HexRouteSearcher.CalculateMovementRange(targetTile, 3, IsEnemy());
-            // 移動可能マスのハイライト処理
+
+            // 1. 移動範囲とスキャン範囲を同時に取得
+            MovementRangeResult rangeResult = HexRouteSearcher.CalculateMovementRange(targetTile, 3);
+
+            // 移動可能マスのハイライト処理（
             List<HexTileData> movementTileList = new List<HexTileData>(rangeResult.MovableTiles);
             ClickableHighlight.HighlightRangeTile(movementTileList, false);
-            // 攻撃可能マスのハイライト処理
-            List<HexTileData> attackableTileList = new List<HexTileData>(rangeResult.AttackableTiles);
+
+            // 敵のいるマスも含まれている全スキャン領域を引数に渡して、攻撃対象を抽出
+            HashSet<HexTileData> attackableSet = HexRouteSearcher.FindAttackableTilesInCandidates(targetTile, rangeResult.AttackableTiles, IsEnemy());
+            List<HexTileData> attackableTileList = new List<HexTileData>(attackableSet);
+
+            // 攻撃可能マスのハイライト処理（赤など）
             ClickableHighlight.HighlightRangeTile(attackableTileList, false, eTileHighlight.BattleHighlight);
-            // マネージャーへの情報登録
+
+            // マネージャーへは実際に移動して止まれるマスだけを登録
             MovementManager.SetMovableTileList(movementTileList);
             MovementManager.AddMoveCharacter(this);
-            // 選択フラグの変更
+
             isSelect = true;
         }
     }

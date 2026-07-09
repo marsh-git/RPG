@@ -45,10 +45,12 @@ public class CharacterMovementManager : MonoBehaviour{
     /// <returns></returns>
     public async UniTask MoveCharacter() {
         await _movementCharacter.MoveAsync(_moveTileList);
+        
+    }
+    public void ResetMovableTile() {
         // 移動タイルの解除
         foreach(var tile in _movableTileList) {
             tile.SetTileState(eTileState.Normal);
         }
     }
-
 }

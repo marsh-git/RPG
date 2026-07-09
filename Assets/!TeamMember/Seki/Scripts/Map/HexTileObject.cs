@@ -22,6 +22,12 @@ public class HexTileObject : MonoBehaviour, IClickable {
         position.z = setPosition.z;
         transform.position = position;
     }
+    public HexTileData GetTileData() {
+        HexTileData tileData = HexTileManager.instance.GetTileData(ID);
+        if(tileData == null) return null;
+
+        return tileData;
+    }
     /// <summary>
     /// ハイライトの設定
     /// </summary>
@@ -54,14 +60,16 @@ public class HexTileObject : MonoBehaviour, IClickable {
             HexTileData startTile = HexManager.GetTileData(selectChara.GetTileID());
             // 移動ルートの決定
             List<HexTileData> route = HexRouteSearcher.FindPath(startTile, targetTile, selectChara.IsEnemy());
+            // 現在のマスを通常マスに戻す
+            startTile.SetTileState(eTileState.Normal);
+            // 移動先マスをキャラクター存在マスに変更
+            targetTile.SetTileState(eTileState.CharacterIn);
             // 移動ルートの設定
             selectChara.SetMoveRoute(route);
             // ハイライトの解除
             ClickableHighlight.ClearHighlights();
             // 移動処理
             UniTask task = MovementManager.MoveCharacter();
-            break;
-            case eTileState.Selected:
             break;
         }
     }

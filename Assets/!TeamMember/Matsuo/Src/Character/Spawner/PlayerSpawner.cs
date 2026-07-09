@@ -29,6 +29,11 @@ public class PlayerSpawner : MonoBehaviour
         int randomIndex = Random.Range(0, candidateTiles.Count);
         HexTileObject targetTile = candidateTiles[randomIndex];
 
+        // タイル情報を取得
+        HexTileData tileData = targetTile.GetTileData();
+        // タイルの状態を更新
+        tileData.SetTileState(eTileState.CharacterIn);
+
         // プレイヤーを生成する
         PlayerBase player = Instantiate(
             playerPrefab,

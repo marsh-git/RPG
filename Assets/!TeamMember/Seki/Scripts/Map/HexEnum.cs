@@ -83,7 +83,8 @@ public enum eTileHighlight {
 public enum eTileState {
     Normal,         // 通常
     Movable,        // 移動可能
-    Selected,       // 選択状態
+    CharacterIn,    // 選択状態
+    Reserved,       // 他のキャラが移動中
 
     Max
 }

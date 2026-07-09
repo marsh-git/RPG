@@ -48,10 +48,15 @@ public class CharacterMovementManager : MonoBehaviour {
         }
 
         // 全員の移動が完了したら後片付け
+        TeardownMovement();
+    }
+    /// <summary>
+    /// 移動の片付け処理
+    /// </summary>
+    public void TeardownMovement() {
         ResetMoveCharacter();
         ResetMovableTile();
     }
-
     /// <summary>
     /// 移動キャラリストのリセットと終了処理
     /// </summary>

@@ -685,6 +685,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1446562999}
     - target: {fileID: 2595365664090884219, guid: 8c04e53b60ba3fc43b09d5d6bf5999ca, type: 3}
+      propertyPath: debugSeed
+      value: 12345
+      objectReference: {fileID: 0}
+    - target: {fileID: 2595365664090884219, guid: 8c04e53b60ba3fc43b09d5d6bf5999ca, type: 3}
       propertyPath: enemySpawner
       value: 
       objectReference: {fileID: 789193881}
@@ -696,6 +700,10 @@ PrefabInstance:
       propertyPath: playerSpawner
       value: 
       objectReference: {fileID: 1819134655}
+    - target: {fileID: 2595365664090884219, guid: 8c04e53b60ba3fc43b09d5d6bf5999ca, type: 3}
+      propertyPath: useStaticSeed
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3212008869848674931, guid: 8c04e53b60ba3fc43b09d5d6bf5999ca, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

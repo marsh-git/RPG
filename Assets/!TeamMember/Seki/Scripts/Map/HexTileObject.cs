@@ -53,23 +53,31 @@ public class HexTileObject : MonoBehaviour, IClickable {
             ClickableHighlight.OnTileHighlight(targetTile);
             break;
             case eTileState.Movable:
-            // 移動対象キャラクターの取得
+            // 移動対象キャラクターの取得（プレイヤーの取得）
             CharacterBase selectChara = MovementManager.GetFirstMoveCharacter();
             if(selectChara == null) return;
-            // 開始地点（キャラクター）のタイル取得
-            HexTileData startTile = HexManager.GetTileData(selectChara.GetTileID());
-            // 移動ルートの決定
-            List<HexTileData> route = HexRouteSearcher.FindPath(startTile, targetTile, selectChara.IsEnemy());
-            // 現在のマスを通常マスに戻す
-            startTile.SetTileState(eTileState.Normal);
-            // 移動先マスをキャラクター存在マスに変更
-            targetTile.SetTileState(eTileState.CharacterIn);
-            // 移動ルートの設定
-            selectChara.SetMoveRoute(route);
-            // ハイライトの解除
-            ClickableHighlight.ClearHighlights();
-            // 移動処理
-            UniTask task = MovementManager.MoveCharacter();
+            // 選択状態なら移動開始
+            if(selectChara.isSelect) {
+                // 開始地点（キャラクター）のタイル取得
+                HexTileData startTile = HexManager.GetTileData(selectChara.GetTileID());
+                // 移動ルートの決定
+                List<HexTileData> route = HexRouteSearcher.FindPath(startTile, targetTile, selectChara.IsEnemy());
+                // 現在のマスを通常マスに戻す
+                startTile.SetTileState(eTileState.Normal);
+                // 移動先マスをキャラクター存在マスに変更
+                targetTile.SetTileState(eTileState.CharacterIn);
+                // 移動ルートの設定
+                selectChara.SetMoveRoute(route);
+                // ハイライトの解除
+                ClickableHighlight.ClearHighlights();
+                // 移動処理
+                UniTask task = MovementManager.MoveCharacter();
+            } else {
+                // ハイライトの解除
+                ClickableHighlight.ClearHighlights();
+                // 移動の片付け処理
+                MovementManager.TeardownMovement();
+            }
             break;
             case eTileState.CharacterIn:
 

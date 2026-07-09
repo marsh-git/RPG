@@ -1,4 +1,5 @@
 ﻿using Cysharp.Threading.Tasks;
+using Mirror;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -15,7 +16,8 @@ public class PartManager : SystemObject
     [SerializeField] private BasePart[] partOrigin = null;
     //パートの配列
     private BasePart[] partList = null;
-    
+
+    [SyncVar(hook = nameof(OnChangedPart))] public GameEnum.eGamePart eGamePart;
 
     /// <summary>
     /// 初期化関数
@@ -42,6 +44,7 @@ public class PartManager : SystemObject
     /// </summary>
     /// <param name="_nextPart"></param>
     /// <returns></returns>
+    [Server]
     public async UniTask TransitionPart(GameEnum.eGamePart _nextPart) {
         //現在のパートの片付け
         if (currentPart != null) {
@@ -52,7 +55,30 @@ public class PartManager : SystemObject
         await currentPart.Setup();
 
         //実行処理
-        UniTask task = currentPart.Execute();
+        currentPart.Execute().Forget();
+        eGamePart = _nextPart;
     }
 
+
+    private void OnChangedPart(GameEnum.eGamePart _oldPart, GameEnum.eGamePart _newPart)
+    {
+        ChangePartClient(_newPart).Forget();
+    }
+
+    private async UniTask ChangePartClient(GameEnum.eGamePart _nextPart)
+    {
+        //現在のパートの片付け
+        if (currentPart != null)
+        {
+            await currentPart.Teardown();
+        }
+        //次のパートに移動
+        currentPart = partList[(int)_nextPart];
+        await currentPart.Setup();
+
+        //実行処理
+        currentPart.Execute().Forget();
+
+        eGamePart = _nextPart;
+    } 
 }

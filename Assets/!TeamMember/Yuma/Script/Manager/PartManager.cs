@@ -17,7 +17,7 @@ public class PartManager : SystemObject
     //パートの配列
     private BasePart[] partList = null;
 
-    [SyncVar(hook = nameof(OnChangedPart))] public GameEnum.eGamePart eGamePart;
+   /* [SyncVar(hook = nameof(OnChangedPart))] */public GameEnum.eGamePart eGamePart;
 
     /// <summary>
     /// 初期化関数

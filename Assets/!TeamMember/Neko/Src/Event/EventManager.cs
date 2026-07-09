@@ -29,6 +29,12 @@ public class EventManager : MonoBehaviour
     /// <param name="eventNum"></param>
     public void StartEvent(int eventNum)
     {
+        if(eventDatas == null)
+        {
+            Debug.LogWarning("eventUIが取得できませんでした");
+            return;
+        }
+
         SetEventUI(eventNum);
 
         eventDatas[eventNum].StartEvent();

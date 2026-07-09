@@ -108,7 +108,7 @@ public class PlayerBase : CharacterBase, IClickable
             // ハイライトのクリア
             ClickableHighlight.ClearHighlights();
             // 選択キャラの解除
-            MovementManager.SetMovementCharacter(null);
+            MovementManager.AddMoveCharacter(null);
             // 選択フラグの変更
             isSelect = false;
         } else {
@@ -125,9 +125,23 @@ public class PlayerBase : CharacterBase, IClickable
             // 移動可能リストの設定
             MovementManager.SetMovableTileList(movementTileList);
             // 自身を移動キャラクターに設定
-            MovementManager.SetMovementCharacter(this);
+            MovementManager.AddMoveCharacter(this);
             // 選択フラグの変更
             isSelect = true;
         }
+    }
+    /// <summary>
+    /// 移動終了処理
+    /// </summary>
+    public override void EndMove() {
+        base.EndMove();
+        isSelect = false;
+    }
+    /// <summary>
+    /// 敵か判別
+    /// </summary>
+    /// <returns></returns>
+    public override bool IsEnemy() {
+        return false;
     }
 }

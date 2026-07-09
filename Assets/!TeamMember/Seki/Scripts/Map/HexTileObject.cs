@@ -38,18 +38,26 @@ public class HexTileObject : MonoBehaviour, IClickable {
     public void OnClick() {
         var ClickableHighlight = ClickableSelectionManager.instance;
         var MovementManager = CharacterMovementManager.instance;
+        var HexManager = HexTileManager.instance;
         // タイルデータを取得
-        HexTileData targetTile = HexTileManager.instance.GetTileData(ID);
+        HexTileData targetTile = HexManager.GetTileData(ID);
         switch(targetTile.tileState) {
             case eTileState.Normal:
             // クリック管理クラスに伝える
             ClickableHighlight.OnTileHighlight(targetTile);
             break;
             case eTileState.Movable:
+            // 移動対象キャラクターの取得
+            CharacterBase selectChara = MovementManager.GetFirstMoveCharacter();
+            if(selectChara == null) return;
+            // 開始地点（キャラクター）のタイル取得
+            HexTileData startTile = HexManager.GetTileData(selectChara.GetTileID());
+            // 移動ルートの決定
+            List<HexTileData> route = HexRouteSearcher.FindPath(startTile, targetTile, selectChara.IsEnemy());
+            // 移動ルートの設定
+            selectChara.SetMoveRoute(route);
             // ハイライトの解除
             ClickableHighlight.ClearHighlights();
-            // 移動ルートの決定
-            MovementManager.DecideMoveRoute(targetTile);
             // 移動処理
             UniTask task = MovementManager.MoveCharacter();
             break;

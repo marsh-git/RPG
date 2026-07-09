@@ -48,6 +48,7 @@ public enum eAttribute {
     Crops,      // 作物マス
     Town,       // 街マス
     Outpost,    // 敵の前哨基地マス
+    Shop,       // ショップ
     CannotMove, // 進行不可能マス
 
     Max

@@ -1,12 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.Callbacks;
 using UnityEngine;
 using UnityEngine.Rendering;
 
 public class JobManager : MonoBehaviour
 {
-    public static JobManager instance;
+    public static JobManager instance { get; private set; }
 
     //  初期Jobの番号(固定)
     public readonly int START_JOB = 0;

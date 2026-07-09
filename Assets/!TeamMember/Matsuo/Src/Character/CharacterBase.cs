@@ -27,6 +27,9 @@ public abstract class CharacterBase : MonoBehaviour
     public bool IsDead => hp <= 0;
     // 移動中か
     public bool IsMoving { get; private set; }
+    // 選択フラグ
+    public bool isSelect { get; protected set; } = false;
+
     // 移動ルート
     public List<HexTileData> currentMoveRoute { get; private set; } = new List<HexTileData>();
     /// <summary>

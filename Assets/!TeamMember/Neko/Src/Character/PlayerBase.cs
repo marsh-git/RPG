@@ -5,7 +5,6 @@ using static HexRouteSearcher;
 
 public class PlayerBase : CharacterBase, IClickable
 {
-    public bool isSelect { get; private set; } = false;
     //  経験値変数
     private int exp = 0;
     private int lv = 1;
@@ -105,32 +104,27 @@ public class PlayerBase : CharacterBase, IClickable
     public void OnClick() {
         var ClickableHighlight = ClickableSelectionManager.instance;
         var MovementManager = CharacterMovementManager.instance;
-
+        // ハイライト削除
+        ClickableHighlight.ClearHighlights();
         if(isSelect) {
-            // 選択解除時の処理
-            ClickableHighlight.ClearHighlights();
-            MovementManager.AddMoveCharacter(null);
+            // 移動の片付け処理
+            MovementManager.TeardownMovement();
             // 選択フラグの変更
             isSelect = false;
         } else {
             HexTileData targetTile = HexTileManager.instance.GetTileData(tileID);
-
+            // プレイヤーがいるタイルのハイライト処理
             ClickableHighlight.OnTileHighlight(targetTile, false, eTileHighlight.PlayerHighlight);
-
-            // 1. 移動範囲とスキャン範囲を同時に取得
+            // 移動範囲とスキャン範囲を同時に取得
             MovementRangeResult rangeResult = HexRouteSearcher.CalculateMovementRange(targetTile, 3);
-
             // 移動可能マスのハイライト処理（
             List<HexTileData> movementTileList = new List<HexTileData>(rangeResult.MovableTiles);
             ClickableHighlight.HighlightRangeTile(movementTileList, false);
-
-            // 敵のいるマスも含まれている全スキャン領域を引数に渡して、攻撃対象を抽出
+            // 敵のいるマスも含まれているリストを引数に渡して、攻撃対象を抽出
             HashSet<HexTileData> attackableSet = HexRouteSearcher.FindAttackableTilesInCandidates(targetTile, rangeResult.AttackableTiles, IsEnemy());
             List<HexTileData> attackableTileList = new List<HexTileData>(attackableSet);
-
-            // 攻撃可能マスのハイライト処理（赤など）
+            // 攻撃可能マスのハイライト処理
             ClickableHighlight.HighlightRangeTile(attackableTileList, false, eTileHighlight.BattleHighlight);
-
             // マネージャーへは実際に移動して止まれるマスだけを登録
             MovementManager.SetMovableTileList(movementTileList);
             MovementManager.AddMoveCharacter(this);

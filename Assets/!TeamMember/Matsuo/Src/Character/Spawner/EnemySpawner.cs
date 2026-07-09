@@ -21,6 +21,7 @@ public class EnemySpawner : MonoBehaviour
         // 候補タイルまたはプレハブが存在しない場合は処理しない
         if (candidateTiles == null || candidateTiles.Count == 0 || enemyPrefab == null)
         {
+            Debug.LogError("敵の生成に失敗しました（候補タイルがない、またはPrefabが未設定です）");
             return;
         }
 
@@ -42,6 +43,10 @@ public class EnemySpawner : MonoBehaviour
 
             // 選択したタイルを候補から除外する
             spawnTiles.RemoveAt(randomIndex);
+            // タイル情報を取得
+            HexTileData tileData = targetTile.GetTileData();
+            // タイルの状態を更新
+            tileData.SetTileState(eTileState.CharacterIn);
 
             // 敵を生成する
             EnemyBase enemy = Instantiate(enemyPrefab, targetTile.transform.position, Quaternion.identity);

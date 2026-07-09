@@ -27,6 +27,8 @@ public abstract class CharacterBase : MonoBehaviour
     public bool IsDead => hp <= 0;
     // 移動中か
     public bool IsMoving { get; private set; }
+    // 移動ルート
+    public List<HexTileData> currentMoveRoute { get; private set; } = new List<HexTileData>();
     /// <summary>
     /// キャラクターの初期化
     /// </summary>
@@ -132,5 +134,25 @@ public abstract class CharacterBase : MonoBehaviour
     {
         moveCancellation?.Cancel();
         moveCancellation?.Dispose();
+    }
+    /// <summary>
+    /// 移動ルートの設定
+    /// </summary>
+    /// <param name="route"></param>
+    public void SetMoveRoute(List<HexTileData> route) {
+        currentMoveRoute = route;
+    }
+    /// <summary>
+    /// 移動終了処理
+    /// </summary>
+    public virtual void EndMove() {
+        currentMoveRoute.Clear();
+    }
+    /// <summary>
+    /// 敵か判別
+    /// </summary>
+    /// <returns></returns>
+    public virtual bool IsEnemy() {
+        return true;
     }
 }

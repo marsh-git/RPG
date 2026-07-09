@@ -13,6 +13,19 @@ public class MainGamePart : BasePart
     }
     public override async UniTask Execute()
     {
+        UniTask task = ServerExecute();
+        task = ClientExecute();
+
+        await UniTask.CompletedTask;
+    }
+
+    public override async UniTask ServerExecute()
+    {
+        await UniTask.CompletedTask;
+    }
+
+    public override async UniTask ClientExecute()
+    {
         await UniTask.CompletedTask;
     }
 }

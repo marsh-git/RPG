@@ -7,7 +7,7 @@ using UnityEngine;
 /// </summary>
 public class TitlePart : BasePart
 {
-    public bool isHost = false;
+    public static bool isHost { get; private set; } = false;
     public bool goToSelectPart = false;
     public override async UniTask Init()
     {

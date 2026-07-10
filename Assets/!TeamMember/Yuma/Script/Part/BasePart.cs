@@ -6,13 +6,15 @@ using UnityEngine;
 /// <summary>
 /// 全パートの基底クラス
 /// </summary>
-public abstract class BasePart : MonoBehaviour {
+public abstract class BasePart : MonoBehaviour
+{
 
     /// <summary>
     /// ゲーム開始時に一度だけ呼ばれる
     /// </summary>
     /// <returns></returns>
-    public virtual async UniTask Init() {
+    public virtual async UniTask Init()
+    {
         gameObject.SetActive(false);
         await UniTask.CompletedTask;
     }
@@ -21,7 +23,8 @@ public abstract class BasePart : MonoBehaviour {
     /// パート遷移前に呼ばれる
     /// </summary>
     /// <returns></returns>
-    public virtual async UniTask Setup() {
+    public virtual async UniTask Setup()
+    {
         gameObject.SetActive(true);
         await UniTask.CompletedTask;
     }
@@ -37,7 +40,8 @@ public abstract class BasePart : MonoBehaviour {
     /// パートが終了する際に呼ばれる
     /// </summary>
     /// <returns></returns>
-    public virtual async UniTask Teardown() {
+    public virtual async UniTask Teardown()
+    {
         gameObject.SetActive(false);
         await UniTask.CompletedTask;
     }
@@ -46,11 +50,17 @@ public abstract class BasePart : MonoBehaviour {
     /// サーバー専用実行処理
     /// </summary>
     /// <returns></returns>
-    public virtual async UniTask ServerExecute() { }
+    public virtual async UniTask ServerExecute()
+    {
+        await UniTask.CompletedTask;
+    }
 
     /// <summary>
     /// クライアント専用実行処理
     /// </summary>
     /// <returns></returns>
-    public virtual async UniTask ClientExecute() { }
+    public virtual async UniTask ClientExecute()
+    {
+        await UniTask.CompletedTask;
+    }
 }

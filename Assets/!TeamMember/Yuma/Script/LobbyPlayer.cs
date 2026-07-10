@@ -9,8 +9,8 @@ public class LobbyPlayer : NetworkBehaviour
     [SyncVar] public bool isReady = false;
 
     [Command]
-    public void CmdToggleReady()
+    public void CmdToggleReady(bool _isReady)
     {
-        isReady = !isReady;
+        isReady = _isReady;
     }
 }

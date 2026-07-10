@@ -6,7 +6,7 @@ using UnityEngine;
 /// <summary>
 /// システムオブジェクトの基底クラス
 /// </summary>
-public abstract class SystemObject : NetworkBehaviour{
+public abstract class SystemObject : MonoBehaviour{
 
     /// <summary>
     /// 初期化処理

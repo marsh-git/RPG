@@ -6,24 +6,31 @@ using UnityEngine.UI;
 
 public abstract class EventDataBase : ScriptableObject
 {
-
     [Header("イベント名")]
-    public string eventName;
+    [SerializeField] protected string eventName;
 
     [Header("イベント説明")]
-    [TextArea(3, 6)]public string eventDescription;
+    [TextArea(3, 6)] public string eventDescription;
 
     [Header("イベント画像")]
-    public Sprite eventImage;
+    [SerializeField] protected Sprite eventImage;
+
+    [Header("ボタン")]
+    [SerializeField] protected Button eventButton;
 
     //  子オブジェクトのUI配置（固定）
-    private readonly int EVENTUI_IMAGE = 1;
-    private readonly int EVENTUI_DESCRIPTION = 2;
+    protected readonly int EVENTUI_IMAGE = 1;
+    protected readonly int EVENTUI_DESCRIPTION = 2;
+    protected readonly int EVENTUI_BUTTON_PARENT = 3;
+
+    protected Transform[] uiChildren;
+
+    protected abstract void EventUpdate();
 
     /// <summary>
-    /// イベント開始関数
+    /// イベント終了関数
     /// </summary>
-    public abstract void StartEvent();
+    protected abstract void EndEvent();
 
     /// <summary>
     /// UIをセットする
@@ -32,7 +39,7 @@ public abstract class EventDataBase : ScriptableObject
     public virtual void SetEventUI(Canvas eventUI)
     {
         Transform uiParent = eventUI.transform;
-        var uiChildren = GetChildren(uiParent);
+        uiChildren = GetChildren(uiParent);
         uiChildren[EVENTUI_IMAGE].GetComponent<Image>().sprite = eventImage;
         uiChildren[EVENTUI_DESCRIPTION].GetComponent<TextMeshProUGUI>().text = eventDescription;
     }

@@ -39,7 +39,7 @@ public class SelectModePart : BasePart
 
     public override async UniTask Execute()
     {
-
+        await UniTask.CompletedTask;
     }
 
     /// <summary>

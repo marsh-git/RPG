@@ -549,6 +549,7 @@ MonoBehaviour:
   evaluationMethod: 0
   evaluationInterval: 3
   timeInterpolationGui: 0
+  lobbyPlayer: {fileID: 4660188379166956485, guid: 09c15bf6cf29fcd4dae07a57d47709fc, type: 3}
 --- !u!4 &1802693244
 Transform:
   m_ObjectHideFlags: 0

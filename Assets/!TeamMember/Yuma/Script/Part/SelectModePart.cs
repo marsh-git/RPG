@@ -2,6 +2,7 @@ using Cysharp.Threading.Tasks;
 using Mirror;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class SelectModePart : BasePart
 {
@@ -12,10 +13,10 @@ public class SelectModePart : BasePart
 
     private bool startGame = false;
 
+    private LobbyPlayer localLobbyPlayer;
     public override async UniTask Init()
     {
         await base.Init();
-
     }
 
     public override async UniTask Setup()
@@ -32,9 +33,13 @@ public class SelectModePart : BasePart
         {
             CustomNetworkManager.instance.StartClient();
         }
+        localLobbyPlayer = NetworkClient.localPlayer.GetComponent<LobbyPlayer>();
 
+        GameObject localPlayerName = Instantiate(nameObj, rect);
+        Toggle checkBox = localPlayerName.GetComponent<Toggle>();
 
-        Instantiate(nameObj, rect);
+        checkBox.onValueChanged.AddListener(ToggleReady);
+
     }
 
     public override async UniTask Execute()
@@ -55,22 +60,18 @@ public class SelectModePart : BasePart
     }
 
     /// <summary>
-    /// 参加人数と準備完了人数が同じならtrueを返す(方法考え中)
-    /// </summary>
-    /// <returns></returns>
-    private bool WaitReadyAllPlayer()
-    {
-        return NetworkServer.connections.Count > 0;
-    }
-
-    /// <summary>
     /// ゲーム開始
     /// ボタンに実装
     /// </summary>
     public void StartGame()
     {
-        if (!WaitReadyAllPlayer()) return;
+        if (!PartNetworkGame.instance.CheckAllReady()) return;
 
         startGame = true;
+    }
+
+    private void ToggleReady(bool _isOn)
+    {
+        localLobbyPlayer.CmdToggleReady(_isOn);
     }
 }

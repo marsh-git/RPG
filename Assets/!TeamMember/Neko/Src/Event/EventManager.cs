@@ -11,7 +11,7 @@ public class EventManager : MonoBehaviour
     [SerializeField] public Canvas eventUI;
 
     [Header("ゲーム内で使用するイベントデータの配列")]
-    [SerializeField] private EventDataBase[] eventDatas;
+    [SerializeField] public EventDataBase[] eventDatas;
 
     private bool doingEvent = false;
 

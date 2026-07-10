@@ -639,6 +639,7 @@ MonoBehaviour:
   eventDatas:
   - {fileID: 11400000, guid: 2cb58444a9755f74998728e666f41186, type: 2}
   - {fileID: 11400000, guid: 633a8e180317f5a4e9750b1795d22a34, type: 2}
+  - {fileID: 11400000, guid: 651ad111913637e4aa865f6534c26b97, type: 2}
 --- !u!1 &1174401722
 GameObject:
   m_ObjectHideFlags: 0

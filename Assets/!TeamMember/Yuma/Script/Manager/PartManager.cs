@@ -17,8 +17,6 @@ public class PartManager : SystemObject
     //パートの配列
     private BasePart[] partList = null;
 
-    [SyncVar(hook = nameof(OnChangedPart))] public GameEnum.eGamePart eGamePart;
-
     /// <summary>
     /// 初期化関数
     /// </summary>
@@ -39,33 +37,31 @@ public class PartManager : SystemObject
         //一気に処理
         await CommonModule.WaitTask(tasks);
     }
+
     /// <summary>
     /// パート変更処理
     /// </summary>
     /// <param name="_nextPart"></param>
     /// <returns></returns>
-    [Server]
     public async UniTask TransitionPart(GameEnum.eGamePart _nextPart) {
-        //現在のパートの片付け
-        if (currentPart != null) {
-            await currentPart.Teardown();
+        if (!NetworkServer.active)
+        {
+            await ChangePartClient(_nextPart);
         }
-        //次のパートに移動
-        currentPart = partList[(int)_nextPart];
-        await currentPart.Setup();
+        else
+        {
+            await ChangePartServer(_nextPart);
+        }
 
-        //実行処理
-        currentPart.Execute().Forget();
-        eGamePart = _nextPart;
     }
 
-
-    private void OnChangedPart(GameEnum.eGamePart _oldPart, GameEnum.eGamePart _newPart)
-    {
-        ChangePartClient(_newPart).Forget();
-    }
-
-    private async UniTask ChangePartClient(GameEnum.eGamePart _nextPart)
+    /// <summary>
+    /// サーバー専用パート遷移処理
+    /// </summary>
+    /// <param name="_nextPart"></param>
+    /// <returns></returns>
+    [Server]
+    private async UniTask ChangePartServer(GameEnum.eGamePart _nextPart)
     {
         //現在のパートの片付け
         if (currentPart != null)
@@ -77,8 +73,32 @@ public class PartManager : SystemObject
         await currentPart.Setup();
 
         //実行処理
+        currentPart.ServerExecute().Forget();
         currentPart.Execute().Forget();
 
-        eGamePart = _nextPart;
-    } 
+
+        PartNetworkGame.instance.SetPart(_nextPart);
+    }
+
+    /// <summary>
+    /// クライアント専用パート遷移
+    /// </summary>
+    /// <param name="_nextPart"></param>
+    /// <returns></returns>
+    public async UniTask ChangePartClient(GameEnum.eGamePart _nextPart)
+    {
+        //現在のパートの片付け
+        if (currentPart != null)
+        {
+            await currentPart.Teardown();
+        }
+        //次のパートに移動
+        currentPart = partList[(int)_nextPart];
+        await currentPart.Setup();
+
+        //実行処理
+        currentPart.ClientExecute().Forget();
+        currentPart.Execute().Forget();
+        
+    }
 }

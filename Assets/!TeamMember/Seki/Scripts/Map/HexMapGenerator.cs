@@ -46,7 +46,7 @@ public class HexMapGenerator : MonoBehaviour {
     };
 
     /// <summary>
-    /// 【メインエントリ】他クラスに変更を加えず、決定論的（再現性100%）にマップを自動生成する
+    /// 他クラスに変更を加えず、決定論的（再現性100%）にマップを自動生成する
     /// </summary>
     /// <param name="config">生成ルールパラメータ</param>
     public void CreateMap(MapGenerationConfig config) {
@@ -80,9 +80,8 @@ public class HexMapGenerator : MonoBehaviour {
         // デバッグログに現在のシード値を明記（バグ遭遇時にこの数値をインスペクターにコピペできるようにする）
         Debug.Log($"【マップ生成完了】シード値: {config.Seed} / 総エリア数: {areaCenters.Count} / 総タイル数: {allGeneratedTiles.Count}");
     }
-
     /// <summary>
-    /// 【フェーズ 1】すべてのエリアの基礎地形とViewをループ生成する。
+    /// すべてのエリアの基礎地形とViewをループ生成する。
     /// 街マス予定地である場合は、山脈を弾いて最初から「平原」として生成する。
     /// </summary>
     private void GenerateBaseTerrain(
@@ -162,9 +161,8 @@ public class HexMapGenerator : MonoBehaviour {
             areaTileMap[areaID] = areaTiles;
         }
     }
-
     /// <summary>
-    /// 【フェーズ 2】各エリアの中心に街マス（1+6マス）の「属性（データ）」を付与する。
+    /// 各エリアの中心に街マス（1+6マス）の「属性（データ）」を付与する。
     /// </summary>
     private void GenerateTowns(List<Vector2Int> areaCenters, Dictionary<int, List<HexTileData>> areaTileMap) {
         foreach(var areaKeyValuePair in areaTileMap) {
@@ -191,9 +189,8 @@ public class HexMapGenerator : MonoBehaviour {
             }
         }
     }
-
     /// <summary>
-    /// 【フェーズ 3】特殊属性（前哨基地・イベント・作物）を、開いたマスに対して確率配置する
+    /// 特殊属性（前哨基地・イベント・作物）を、開いたマスに対して確率配置する
     /// </summary>
     private void GenerateSpecialAttributes(List<HexTileData> allGeneratedTiles, MapGenerationConfig config, System.Random mapRand) {
         // まだ何の属性も付与されていない（山脈でも街でもない）完全な空きマスを抽出
@@ -223,17 +220,12 @@ public class HexMapGenerator : MonoBehaviour {
     }
 
     /// <summary>
-    /// 【フェーズ 4】確定したマップオブジェクト群に対してユニットのスポーン命令を出す
+    /// 確定したマップオブジェクト群に対してユニットのスポーン命令を出す
     /// </summary>
     private void SpawnCharacters(List<HexTileObject> playerSpawnCandidates) {
         playerSpawner.Spawn(playerSpawnCandidates);
         enemySpawner.SpawnEnemy(playerSpawnCandidates, 5);
     }
-
-    // =========================================================================
-    // 内部補助ヘルパー関数
-    // =========================================================================
-
     /// <summary>
     /// 各エリアの中心と、そこから隣接する6方向のすべての「街予定地」のグローバル座標を事前に計算する
     /// </summary>
@@ -281,7 +273,11 @@ public class HexMapGenerator : MonoBehaviour {
 
         return eTerrain.Mountain;
     }
-
+    /// <summary>
+    /// 地形に合わせたオブジェクトを返す
+    /// </summary>
+    /// <param name="terrain"></param>
+    /// <returns></returns>
     private HexTileObject GetTerrainPrefab(eTerrain terrain) {
         switch(terrain) {
             case eTerrain.Plain: return tilePrefabPlain;
@@ -291,7 +287,6 @@ public class HexMapGenerator : MonoBehaviour {
         }
         return null;
     }
-
     /// <summary>
     /// 選択された難易度プリセットから、マップ生成の設定オブジェクト（Config）をビルドして返す
     /// </summary>
@@ -317,7 +312,6 @@ public class HexMapGenerator : MonoBehaviour {
         }
         return config;
     }
-
     /// <summary>
     /// デバッグ用のランダム生成エントリ（HexTileManagerのAwakeから呼ばれる）
     /// </summary>
@@ -335,7 +329,6 @@ public class HexMapGenerator : MonoBehaviour {
         MapGenerationConfig debugConfig = DecideConfigByLevel(eGameLevel.Normal, seed);
         CreateMap(debugConfig);
     }
-
     /// <summary>
     /// 決定論的に隣接エリアの方向・座標を算出する
     /// </summary>

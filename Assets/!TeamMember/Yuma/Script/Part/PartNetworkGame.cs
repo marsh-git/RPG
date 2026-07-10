@@ -46,4 +46,27 @@ public class PartNetworkGame : NetworkBehaviour
     {
         PartManager.instance.ChangePartClient(_newPart).Forget();
     }
+
+    #region ロビー用処理
+
+    public bool CheckAllReady()
+    {
+        int readyCount = 0;
+
+        foreach (var conn in NetworkServer.connections)
+        {
+            var player = conn.Value.identity.GetComponent<LobbyPlayer>();
+            if (player != null && player.isReady)
+            {
+                readyCount++;
+            }
+        }
+
+        if (readyCount == NetworkServer.connections.Count)
+        {
+            return true;
+        }
+        return false;
+    }
+    #endregion
 }

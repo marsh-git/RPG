@@ -1,6 +1,7 @@
 using Mirror;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 /// <summary>
 /// å≥Ç†ÇÈNetworkManagerÇÃîhê∂ÉNÉâÉX
 /// </summary>
@@ -8,6 +9,7 @@ public class CustomNetworkManager : NetworkManager
 {
     public static CustomNetworkManager instance;
 
+    public GameObject lobbyPlayer;
     public override void Awake()
     {
         base.Awake();
@@ -64,6 +66,9 @@ public class CustomNetworkManager : NetworkManager
             return;
         }
         base.OnServerConnect(_conn);
+        GameObject player = Instantiate(lobbyPlayer);
+        NetworkServer.Spawn(player);
+        NetworkServer.AddPlayerForConnection(_conn, player);
     }
 
     /// <summary>

@@ -15,7 +15,6 @@ public class SelectModePart : BasePart
     public override async UniTask Init()
     {
         await base.Init();
-
     }
 
     public override async UniTask Setup()
@@ -55,21 +54,12 @@ public class SelectModePart : BasePart
     }
 
     /// <summary>
-    /// 参加人数と準備完了人数が同じならtrueを返す(方法考え中)
-    /// </summary>
-    /// <returns></returns>
-    private bool WaitReadyAllPlayer()
-    {
-        return NetworkServer.connections.Count > 0;
-    }
-
-    /// <summary>
     /// ゲーム開始
     /// ボタンに実装
     /// </summary>
     public void StartGame()
     {
-        if (!WaitReadyAllPlayer()) return;
+        if (!PartNetworkGame.instance.CheckAllReady()) return;
 
         startGame = true;
     }

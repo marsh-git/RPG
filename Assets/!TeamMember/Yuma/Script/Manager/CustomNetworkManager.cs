@@ -74,7 +74,13 @@ public class CustomNetworkManager : NetworkManager
     public override void OnServerAddPlayer(NetworkConnectionToClient _conn)
     {
 
-        
+        NetworkServer.AddConnection(_conn);
+        if (!ServerManager.instance.connectPlayer.Contains(_conn.identity))
+        {
+            ServerManager.instance.connectPlayer.Add(_conn.identity);
+        }
+
+        Debug.Log(ServerManager.instance.connectPlayer.Count);
     }
 
     /// <summary>

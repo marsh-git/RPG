@@ -25,12 +25,23 @@ public class PartNetworkGame : NetworkBehaviour
         isNetworkReady = true;
     }
 
+    /// <summary>
+    /// サーバー側パート変更
+    /// </summary>
+    /// <param name="_next"></param>
     [Server]
     public void SetPart(GameEnum.eGamePart _next)
     {
         currentPart = _next;
     }
 
+
+
+    /// <summary>
+    /// サーバー側パート変更発火時処理
+    /// </summary>
+    /// <param name="_oldPart"></param>
+    /// <param name="_newPart"></param>
     void OnPartChanged(GameEnum.eGamePart _oldPart, GameEnum.eGamePart _newPart)
     {
         PartManager.instance.ChangePartClient(_newPart).Forget();

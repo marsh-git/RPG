@@ -97,7 +97,8 @@ public class PartManager : SystemObject
         await currentPart.Setup();
 
         //実行処理
-        currentPart.Execute().Forget();
         currentPart.ClientExecute().Forget();
-    } 
+        currentPart.Execute().Forget();
+        
+    }
 }

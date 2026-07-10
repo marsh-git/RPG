@@ -1,4 +1,5 @@
 using Cysharp.Threading.Tasks;
+using Mirror;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,34 +10,45 @@ public class SelectModePart : BasePart
     [SerializeField]
     private GameObject nameObj;
 
+    private bool startGame = false;
+
     public override async UniTask Init()
     {
         await base.Init();
-        
+
     }
 
     public override async UniTask Setup()
     {
         await base.Setup();
+
         //ホストかどうかで分岐
         if (TitlePart.isHost)
         {
-            CustomNetworkManager.instance.StartServer();
+            CustomNetworkManager.instance.StartHost();
+             this.ServerExecute().Forget();
         }
         else
         {
-
             CustomNetworkManager.instance.StartClient();
         }
+
+
         Instantiate(nameObj, rect);
     }
 
     public override async UniTask Execute()
     {
-        //全員準備完了まで待ち
-        await UniTask.WaitUntil(() => WaitReadyAllPlayer());
 
-        await UniTask.Delay(3000);
+    }
+
+    /// <summary>
+    /// サーバー側処理
+    /// </summary>
+    /// <returns></returns>
+    public override async UniTask ServerExecute()
+    {
+        await UniTask.WaitUntil(() => startGame);
 
         //ゲーム開始
         await PartManager.instance.TransitionPart(GameEnum.eGamePart.MainGame);
@@ -48,6 +60,17 @@ public class SelectModePart : BasePart
     /// <returns></returns>
     private bool WaitReadyAllPlayer()
     {
-        return ServerManager.instance.connectPlayer.Count == int.MaxValue;
-    } 
+        return NetworkServer.connections.Count > 0;
+    }
+
+    /// <summary>
+    /// ゲーム開始
+    /// ボタンに実装
+    /// </summary>
+    public void StartGame()
+    {
+        if (!WaitReadyAllPlayer()) return;
+
+        startGame = true;
+    }
 }

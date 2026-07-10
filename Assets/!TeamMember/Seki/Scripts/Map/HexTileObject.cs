@@ -49,6 +49,8 @@ public class HexTileObject : MonoBehaviour, IClickable {
         HexTileData targetTile = HexManager.GetTileData(ID);
         switch(targetTile.tileState) {
             case eTileState.Normal:
+            // 移動の片付け処理
+            MovementManager.TeardownMovement();
             // クリック管理クラスに伝える
             ClickableHighlight.OnTileHighlight(targetTile);
             break;
@@ -80,7 +82,10 @@ public class HexTileObject : MonoBehaviour, IClickable {
             }
             break;
             case eTileState.CharacterIn:
-
+            // 移動の片付け処理
+            MovementManager.TeardownMovement();
+            // クリック管理クラスに伝える
+            ClickableHighlight.OnTileHighlight(targetTile);
             break;
         }
     }

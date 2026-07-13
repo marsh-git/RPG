@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -23,7 +24,7 @@ public class DebugEventPlay : MonoBehaviour
                 Debug.Log("イベント中です");
                 return;
             }
-            eventManager.StartEvent(Random.Range(0,2));
+            eventManager.StartEvent(Random.Range(0,eventManager.eventDatas.Length));
         }
     }
 }

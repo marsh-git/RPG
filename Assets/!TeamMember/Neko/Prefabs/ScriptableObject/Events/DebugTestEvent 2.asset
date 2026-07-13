@@ -13,6 +13,10 @@ MonoBehaviour:
   m_Name: DebugTestEvent 2
   m_EditorClassIdentifier: 
   eventName: DebugEvent
-  eventDescription: F**K
+  eventDescription: 'Chicken
+
+    ChickenChicken
+
+    ChickenChickenChicken'
   eventImage: {fileID: 21300000, guid: 676c1aa3f1ef9e241ba29a5d55ad7205, type: 3}
   eventButton: {fileID: 7616611666898629563, guid: cb2318a830a7a96419ef062bea32304c, type: 3}

@@ -12,10 +12,14 @@ public class HexTileManager : MonoBehaviour {
     // TODO:そのうち、ゲームシーンステートクラスが持つようになる
     [SerializeField] private HexMapGenerator mapGenerator;
 
-    public void Awake() {
-        instance = this;
+    private void Start()
+    {
         // デバッグ用
         mapGenerator.CreateDebugMap();
+    }
+
+    public void Awake() {
+        instance = this;
     }
 
     /// <summary>

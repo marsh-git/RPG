@@ -5,6 +5,9 @@ using static HexRouteSearcher;
 
 public class PlayerBase : CharacterBase, IClickable
 {
+
+    public static PlayerBase instance { get; private set; }
+
     //  経験値変数
     private int exp = 0;
     private int lv = 1;
@@ -27,6 +30,8 @@ public class PlayerBase : CharacterBase, IClickable
     protected override void Awake()
     {
         base.Awake();
+
+        instance = this;
 
         jobManager = JobManager.instance;
         needExp = baseNeedExp;
@@ -67,7 +72,7 @@ public class PlayerBase : CharacterBase, IClickable
     /// Jobをプレイヤーにセットする
     /// </summary>
     /// <param name="jobNum"></param>
-    private void SetJob(int jobNum)
+    public void SetJob(int jobNum)
     {
         jobData = jobManager.GetJobData(jobNum);
 

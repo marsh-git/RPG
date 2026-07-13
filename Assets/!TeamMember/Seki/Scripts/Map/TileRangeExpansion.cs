@@ -114,8 +114,8 @@ public static class TileRangeExpansion {
         List<HexTileData> ringTileList = new List<HexTileData>();
         if(centerTile == null || radius <= 0) return ringTileList;
 
-        // 数学的にスタート地点のアキシアル座標(q, r)を厳密に計算
-        // GetTilesWithinRadius のループ上限・下限計算ロジックを応用し、DownLeft方向の最下端座標を正確に算出します。
+        // 数学的にスタート地点のアキシアル座標(q, r)を計算
+        // GetTilesWithinRadius のループ上限・下限計算ロジックを応用し、DownLeft方向の最下端座標を算出
         int currentQ = centerTile.gridPosX;
         int currentR = centerTile.gridPosY + radius;
 
@@ -123,7 +123,7 @@ public static class TileRangeExpansion {
         // 走査順：UpRight -> Right -> DownRight -> DownLeft -> Left -> UpLeft
         foreach(eDirectionHex dir in Directions) {
             for(int i = 0; i < radius; i++) {
-                // 【バグ修正】座標から直接タイルデータを逆引きすることで、マップ外(null)を跨いだ正しいリング走査を保証
+                // 座標から直接タイルデータを逆引きすることで、マップ外(null)を跨いだ正しいリング走査を保証
                 HexTileData currentTile = HexTileManager.instance.GetTileData(currentQ, currentR);
                 if(currentTile != null) {
                     ringTileList.Add(currentTile);

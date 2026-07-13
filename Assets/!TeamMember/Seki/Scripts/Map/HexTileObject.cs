@@ -77,7 +77,7 @@ public class HexTileObject : MonoBehaviour, IClickable {
                 ClickableHighlight.ClearHighlights();
                 // 移動開始
                 MovePlayer().Forget();
-                } else {
+            } else {
                 // ハイライトの解除
                 ClickableHighlight.ClearHighlights();
                 // 移動の片付け処理

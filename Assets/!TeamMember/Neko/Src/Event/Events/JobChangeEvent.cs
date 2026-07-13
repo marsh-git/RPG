@@ -17,7 +17,7 @@ public class JobChangeEvent : EventDataBase
     [SerializeField] private string selectJobButtonText2 = "";
     [SerializeField] private string selectJobButtonText3 = "";
 
-    private readonly string selectJobCancelButtonText = "転職しない";
+    private readonly string selectJobCancelButtonText = "No";
 
     [Header("転職する役職の番号（JobManagerから参照）")]
     [SerializeField] private int JobNum1 = 0;
@@ -52,10 +52,12 @@ public class JobChangeEvent : EventDataBase
         base.SetEventUI(eventUI);
 
         //  ボタン追加
+        button = new Button[BUTTON_COUNT];
         for(int i = 0; i < BUTTON_COUNT; i++)
         {
             button[i] = SetButton();
         }
+
         button[0].GetComponentInChildren<TextMeshProUGUI>().text = selectJobButtonText1;
         button[0].onClick.AddListener(OnJobChangeEvent1);
         button[1].GetComponentInChildren<TextMeshProUGUI>().text = selectJobButtonText2;

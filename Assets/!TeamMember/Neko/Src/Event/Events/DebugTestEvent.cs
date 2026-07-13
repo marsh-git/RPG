@@ -8,7 +8,7 @@ using UnityEngine.UI;
 public class DebugTestEvent : EventDataBase
 {
 
-    Button button;
+    private Button button;
 
     protected override void EventUpdate()
     {

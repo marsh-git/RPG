@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6910e5e5ee0e314499116360f24b2613, type: 3}
+  m_Name: DebugJobChangeEvent
+  m_EditorClassIdentifier: 
+  eventName: 
+  eventDescription: Change job?
+  eventImage: {fileID: 21300000, guid: 8ee02c70c8f3fde44807e1a0ddea517d, type: 3}
+  eventButton: {fileID: 7616611666898629563, guid: cb2318a830a7a96419ef062bea32304c, type: 3}
+  selectJobButtonText1: change neet
+  selectJobButtonText2: change shrimp
+  selectJobButtonText3: change kani
+  JobNum1: 0
+  JobNum2: 1
+  JobNum3: 2

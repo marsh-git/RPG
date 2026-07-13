@@ -470,6 +470,7 @@ MonoBehaviour:
   jobDatas:
   - {fileID: 11400000, guid: b5c9ecdacf12543478ef2b320c4b806d, type: 2}
   - {fileID: 11400000, guid: f4c0c81f79ecd1a4f876465029288972, type: 2}
+  - {fileID: 11400000, guid: 62ba9c405c0e6994cac6ce11a9cb6c11, type: 2}
 --- !u!1 &840257007
 GameObject:
   m_ObjectHideFlags: 0
@@ -640,6 +641,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 2cb58444a9755f74998728e666f41186, type: 2}
   - {fileID: 11400000, guid: 633a8e180317f5a4e9750b1795d22a34, type: 2}
   - {fileID: 11400000, guid: 651ad111913637e4aa865f6534c26b97, type: 2}
+  - {fileID: 11400000, guid: 8eee390f7580eb94082edb9156c817a1, type: 2}
 --- !u!1 &1174401722
 GameObject:
   m_ObjectHideFlags: 0

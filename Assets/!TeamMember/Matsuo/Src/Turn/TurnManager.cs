@@ -9,7 +9,7 @@ public class TurnManager : MonoBehaviour
     public TurnState CurrentTurn { get; private set; }
 
     // 参照用
-    [SerializeField] private HexGridManager gridManager;
+    [SerializeField] private HexTileManager tileManager;
     [SerializeField] private EnemyAIManager enemyAIManager;
 
     // プレイヤー一覧
@@ -46,9 +46,9 @@ public class TurnManager : MonoBehaviour
         Debug.Log($"プレイヤー{currentPlayerIndex + 1}のターン開始");
 
         // プレイヤー操作開始
-        if (gridManager != null)
+        if (tileManager != null)
         {
-            gridManager.enabled = true;
+            tileManager.enabled = true;
         }
     }
 
@@ -62,9 +62,9 @@ public class TurnManager : MonoBehaviour
             return;
         }
 
-        if (gridManager != null)
+        if (tileManager != null)
         {
-            gridManager.enabled = false;
+            tileManager.enabled = false;
         }
 
         // 次のプレイヤーへ

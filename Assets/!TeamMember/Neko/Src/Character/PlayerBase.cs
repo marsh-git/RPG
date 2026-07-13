@@ -12,7 +12,7 @@ public class PlayerBase : CharacterBase, IClickable
     private int exp = 0;
     private int lv = 1;
     private int needExp;
-    private readonly int baseNeedExp = 50;
+    private readonly int BASE_NEED_EXP = 50;
     private float needExpRatio = 1.5f;
 
     //  外部参照用
@@ -24,6 +24,9 @@ public class PlayerBase : CharacterBase, IClickable
     [SerializeField] private JobData jobData = null;
     private JobManager jobManager = null;
 
+    //  所持遺物
+    private List<RelicDataBase> currentRelic;
+
     // プレイヤーのダイス
     private DiceManager diceManager;
 
@@ -34,7 +37,6 @@ public class PlayerBase : CharacterBase, IClickable
         instance = this;
 
         jobManager = JobManager.instance;
-        needExp = baseNeedExp;
 
         //  初期職業がnullなら初期職業に変更する
         if (jobData == null) SetJob(jobManager.START_JOB);
@@ -65,7 +67,16 @@ public class PlayerBase : CharacterBase, IClickable
 
         lv += 1;
         //  小数点以下切り捨て
-        needExp = Mathf.FloorToInt(baseNeedExp * Mathf.Pow(lv, needExpRatio));
+        needExp = Mathf.FloorToInt(BASE_NEED_EXP * Mathf.Pow(lv, needExpRatio));
+    }
+
+    /// <summary>
+    /// 経験値とレベルをリセットする
+    /// </summary>
+    private void ResetExpAndLevel()
+    {
+        exp = 0;
+        needExp = BASE_NEED_EXP;
     }
 
     /// <summary>
@@ -79,21 +90,60 @@ public class PlayerBase : CharacterBase, IClickable
         //  職業がnullなら初期職業に変更する
         if (jobData == null) SetJob(jobManager.START_JOB);
 
-        SetStatus(jobData);
+        //  経験値とレベルをリセット
+        ResetExpAndLevel();
+
+        //  役職のステータスをセットする
+        SetJobStatus();
     }
 
     /// <summary>
-    /// ステータスをセットする
+    /// 役職のステータスをセットする
     /// </summary>
-    private void SetStatus(JobData jobData)
+    private void SetJobStatus()
     {
         if (jobData == null) return;
 
         maxHp = jobData.maxHp;
-        hp = maxHp;
         attack = jobData.attack;
         defense = jobData.defense;
         luck = jobData.luck;
+        //  レリックのバフを再適応する
+        ReconfigureRelicsStatus();
+
+        //  hpを全快させる
+        hp = maxHp;
+    }
+
+    /// <summary>
+    /// レリックのバフを再適応する(ジョブ入れ替え時のステータスに入れ込む)
+    /// </summary>
+    private void ReconfigureRelicsStatus()
+    {
+        //  初期の遺物は配列0番目固定にする
+        currentRelic[0] = jobData.jobRelic;
+
+        for(int i = 0; i < currentRelic.Count; i++)
+        {
+            RelicDataBase relics = currentRelic[i];
+            maxHp += relics.maxHp;
+            attack += relics.attack;
+            defense += relics.defense;
+            luck += relics.luck;
+        }
+    }
+
+    /// <summary>
+    /// レリックを新規取得時に適応する
+    /// </summary>
+    /// <param name="addRelic"></param>
+    public void AddRelic(RelicDataBase addRelic)
+    {
+        currentRelic.Add(addRelic);
+        maxHp += addRelic.maxHp;
+        attack += addRelic.attack;
+        defense += addRelic.defense;
+        luck += addRelic.luck;
     }
 
     /// <summary>

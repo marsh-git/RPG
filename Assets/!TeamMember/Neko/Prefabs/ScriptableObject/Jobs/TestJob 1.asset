@@ -17,3 +17,4 @@ MonoBehaviour:
   attack: 10
   defense: 10
   luck: 0
+  jobRelic: {fileID: 11400000, guid: 0b9ae7429032b9745a665596265d12da, type: 2}

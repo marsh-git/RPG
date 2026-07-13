@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public static class TileRangeExpansion{
+public static class TileRangeExpansion {
     // 時計回りの方向リスト
     private static readonly eDirectionHex[] Directions = new eDirectionHex[] {
         eDirectionHex.UpRight, eDirectionHex.Right, eDirectionHex.DownRight,
@@ -10,7 +10,7 @@ public static class TileRangeExpansion{
     };
     /// <summary>
     /// 指定回数分の指定方向範囲内のタイル取得
-    /// startTile自体は含めない
+    /// ※startTile自体は含めない
     /// </summary>
     /// <param name="startTile"></param>
     /// <param name="dir"></param>
@@ -74,7 +74,7 @@ public static class TileRangeExpansion{
             validTilesInRing.RemoveAll(neighbor =>
                 neighbor == null ||
                 neighbor.attribute == eAttribute.CannotMove ||
-                neighbor.tileState == eTileState.CharacterIn || 
+                neighbor.tileState == eTileState.CharacterIn ||
                 neighbor.tileState == eTileState.Reserved
             );
 
@@ -104,32 +104,89 @@ public static class TileRangeExpansion{
         // マップ全域が埋まっているなど、見つからなかった場合
         return null;
     }
-
     /// <summary>
     /// 中心タイルから指定距離の位置にあるタイルのリストを取得
     /// </summary>
-    private static List<HexTileData> GetTilesAtRadius(HexTileData center, int radius) {
-        List<HexTileData> ringTiles = new List<HexTileData>();
+    /// <param name="centerTile">基準となるタイル</param>
+    /// <param name="radius">半径</param>
+    /// <returns></returns>
+    public static List<HexTileData> GetTilesAtRadius(HexTileData centerTile, int radius) {
+        List<HexTileData> ringTileList = new List<HexTileData>();
+        if(centerTile == null || radius <= 0) return ringTileList;
 
-        // 中心から指定方向に「半径分の歩数」だけ進んだ地点（スタート地点）を算出
-        HexTileData current = center;
-        for(int i = 0; i < radius; i++) {
-            current = HexTileManager.instance.GetToDirTile(current.gridPosX, current.gridPosY, eDirectionHex.DownLeft);
-            if(current == null) break;
-        }
+        // 数学的にスタート地点のアキシアル座標(q, r)を厳密に計算
+        // GetTilesWithinRadius のループ上限・下限計算ロジックを応用し、DownLeft方向の最下端座標を正確に算出します。
+        int currentQ = centerTile.gridPosX;
+        int currentR = centerTile.gridPosY + radius;
 
         // スタート地点から、6つの方向を順番に変えながら「半径と同じ歩数」ずつ進むことで綺麗な正六角形の環を一周する
         // 走査順：UpRight -> Right -> DownRight -> DownLeft -> Left -> UpLeft
         foreach(eDirectionHex dir in Directions) {
             for(int i = 0; i < radius; i++) {
-                if(current != null) {
-                    ringTiles.Add(current);
+                // 【バグ修正】座標から直接タイルデータを逆引きすることで、マップ外(null)を跨いだ正しいリング走査を保証
+                HexTileData currentTile = HexTileManager.instance.GetTileData(currentQ, currentR);
+                if(currentTile != null) {
+                    ringTileList.Add(currentTile);
                 }
-                current = HexTileManager.instance.GetToDirTile(current.gridPosX, current.gridPosY, dir);
+
+                // マップの形状に関わらず正しく次の座標を追跡するため、
+                // 隣接マスのデータ有無にかかわらず、次の方向の相対座標オフセット（位置関係）を計算に適用
+                HexTileData peekTile = HexTileManager.instance.GetToDirTile(currentQ, currentR, dir);
+                if(peekTile != null) {
+                    currentQ = peekTile.gridPosX;
+                    currentR = peekTile.gridPosY;
+                } else {
+                    // 万が一マップ外(null)に進む場合は、これまでの方向性（進行ベクトル）を維持して座標のみを進める
+                    // ※アキシアル座標系における各方向の増分(dq, dr)を適用
+                    switch(dir) {
+                        case eDirectionHex.UpRight: currentQ += 1; currentR -= 1; break;
+                        case eDirectionHex.Right: currentQ += 1; break;
+                        case eDirectionHex.DownRight: currentR += 1; break;
+                        case eDirectionHex.DownLeft: currentQ -= 1; currentR += 1; break;
+                        case eDirectionHex.Left: currentQ -= 1; break;
+                        case eDirectionHex.UpLeft: currentR -= 1; break;
+                    }
+                }
             }
         }
 
-        return ringTiles;
+        return ringTileList;
+    }
+    /// <summary>
+    /// 中心タイルから指定された半径「以内」にあるすべてのマスのリストを取得する
+    /// ※中心タイル自体は含めない
+    /// </summary>
+    /// <param name="center">基準となる中心のタイル</param>
+    /// <param name="radius">探索半径（1以上を指定、0以下の場合は空のリストを返す）</param>
+    /// <returns>半径内に存在する全タイルのリスト（中心除く）</returns>
+    public static List<HexTileData> GetTilesWithinRadius(HexTileData center, int radius) {
+        if(center == null || radius <= 0) return new List<HexTileData>();
+
+        // 中心を除外するため、初期容量から1を引く
+        int estimatedSize = 3 * radius * (radius + 1);
+        List<HexTileData> allTilesInRadius = new List<HexTileData>(estimatedSize);
+
+        // 中心座標を起点とした相対的なアキシアル座標の範囲ループ
+        for(int q = -radius; q <= radius; q++) {
+            int rStart = Mathf.Max(-radius, -q - radius);
+            int rEnd = Mathf.Min(radius, -q + radius);
+
+            for(int r = rStart; r <= rEnd; r++) {
+                // 中心マス場合はリストに加えずスキップ
+                if(q == 0 && r == 0) continue;
+
+                // 中心タイルの絶対座標に相対オフセットを加算して対象座標を特定
+                int targetQ = center.gridPosX + q;
+                int targetR = center.gridPosY + r;
+
+                // マネージャーから該当する座標のタイルデータを取得
+                HexTileData tileData = HexTileManager.instance.GetTileData(targetQ, targetR);
+                if(tileData != null) {
+                    allTilesInRadius.Add(tileData);
+                }
+            }
+        }
+        return allTilesInRadius;
     }
     /// <summary>
     /// アキシアル座標系における2点間の幾何学的なヘックス距離を算出するヘルパー関数

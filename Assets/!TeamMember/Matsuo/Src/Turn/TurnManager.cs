@@ -9,8 +9,8 @@ public class TurnManager : MonoBehaviour
     public TurnState CurrentTurn { get; private set; }
 
     // 参照用
-    [SerializeField] private HexGridManager gridManager;
-    [SerializeField] private EnemyBase enemy;
+    [SerializeField] private HexTileManager tileManager;
+    [SerializeField] private EnemyAIManager enemyAIManager;
 
     // プレイヤー一覧
     [SerializeField]
@@ -18,10 +18,6 @@ public class TurnManager : MonoBehaviour
 
     // 現在行動中のプレイヤー番号
     private int currentPlayerIndex = 0;
-
-    // キャラクター管理
-    [SerializeField]
-    private CharacterManager characterManager;
 
     // 現在ターン中のプレイヤー
     public PlayerBase CurrentPlayer => players[currentPlayerIndex];
@@ -50,9 +46,9 @@ public class TurnManager : MonoBehaviour
         Debug.Log($"プレイヤー{currentPlayerIndex + 1}のターン開始");
 
         // プレイヤー操作開始
-        if (gridManager != null)
+        if (tileManager != null)
         {
-            gridManager.enabled = true;
+            tileManager.enabled = true;
         }
     }
 
@@ -66,9 +62,9 @@ public class TurnManager : MonoBehaviour
             return;
         }
 
-        if (gridManager != null)
+        if (tileManager != null)
         {
-            gridManager.enabled = false;
+            tileManager.enabled = false;
         }
 
         // 次のプレイヤーへ
@@ -89,21 +85,16 @@ public class TurnManager : MonoBehaviour
     /// <summary>
     /// 敵ターン開始
     /// </summary>
-    private void StartEnemyTurn()
+    private async void StartEnemyTurn()
     {
         CurrentTurn = TurnState.EnemyTurn;
 
         Debug.Log("敵ターン開始");
 
-        foreach (CharacterBase character in characterManager.GetCharacters())
+        if (enemyAIManager != null)
         {
-            if (character is EnemyBase enemy)
-            {
-                // enemy.StartTurn();
-            }
+            await enemyAIManager.StartEnemyTurn();
         }
-
-        EndEnemyTurn();
     }
 
     /// <summary>

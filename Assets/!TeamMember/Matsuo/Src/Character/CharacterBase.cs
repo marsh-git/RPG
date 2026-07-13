@@ -79,6 +79,8 @@ public abstract class CharacterBase : MonoBehaviour
 
         IsMoving = true;
 
+        List<HexTileData> movePath = new List<HexTileData>(path);
+
         await movement.MoveAlongPathAsync(
             transform,
             path,

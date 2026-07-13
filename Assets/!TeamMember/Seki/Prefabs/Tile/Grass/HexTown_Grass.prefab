@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 3650420647696348312}
   - component: {fileID: 1131223825451217967}
   m_Layer: 6
-  m_Name: HexTile
+  m_Name: HexTown_Grass
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -51,6 +51,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   axialCoordinate: {x: 0, y: 0}
   terrainType: 0
+  playerUnits: []
+  enemyUnit: {fileID: 0}
   tileRenderer: {fileID: 0}
 --- !u!114 &8162397954162978796
 MonoBehaviour:
@@ -582,7 +584,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 3256
+  m_VersionIndex: 3262
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []

@@ -17,41 +17,23 @@ public class EnemyBase : CharacterBase
     }
 
     /// <summary>
-    /// 敵ターン開始
+    /// 敵ターン
     /// </summary>
-    public virtual async UniTask StartTurn()
+    /// <returns></returns>
+    public virtual List<HexTileData> DecideRoute()
     {
-        await Think();
-    }
-
-    /// <summary>
-    /// 敵AI
-    /// </summary>
-    protected virtual async UniTask Think()
-    {
-        // 一番近いプレイヤーを取得
         PlayerBase targetPlayer = EnemyAIManager.Instance.FindTargetPlayer(this);
 
         if (targetPlayer == null)
         {
-            return;
+            return null;
         }
 
-        // 自分とプレイヤーのタイル取得
-        HexTileData myTile =
-            HexTileManager.instance.GetTileData(GetTileID());
+        HexTileData myTile =　HexTileManager.instance.GetTileData(GetTileID());
 
-        HexTileData targetTile =
-            HexTileManager.instance.GetTileData(targetPlayer.GetTileID());
+        HexTileData targetTile =　HexTileManager.instance.GetTileData(targetPlayer.GetTileID());
 
-        // 最短ルート取得
-        List<HexTileData> route =
-            HexRouteSearcher.FindPath(myTile, targetTile, true);
-
-        if (route == null || route.Count == 0)
-        {
-            return;
-        }
+        List<HexTileData> route =　HexRouteSearcher.FindPath(myTile, targetTile, true);
 
         // 移動力分だけ切り出す
         if (route.Count > moveRange)
@@ -59,19 +41,13 @@ public class EnemyBase : CharacterBase
             route = route.GetRange(0, moveRange);
         }
 
-        // ルート設定
-        SetMoveRoute(route);
+        // 最後はプレイヤーのマスなので削除する
+        if (route.Count > 0)
+        {
+            route.RemoveAt(route.Count - 1);
+        }
 
-        // 移動
-        await MoveAsync(currentMoveRoute);
-    }
-
-    /// <summary>
-    /// 移動先決定
-    /// </summary>
-    protected virtual HexTileData DecideMoveTile()
-    {
-        return null;
+        return route;
     }
 
     /// <summary>

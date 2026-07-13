@@ -43,7 +43,7 @@ public abstract class CharacterBase : MonoBehaviour
     /// タイルIDの取得
     /// </summary>
     /// <returns></returns>
-    public virtual int GetTileID() 
+    public virtual int GetTileID()
     {
         return tileID;
     }
@@ -56,7 +56,7 @@ public abstract class CharacterBase : MonoBehaviour
         tileID = setTileID;
 
         HexTileData tileData = HexTileManager.instance.GetTileData(tileID);
-        if(tileData != null) transform.position = tileData.GetTilePos() + Vector3.up * 0.5f;
+        if (tileData != null) transform.position = tileData.GetTilePos() + Vector3.up * 0.5f;
     }
 
     /// <summary>
@@ -82,12 +82,33 @@ public abstract class CharacterBase : MonoBehaviour
         List<HexTileData> movePath = new List<HexTileData>(path);
 
         await movement.MoveAlongPathAsync(
-            transform,
-            path,
-            moveCancellation.Token,
-            tileData => {
-                if(tileData != null) tileID = tileData.ID;  // 1マス移動するたびにIDを抽出し、tileIDを更新する
-            });
+        transform,
+        movePath,
+        moveCancellation.Token,
+        tileData =>
+        {
+            if (tileData == null)
+            {
+                return;
+            }
+
+            // 今いるマスを通常状態に戻す
+            HexTileData oldTile = HexTileManager.instance.GetTileData(tileID);
+            if (oldTile != null)
+            {
+                oldTile.SetTileState(eTileState.Normal);
+            }
+
+            // タイルID更新
+            tileID = tileData.ID;
+
+            // 新しいマスを占有状態にする
+            HexTileData newTile = HexTileManager.instance.GetTileData(tileID);
+            if (newTile != null)
+            {
+                newTile.SetTileState(eTileState.CharacterIn);
+            }
+        });
         IsMoving = false;
     }
 
@@ -144,20 +165,23 @@ public abstract class CharacterBase : MonoBehaviour
     /// 移動ルートの設定
     /// </summary>
     /// <param name="route"></param>
-    public void SetMoveRoute(List<HexTileData> route) {
+    public void SetMoveRoute(List<HexTileData> route)
+    {
         currentMoveRoute = route;
     }
     /// <summary>
     /// 移動終了処理
     /// </summary>
-    public virtual void EndMove() {
+    public virtual void EndMove()
+    {
         currentMoveRoute.Clear();
     }
     /// <summary>
     /// 敵か判別
     /// </summary>
     /// <returns></returns>
-    public virtual bool IsEnemy() {
+    public virtual bool IsEnemy()
+    {
         return true;
     }
 }

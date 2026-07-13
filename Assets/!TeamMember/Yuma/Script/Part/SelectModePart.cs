@@ -2,6 +2,7 @@ using Cysharp.Threading.Tasks;
 using Mirror;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class SelectModePart : BasePart
 {
@@ -12,6 +13,7 @@ public class SelectModePart : BasePart
 
     private bool startGame = false;
 
+    private LobbyPlayer localLobbyPlayer;
     public override async UniTask Init()
     {
         await base.Init();
@@ -31,9 +33,13 @@ public class SelectModePart : BasePart
         {
             CustomNetworkManager.instance.StartClient();
         }
+        localLobbyPlayer = NetworkClient.localPlayer.GetComponent<LobbyPlayer>();
 
+        GameObject localPlayerName = Instantiate(nameObj, rect);
+        Toggle checkBox = localPlayerName.GetComponent<Toggle>();
 
-        Instantiate(nameObj, rect);
+        checkBox.onValueChanged.AddListener(ToggleReady);
+
     }
 
     public override async UniTask Execute()
@@ -62,5 +68,10 @@ public class SelectModePart : BasePart
         if (!PartNetworkGame.instance.CheckAllReady()) return;
 
         startGame = true;
+    }
+
+    private void ToggleReady(bool _isOn)
+    {
+        localLobbyPlayer.CmdToggleReady(_isOn);
     }
 }

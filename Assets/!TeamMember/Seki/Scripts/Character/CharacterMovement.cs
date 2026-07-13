@@ -21,7 +21,7 @@ public class CharacterMovement{
             Action<HexTileData> onStepTile = null) {
 
         if(targetTransform == null || path == null || path.Count == 0) return;
-
+        List<HexTileData> movePath = new List<HexTileData>(path);
         try {
             foreach(HexTileData nextTile in path) {
                 if(nextTile == null) continue;

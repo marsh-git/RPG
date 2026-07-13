@@ -7,10 +7,6 @@ public class PlayerSpawner : MonoBehaviour
     [SerializeField]
     private PlayerBase playerPrefab = null;
 
-    // キャラクター管理クラス
-    [SerializeField]
-    private CharacterManager characterManager = null;
-
     /// <summary>
     /// 候補タイルからランダムな位置へプレイヤーを生成する
     /// </summary>
@@ -44,7 +40,7 @@ public class PlayerSpawner : MonoBehaviour
         player.SetTile(targetTile.ID);
 
         // CharacterManagerへ登録する
-        characterManager.Register(player);
+        CharacterManager.Instance.Register(player);
 
         Debug.Log($"【プレイヤー生成】{targetTile.name} に配置しました。");
 

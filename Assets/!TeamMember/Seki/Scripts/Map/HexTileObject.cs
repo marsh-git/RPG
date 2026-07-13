@@ -42,6 +42,9 @@ public class HexTileObject : MonoBehaviour, IClickable {
     /// クリックされたときの処理
     /// </summary>
     public void OnClick() {
+        // プレイヤーターン以外は操作禁止
+        if (!TurnManager.Instance.IsPlayerTurn()) return;
+        
         var ClickableHighlight = ClickableSelectionManager.instance;
         var MovementManager = CharacterMovementManager.instance;
         var HexManager = HexTileManager.instance;
@@ -72,9 +75,9 @@ public class HexTileObject : MonoBehaviour, IClickable {
                 selectChara.SetMoveRoute(route);
                 // ハイライトの解除
                 ClickableHighlight.ClearHighlights();
-                // 移動処理
-                UniTask task = MovementManager.MoveCharacter();
-            } else {
+                // 移動開始
+                MovePlayer().Forget();
+                } else {
                 // ハイライトの解除
                 ClickableHighlight.ClearHighlights();
                 // 移動の片付け処理
@@ -88,5 +91,14 @@ public class HexTileObject : MonoBehaviour, IClickable {
             ClickableHighlight.OnTileHighlight(targetTile);
             break;
         }
+    }
+    /// <summary>
+    /// プレイヤーを移動させ、移動終了後にターンを終了する
+    /// </summary>
+    private async UniTaskVoid MovePlayer()
+    {
+        await CharacterMovementManager.instance.MoveCharacter();
+
+        TurnManager.Instance.EndPlayerTurn();
     }
 }

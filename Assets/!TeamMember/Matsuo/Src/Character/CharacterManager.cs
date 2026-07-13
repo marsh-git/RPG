@@ -3,8 +3,22 @@ using UnityEngine;
 
 public class CharacterManager : MonoBehaviour
 {
+    public static CharacterManager Instance { get; private set; }
+
     // マップ上に存在する全キャラクター
     private readonly List<CharacterBase> characters = new();
+
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
 
     /// <summary>
     /// キャラクターを管理対象に追加する
@@ -72,5 +86,41 @@ public class CharacterManager : MonoBehaviour
     public void Clear()
     {
         characters.Clear();
+    }
+
+    /// <summary>
+    /// 生存しているプレイヤー一覧を取得する
+    /// </summary>
+    public List<PlayerBase> GetPlayers()
+    {
+        List<PlayerBase> players = new();
+
+        foreach (CharacterBase character in characters)
+        {
+            if (character is PlayerBase player && !player.IsDead)
+            {
+                players.Add(player);
+            }
+        }
+
+        return players;
+    }
+
+    /// <summary>
+    /// 生存している敵一覧を取得する
+    /// </summary>
+    public List<EnemyBase> GetEnemies()
+    {
+        List<EnemyBase> enemies = new();
+
+        foreach (CharacterBase character in characters)
+        {
+            if (character is EnemyBase enemy && !enemy.IsDead)
+            {
+                enemies.Add(enemy);
+            }
+        }
+
+        return enemies;
     }
 }

@@ -7,10 +7,20 @@ public class CropsAttribute : IAttributeTile {
     /// 作物の成長過程
     /// </summary>
     public enum eGrowProcess {
-        Seeds,
-        Growing,
-        Harvest,
+        None,       // なし
+        Seeds,      // 種
+        Growing,    // 成長中
+        Harvest,    // 収穫可能
     }
+    // 作物ID
+    public int cropsID { get; private set; } = -1;
+    // 作物の進捗
+    public eGrowProcess process { get; private set; } = eGrowProcess.None;
+    // 成長カウンタ
+    private int _growCounter = -1;
+    // 要求ターン数
+    private const int _REQUIRE_GROW_TURN = 3;
+
     /// <summary>
     /// 自身の属性取得
     /// </summary>
@@ -36,7 +46,46 @@ public class CropsAttribute : IAttributeTile {
     /// </summary>
     /// <param name="tile"></param>
     public void OnTickTile(HexTileData tile) {
-        
+        if(process == eGrowProcess.None || process == eGrowProcess.Harvest) return;
+        // カウンタを増やす
+        _growCounter++;
+        // 一定ターン経過で成長させる
+        if(_growCounter >= _REQUIRE_GROW_TURN) {
+            _growCounter = 0;
+            GrowUp();
+        }
     }
-    
+    /// <summary>
+    /// 準備処理
+    /// </summary>
+    public void Setup(int setID) {
+        cropsID = setID;
+        // 生成時は収穫可能にしておく
+        process = eGrowProcess.Harvest;
+        _growCounter = 0;
+    }
+    /// <summary>
+    /// 作物を植える
+    /// </summary>
+    /// <param name="setID"></param>
+    public void PlantCrops(int setID) {
+        cropsID = setID;
+        process = eGrowProcess.Seeds;
+    }
+    /// <summary>
+    /// 成長処理
+    /// </summary>
+    public void GrowUp() {
+        // カウンタを増やす
+        process++;
+    }
+    /// <summary>
+    /// 収穫処理
+    /// </summary>
+    public void HarvestCrops() {
+        // 収穫処理を行う
+
+        // IDを取り除く
+        cropsID = -1;
+    }
 }

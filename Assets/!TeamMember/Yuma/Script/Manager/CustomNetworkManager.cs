@@ -9,7 +9,8 @@ public class CustomNetworkManager : NetworkManager
 {
     public static CustomNetworkManager instance;
 
-    public GameObject lobbyPlayer;
+    public GameObject lobbyPlayerPrefab;
+    private GameObject lobbyPlayer;
     public override void Awake()
     {
         base.Awake();
@@ -66,16 +67,18 @@ public class CustomNetworkManager : NetworkManager
             return;
         }
         base.OnServerConnect(_conn);
+
+        lobbyPlayer = Instantiate(lobbyPlayerPrefab);
        
     }
 
     public override void OnServerReady(NetworkConnectionToClient _conn)
     {
         base.OnServerReady(_conn);
+        NetworkServer.Spawn(lobbyPlayer);
+        NetworkServer.AddPlayerForConnection(_conn, lobbyPlayer);
 
-        GameObject player = Instantiate(lobbyPlayer);
-        NetworkServer.Spawn(player);
-        NetworkServer.AddPlayerForConnection(_conn, player);
+
     }
 
     /// <summary>
@@ -85,8 +88,6 @@ public class CustomNetworkManager : NetworkManager
     /// <param name="_conn"></param>
     public override void OnServerAddPlayer(NetworkConnectionToClient _conn)
     {
-
-        NetworkServer.AddConnection(_conn);
         if (!ServerManager.instance.connectPlayer.Contains(_conn.identity))
         {
             ServerManager.instance.connectPlayer.Add(_conn.identity);

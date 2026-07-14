@@ -67,6 +67,12 @@ public class HexTileData {
         attributeTile = setAttribute;
     }
     /// <summary>
+    /// タイル属性のクリア
+    /// </summary>
+    public void ClearAtrribute() {
+        attributeTile = AttributeFactory.Create(eAttribute.None);
+    }
+    /// <summary>
     /// バイオームの設定
     /// </summary>
     /// <param name="setBiome"></param>

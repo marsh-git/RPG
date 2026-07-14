@@ -26,7 +26,7 @@ public class EventAttribute : IAttributeTile{
         // イベント開始
         EventManager.instance.StartEvent(eventID);
         // 自身の属性をクリア
-        tile.SetAttributeTile(null);
+        tile.ClearAtrribute();
     }
     /// <summary>
     /// キャラクターがこのマスでターン終了した時の処理

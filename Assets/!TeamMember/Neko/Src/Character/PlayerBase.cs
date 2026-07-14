@@ -9,11 +9,11 @@ public class PlayerBase : CharacterBase, IClickable
     public static PlayerBase instance { get; private set; }
 
     //  経験値変数
-    private int exp = 0;
     private int lv = 1;
-    private int needExp;
-    private readonly int BASE_NEED_EXP = 50;
-    private float needExpRatio = 1.5f;
+    //private int exp = 0;
+    //private int needExp;
+    //private readonly int BASE_NEED_EXP = 50;
+    //private float needExpRatio = 1.5f;
 
     [Header("▼　現在の職業　▼")]
     [SerializeField] private JobData jobData = null;
@@ -45,28 +45,28 @@ public class PlayerBase : CharacterBase, IClickable
     /// 敵から得れる経験値を引数に呼び出す
     /// </summary>
     /// <param name="getExp"></param>
-    public void GetExp(int getExp)
-    {
-        exp += getExp;
+    //public void GetExp(int getExp)
+    //{
+    //    exp += getExp;
 
-        while(exp >= needExp)
-        {
-            Levelup();
-        }
-    }
+    //    while(exp >= needExp)
+    //    {
+    //        Levelup();
+    //    }
+    //}
 
     /// <summary>
     /// レベルアップ処理
     /// </summary>
-    private void Levelup()
+    public void Levelup()
     {
-        exp -= needExp;
-        //  万が一経験値が0を下回ったら
-        if(exp < 0) exp = 0;
+        //exp -= needExp;
+        ////  万が一経験値が0を下回ったら
+        //if(exp < 0) exp = 0;
 
         lv += 1;
         //  小数点以下切り捨て
-        needExp = Mathf.FloorToInt(BASE_NEED_EXP * Mathf.Pow(lv, needExpRatio));
+        //needExp = Mathf.FloorToInt(BASE_NEED_EXP * Mathf.Pow(lv, needExpRatio));
     }
 
     /// <summary>
@@ -74,8 +74,9 @@ public class PlayerBase : CharacterBase, IClickable
     /// </summary>
     private void ResetExpAndLevel()
     {
-        exp = 0;
-        needExp = BASE_NEED_EXP;
+        //exp = 0;
+        //needExp = BASE_NEED_EXP;
+        lv = 1;
     }
 
     /// <summary>

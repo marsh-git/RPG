@@ -189,6 +189,24 @@ public static class TileRangeExpansion {
         return allTilesInRadius;
     }
     /// <summary>
+    /// 範囲内のタイルの中から有効なタイルのみを返す
+    /// </summary>
+    /// <param name="cneterTile"></param>
+    /// <param name="radius"></param>
+    /// <returns></returns>
+    public static List<HexTileData> GetValidTiles(HexTileData cneterTile, int radius) {
+        // 範囲内のタイルリストの取得
+        List<HexTileData> radiusTileList = GetTilesWithinRadius(cneterTile, radius);
+        // 有効なマス以外を除外
+        radiusTileList.RemoveAll(neighbor =>
+            neighbor == null ||
+            neighbor.attribute == eAttribute.CannotMove ||
+            neighbor.tileState == eTileState.CharacterIn ||
+            neighbor.tileState == eTileState.Reserved
+        );
+        return radiusTileList;
+    }
+    /// <summary>
     /// アキシアル座標系における2点間の幾何学的なヘックス距離を算出するヘルパー関数
     /// </summary>
     private static int CalculateHexDistance(int q1, int r1, int q2, int r2) {

@@ -23,8 +23,9 @@ public class PlayerBase : CharacterBase, IClickable
     [SerializeField] private List<RelicDataBase> currentRelic = new();
 
     //  一時的バフ、デバフ
-    
+    private CharacterStatus temporaryStatus;
     //  永続バフ、デバフ(レリックは適応しない。イベントなどで貰えるバフ、デバフ)
+    private CharacterStatus permanentStatus;
 
     // プレイヤーのダイス
     private DiceManager diceManager;
@@ -104,15 +105,26 @@ public class PlayerBase : CharacterBase, IClickable
     {
         if (jobData == null) return;
 
-        maxHp = jobData.maxHp;
-        attack = jobData.attack;
-        defense = jobData.defense;
-        luck = jobData.luck;
+        //  ステータス更新
+        RefreshStatus();
+
+        //  hpを全快させる
+        hp = status.maxHp;
+    }
+
+    /// <summary>
+    /// ステータスを更新する
+    /// </summary>
+    private void RefreshStatus()
+    {
+        //  ジョブのステータスに書き換え
+        status = jobData.status;
+
         //  レリックのバフを再適応する
         ReconfigureRelicsStatus();
 
-        //  hpを全快させる
-        hp = maxHp;
+        //  永続バフを適応
+        status.Add(permanentStatus);
     }
 
     /// <summary>
@@ -132,10 +144,7 @@ public class PlayerBase : CharacterBase, IClickable
         for(int i = 0; i < currentRelic.Count; i++)
         {
             RelicDataBase relics = currentRelic[i];
-            maxHp += relics.maxHp;
-            attack += relics.attack;
-            defense += relics.defense;
-            luck += relics.luck;
+            status.Add(relics.status);
         }
     }
 
@@ -146,10 +155,7 @@ public class PlayerBase : CharacterBase, IClickable
     public void AddRelic(RelicDataBase addRelic)
     {
         currentRelic.Add(addRelic);
-        maxHp += addRelic.maxHp;
-        attack += addRelic.attack;
-        defense += addRelic.defense;
-        luck += addRelic.luck;
+        status.Add(addRelic.status);
     }
 
     /// <summary>

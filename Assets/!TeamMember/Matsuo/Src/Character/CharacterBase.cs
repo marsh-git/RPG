@@ -13,18 +13,10 @@ public abstract class CharacterBase : MonoBehaviour
     protected CharacterMovement movement = new();
     // 移動キャンセル用
     protected CancellationTokenSource moveCancellation;
-    // 最大HP
-    protected int maxHp = 100;
+    // キャラクター共通のステータス
+    protected CharacterStatus status;
     // 現在HP
     protected int hp;
-    // 攻撃力
-    protected int attack = 0;
-    // 防御力
-    protected int defense = 0;
-    // 運
-    protected int luck = 0;
-    // 視界
-    protected int radius = 5;
     // 死亡しているか
     public bool IsDead => hp <= 0;
     // 移動中か
@@ -39,7 +31,7 @@ public abstract class CharacterBase : MonoBehaviour
     /// </summary>
     protected virtual void Awake()
     {
-        hp = maxHp;
+        hp = status.maxHp;
     }
     /// <summary>
     /// タイルIDの取得
@@ -128,7 +120,7 @@ public abstract class CharacterBase : MonoBehaviour
     /// <param name="damage">受けるダメージ量</param>
     public virtual void TakeDamage(int damage)
     {
-        int finalDamage = Mathf.Max(1, damage - defense);
+        int finalDamage = Mathf.Max(1, damage - status.defense);
 
         hp -= finalDamage;
 
@@ -144,7 +136,7 @@ public abstract class CharacterBase : MonoBehaviour
     /// <param name="amount">回復量</param>
     public virtual void Heal(int amount)
     {
-        hp = Mathf.Min(maxHp, hp + amount);
+        hp = Mathf.Min(status.maxHp, hp + amount);
     }
 
     /// <summary>

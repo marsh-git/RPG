@@ -13,8 +13,10 @@ MonoBehaviour:
   m_Name: TestJob 2
   m_EditorClassIdentifier: 
   jobName: "\u30C6\u30B9\u30C8\u7528\u30AB\u30CB"
-  maxHp: 1
-  attack: 10
-  defense: 500
-  luck: 0
+  status:
+    maxHp: 1000
+    attack: 0
+    defense: 1000
+    luck: 0
+    radius: 10
   jobRelic: {fileID: 11400000, guid: 8c28c202330ed4944a65a5babc4cf544, type: 2}

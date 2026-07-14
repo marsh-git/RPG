@@ -218,8 +218,11 @@ public class HexMapGenerator : MonoBehaviour {
 
             if(roll < config.EventTileChance) {
                 tile.SetAttributeTile(AttributeFactory.Create(eAttribute.Event));
-                if(tile.attributeTile is EventAttribute eventTile) 
-                    eventTile.Setup(0); 
+                if(tile.attributeTile is EventAttribute eventTile) {
+                    // イベントの設定
+                    int eventID = mapRand.Next(0, EventManager.instance.eventDatas.Length);
+                    eventTile.Setup(eventID);
+                }
             } else if(roll < config.EventTileChance + config.CropsTileChance) {
                 tile.SetAttributeTile(AttributeFactory.Create(eAttribute.Crops));
             }else {

@@ -23,6 +23,8 @@ public abstract class CharacterBase : MonoBehaviour
     protected int defense = 0;
     // 運
     protected int luck = 0;
+    // 視界
+    protected int radius = 5;
     // 死亡しているか
     public bool IsDead => hp <= 0;
     // 移動中か

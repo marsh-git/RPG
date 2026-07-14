@@ -15,17 +15,16 @@ public class PlayerBase : CharacterBase, IClickable
     private readonly int BASE_NEED_EXP = 50;
     private float needExpRatio = 1.5f;
 
-    //  外部参照用
-    public int Exp => exp;
-    public int Lv => lv;
-    public int NeedExp => needExp;
-
-    //  職業
+    [Header("▼　現在の職業　▼")]
     [SerializeField] private JobData jobData = null;
     private JobManager jobManager = null;
 
-    //  所持遺物
-    private List<RelicDataBase> currentRelic;
+    [Header("▼　所持遺物一覧　▼")]
+    [SerializeField] private List<RelicDataBase> currentRelic = new();
+
+    //  一時的バフ、デバフ
+    
+    //  永続バフ、デバフ(レリックは適応しない。イベントなどで貰えるバフ、デバフ)
 
     // プレイヤーのダイス
     private DiceManager diceManager;
@@ -120,8 +119,14 @@ public class PlayerBase : CharacterBase, IClickable
     /// </summary>
     private void ReconfigureRelicsStatus()
     {
-        //  初期の遺物は配列0番目固定にする
-        currentRelic[0] = jobData.jobRelic;
+        //  初期の遺物は配列0番目固定にする(初回生成時は追加)
+        if(currentRelic.Count == 0)
+        {
+            currentRelic.Add(jobData.jobRelic);
+        }
+        else {
+            currentRelic[0] = jobData.jobRelic;
+        }
 
         for(int i = 0; i < currentRelic.Count; i++)
         {

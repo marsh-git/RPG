@@ -33,12 +33,15 @@ public class SelectModePart : BasePart
         {
             CustomNetworkManager.instance.StartClient();
         }
-        localLobbyPlayer = NetworkClient.localPlayer.GetComponent<LobbyPlayer>();
+        await UniTask.WaitUntil(() => NetworkClient.localPlayer != null);
+
 
         GameObject localPlayerName = Instantiate(nameObj, rect);
         Toggle checkBox = localPlayerName.GetComponent<Toggle>();
 
         checkBox.onValueChanged.AddListener(ToggleReady);
+
+        localLobbyPlayer = NetworkClient.localPlayer.GetComponent<LobbyPlayer>();
 
     }
 
@@ -70,6 +73,10 @@ public class SelectModePart : BasePart
         startGame = true;
     }
 
+    /// <summary>
+    /// ローカルプレイヤーの準備完了切り替え
+    /// </summary>
+    /// <param name="_isOn"></param>
     private void ToggleReady(bool _isOn)
     {
         localLobbyPlayer.CmdToggleReady(_isOn);

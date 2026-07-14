@@ -11,6 +11,16 @@ public class MainGamePart : BasePart
     {
         await base.Init();
     }
+
+    public override async UniTask Setup()
+    {
+        await base.Setup();
+    }
+
+    /// <summary>
+    /// UI等共通処理
+    /// </summary>
+    /// <returns></returns>
     public override async UniTask Execute()
     {
         UniTask task = ServerExecute();
@@ -19,11 +29,19 @@ public class MainGamePart : BasePart
         await UniTask.CompletedTask;
     }
 
+    /// <summary>
+    /// サーバー側の実行処理
+    /// </summary>
+    /// <returns></returns>
     public override async UniTask ServerExecute()
     {
         await UniTask.CompletedTask;
     }
 
+    /// <summary>
+    /// クライアント側の実行処理
+    /// </summary>
+    /// <returns></returns>
     public override async UniTask ClientExecute()
     {
         await UniTask.CompletedTask;

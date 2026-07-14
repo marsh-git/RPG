@@ -127,6 +127,7 @@ public class PlayerBase : CharacterBase, IClickable
 
         //  永続バフを適応
         status.Add(permanentStatus);
+
     }
 
     /// <summary>
@@ -168,6 +169,33 @@ public class PlayerBase : CharacterBase, IClickable
     {
         permanentStatus.Add(addStatus);
         RefreshStatus();
+    }
+
+    /// <summary>
+    /// アクションをする際に一時バフ、デバフを含めたステータスの計算結果を返す
+    /// </summary>
+    /// <returns></returns>
+    private CharacterStatus GetActionStatus()
+    {
+        CharacterStatus current = status;
+        current.Add(temporaryStatus);
+        return current;
+    }
+
+    /// <summary>
+    /// 一時バフ、デバフを追加する
+    /// </summary>
+    public void AddTemporaryStatus(CharacterStatus addStatus)
+    {
+        temporaryStatus.Add(addStatus);
+    }
+
+    /// <summary>
+    /// 一時バフ、デバフをリセットする
+    /// </summary>
+    public void ResetTemporaryStatus()
+    {
+        temporaryStatus.Reset();
     }
 
     /// <summary>

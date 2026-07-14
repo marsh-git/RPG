@@ -168,6 +168,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   systemObjectList:
   - {fileID: 3248639904869975024, guid: 333f7d80e0b32c64db02efb8f62fd369, type: 3}
+  - {fileID: 0}
 --- !u!1 &769532765
 GameObject:
   m_ObjectHideFlags: 0

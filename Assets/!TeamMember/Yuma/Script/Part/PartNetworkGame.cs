@@ -1,6 +1,9 @@
 using Cysharp.Threading.Tasks;
 using Mirror;
 
+/// <summary>
+/// ネットワーク同期用パート
+/// </summary>
 public class PartNetworkGame : NetworkBehaviour
 {
     public static PartNetworkGame instance;
@@ -56,10 +59,11 @@ public class PartNetworkGame : NetworkBehaviour
         foreach (var conn in NetworkServer.connections)
         {
             var player = conn.Value.identity.GetComponent<LobbyPlayer>();
-            if (player != null && player.isReady)
+            if (player == null || !player.isReady)
             {
-                readyCount++;
+                return false;
             }
+            readyCount++;
         }
 
         if (readyCount == NetworkServer.connections.Count)

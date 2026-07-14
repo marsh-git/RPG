@@ -66,6 +66,13 @@ public class CustomNetworkManager : NetworkManager
             return;
         }
         base.OnServerConnect(_conn);
+       
+    }
+
+    public override void OnServerReady(NetworkConnectionToClient _conn)
+    {
+        base.OnServerReady(_conn);
+
         GameObject player = Instantiate(lobbyPlayer);
         NetworkServer.Spawn(player);
         NetworkServer.AddPlayerForConnection(_conn, player);

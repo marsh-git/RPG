@@ -20,6 +20,8 @@ public class HexTileData {
     public eTileState tileState { get; private set; } = eTileState.Normal;
     // タイルの地形
     public eTerrain terrain { get; private set; } = eTerrain.Invalid;
+    // タイル属性
+    public IAttributeTile attributeTile { get; private set; } = null;
     // タイルの属性
     public eAttribute attribute { get; private set; } = eAttribute.None;
     // タイルのバイオーム
@@ -56,6 +58,13 @@ public class HexTileData {
     /// <param name="setTerrain"></param>
     public void SetTerrain(eTerrain setTerrain) {
         terrain = setTerrain;
+    }
+    /// <summary>
+    /// タイル属性の設定
+    /// </summary>
+    /// <param name="setAttribute"></param>
+    public void SetAttributeTile(IAttributeTile setAttribute) {
+        attributeTile = setAttribute;
     }
     /// <summary>
     /// 属性の設定

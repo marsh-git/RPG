@@ -63,6 +63,21 @@ public class SelectModePart : BasePart
     }
 
     /// <summary>
+    /// 解放処理
+    /// </summary>
+    /// <returns></returns>
+    public override async UniTask Teardown()
+    {
+        foreach(var conn in NetworkServer.connections)
+        {
+            if (conn.Value.identity != null)
+                NetworkServer.Destroy(conn.Value.identity.gameObject);
+        }
+
+        await base.Teardown();
+    }
+
+    /// <summary>
     /// ゲーム開始
     /// ボタンに実装
     /// </summary>

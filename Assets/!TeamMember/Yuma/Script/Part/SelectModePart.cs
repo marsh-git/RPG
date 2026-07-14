@@ -79,6 +79,7 @@ public class SelectModePart : BasePart
     /// <param name="_isOn"></param>
     private void ToggleReady(bool _isOn)
     {
+        if (!localLobbyPlayer.isLocalPlayer) return;
         localLobbyPlayer.CmdToggleReady(_isOn);
     }
 }

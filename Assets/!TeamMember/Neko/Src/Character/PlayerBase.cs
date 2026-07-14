@@ -22,6 +22,8 @@ public class PlayerBase : CharacterBase, IClickable
     [Header("▼　所持遺物一覧　▼")]
     [SerializeField] private List<RelicDataBase> currentRelic = new();
 
+    //  参照するためだけのステータス
+    public CharacterStatus Status => status;
     //  一時的バフ、デバフ
     private CharacterStatus temporaryStatus;
     //  永続バフ、デバフ(レリックは適応しない。イベントなどで貰えるバフ、デバフ)
@@ -155,7 +157,17 @@ public class PlayerBase : CharacterBase, IClickable
     public void AddRelic(RelicDataBase addRelic)
     {
         currentRelic.Add(addRelic);
-        status.Add(addRelic.status);
+        RefreshStatus();
+    }
+
+    /// <summary>
+    /// 永続バフを追加する
+    /// </summary>
+    /// <param name="addStatus"></param>
+    public void AddPermanentStatus(CharacterStatus addStatus)
+    {
+        permanentStatus.Add(addStatus);
+        RefreshStatus();
     }
 
     /// <summary>

@@ -2,20 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CropsAttribute : IAttributeTile {
-    /// <summary>
-    /// 作物の成長過程
-    /// </summary>
-    public enum eGrowProcess {
-        Seeds,
-        Growing,
-        Harvest,
-    }
+public class CannotMoveAttribute : IAttributeTile {
     /// <summary>
     /// 自身の属性取得
     /// </summary>
-    public eAttribute AttributeType => eAttribute.Crops;
-    /// <summary>
+    public eAttribute AttributeType => eAttribute.CannotMove;
+        /// <summary>
     /// キャラクターがこのマスを踏んだ瞬間
     /// </summary>
     /// <param name="tile"></param>
@@ -38,5 +30,4 @@ public class CropsAttribute : IAttributeTile {
     public void OnTickTile(HexTileData tile) {
         
     }
-    
 }

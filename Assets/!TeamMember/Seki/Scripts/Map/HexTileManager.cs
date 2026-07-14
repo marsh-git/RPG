@@ -20,6 +20,8 @@ public class HexTileManager : MonoBehaviour {
 
     public void Awake() {
         instance = this;
+        // TODO : そのうち呼び出し場所を変える
+        AttributeFactory.Initialize();
     }
 
     /// <summary>

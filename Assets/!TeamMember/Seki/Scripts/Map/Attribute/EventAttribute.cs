@@ -22,6 +22,7 @@ public class EventAttribute : IAttributeTile{
     /// <param name="tile"></param>
     /// <param name="character"></param>
     public void OnEnterTile(HexTileData tile, CharacterBase character) {
+        if(character.IsEnemy()) return;
         // イベント開始
         EventManager.instance.StartEvent(eventID);
         // 自身の属性をクリア

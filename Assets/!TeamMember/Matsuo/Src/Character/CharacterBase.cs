@@ -14,8 +14,10 @@ public abstract class CharacterBase : MonoBehaviour
     // 移動キャンセル用
     protected CancellationTokenSource moveCancellation;
     // キャラクター共通のステータス
+    [SerializeField]
     protected CharacterStatus status;
     // 現在HP
+    [SerializeField]
     protected int hp;
     // 死亡しているか
     public bool IsDead => hp <= 0;

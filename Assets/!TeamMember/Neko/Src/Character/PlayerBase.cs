@@ -15,17 +15,16 @@ public class PlayerBase : CharacterBase, IClickable
     private readonly int BASE_NEED_EXP = 50;
     private float needExpRatio = 1.5f;
 
-    //  外部参照用
-    public int Exp => exp;
-    public int Lv => lv;
-    public int NeedExp => needExp;
-
     [Header("▼　現在の職業　▼")]
     [SerializeField] private JobData jobData = null;
     private JobManager jobManager = null;
 
     [Header("▼　所持遺物一覧　▼")]
     [SerializeField] private List<RelicDataBase> currentRelic = new();
+
+    //  一時的バフ、デバフ
+    
+    //  永続バフ、デバフ(レリックは適応しない。イベントなどで貰えるバフ、デバフ)
 
     // プレイヤーのダイス
     private DiceManager diceManager;

@@ -56,6 +56,7 @@ public class HexTileObject : MonoBehaviour, IClickable {
             MovementManager.TeardownMovement();
             // クリック管理クラスに伝える
             ClickableHighlight.OnTileHighlight(targetTile);
+            Debug.Log(targetTile.Attribute);
             break;
             case eTileState.Movable:
             // 移動対象キャラクターの取得（プレイヤーの取得）

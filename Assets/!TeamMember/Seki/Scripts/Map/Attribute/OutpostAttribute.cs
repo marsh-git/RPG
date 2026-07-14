@@ -38,6 +38,8 @@ public class OutpostAttribute : IAttributeTile {
         if(_turnSpawnCounter <= 0) {
             // TODO : そのうち敵のプール内からの生成
 
+            // 有効なタイル取得
+            
         }
     }
     /// <summary>

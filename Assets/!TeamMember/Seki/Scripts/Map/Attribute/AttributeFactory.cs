@@ -11,10 +11,21 @@ public static class AttributeFactory{
     /// 登録はここで行う
     /// </summary>
     public static void Initialize() {
+        _attributeRegistry = new();
+        // 何もない
+        Register(eAttribute.None, () => new NoneAttribute());
         // イベントクラス
         Register(eAttribute.Event, () => new EventAttribute());
-        // 敵の前哨基地
+        // 作物クラス
+        Register(eAttribute.Crops, () => new CropsAttribute());
+        // 街クラス
+        Register(eAttribute.Town, () => new TownAttribute());
+        // 敵の前哨基地クラス
         Register(eAttribute.Outpost, () => new OutpostAttribute());
+        // ショップクラス
+        Register(eAttribute.Shop, () => new ShopAttribute());
+        // 移動不可能クラス
+        Register(eAttribute.CannotMove, () => new CannotMoveAttribute());
     }
     /// <summary>
     /// 属性クラスの登録

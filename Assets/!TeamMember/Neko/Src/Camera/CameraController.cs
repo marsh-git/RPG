@@ -1,9 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
-public class CameraController : MonoBehaviour
-{
+public class CameraController : MonoBehaviour {
     // メインカメラ
     [SerializeField]
     private Camera mainCamera;
@@ -59,11 +59,9 @@ public class CameraController : MonoBehaviour
     // ドラッグ開始時カメラ位置
     private Vector3 dragStartCameraPosition;
 
-    private void Awake()
-    {
+    private void Awake() {
         // カメラ未設定なら自動取得
-        if (mainCamera == null)
-        {
+        if(mainCamera == null) {
             // 子オブジェクトから取得
             mainCamera = GetComponentInChildren<Camera>();
         }
@@ -81,8 +79,7 @@ public class CameraController : MonoBehaviour
         UpdateCameraPosition();
     }
 
-    private void Update()
-    {
+    private void Update() {
         // WASD移動
         MoveByKeyboard();
 
@@ -102,8 +99,7 @@ public class CameraController : MonoBehaviour
     /// <summary>
     /// WASD移動
     /// </summary>
-    private void MoveByKeyboard()
-    {
+    private void MoveByKeyboard() {
         // 横入力取得
         float horizontal =
             Input.GetAxisRaw("Horizontal");
@@ -125,11 +121,9 @@ public class CameraController : MonoBehaviour
     /// <summary>
     /// 右ドラッグ移動
     /// </summary>
-    private void MoveByDrag()
-    {
+    private void MoveByDrag() {
         // ドラッグ開始
-        if (Input.GetMouseButtonDown(1))
-        {
+        if(Input.GetMouseButtonDown(1)) {
             // マウス位置保存
             dragStartMousePosition = Input.mousePosition;
 
@@ -138,8 +132,7 @@ public class CameraController : MonoBehaviour
         }
 
         // ドラッグ中
-        if (Input.GetMouseButton(1))
-        {
+        if(Input.GetMouseButton(1)) {
             // マウス差分取得
             Vector3 mouseDelta = Input.mousePosition - dragStartMousePosition;
 
@@ -172,15 +165,13 @@ public class CameraController : MonoBehaviour
     /// <summary>
     /// ホイールズーム
     /// </summary>
-    private void Zoom()
-    {
+    private void Zoom() {
         // ホイール入力取得
         float scroll =
             Input.mouseScrollDelta.y;
 
         // 入力なし
-        if (Mathf.Approximately(scroll, 0f))
-        {
+        if(Mathf.Approximately(scroll, 0f)) {
             return;
         }
 
@@ -194,8 +185,7 @@ public class CameraController : MonoBehaviour
     /// <summary>
     /// ズーム更新
     /// </summary>
-    private void UpdateZoom()
-    {
+    private void UpdateZoom() {
         // スムーズ補間
         currentDistance = Mathf.SmoothDamp(currentDistance, targetDistance, ref zoomVelocity, zoomSmoothTime);
 
@@ -206,8 +196,7 @@ public class CameraController : MonoBehaviour
     /// <summary>
     /// カメラ位置更新
     /// </summary>
-    private void UpdateCameraPosition()
-    {
+    private void UpdateCameraPosition() {
         // ローカル位置設定
         mainCamera.transform.localPosition =
             Quaternion.Euler(pitch, 0f, 0f) * new Vector3(0f, 0f, -currentDistance);
@@ -216,9 +205,11 @@ public class CameraController : MonoBehaviour
     /// <summary>
     /// 左クリック処理
     /// </summary>
-    private void HandleLeftClick()
-    {
+    private void HandleLeftClick() {
         if(Input.GetMouseButtonDown(0)) {
+            // UIに触れているか判定
+            if(EventSystem.current != null && EventSystem.current.IsPointerOverGameObject()) return;
+
             Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
 
             if(Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, clickableLayer)) {

@@ -134,7 +134,7 @@ public class HexMapGenerator : MonoBehaviour {
 
                     // 山脈マスの場合は、ゲームロジック用に進行不可属性を付与
                     if(chosenTerrain == eTerrain.Mountain) {
-                        newTileData.SetAttribute(eAttribute.CannotMove);
+                        newTileData.SetAttributeTile(AttributeFactory.Create(eAttribute.CannotMove));
                     }
 
                     // マネージャーへ登録（他クラスの既存関数のみを使用）
@@ -175,7 +175,7 @@ public class HexMapGenerator : MonoBehaviour {
             if(townCenter == null) continue;
 
             // 中心を街マス属性に設定
-            townCenter.SetAttribute(eAttribute.Town);
+            townCenter.SetAttributeTile(AttributeFactory.Create(eAttribute.Town));
 
             // 周囲6方向の隣接マスに対しても街マス属性を設定
             foreach(eDirectionHex dir in Directions) {
@@ -184,7 +184,7 @@ public class HexMapGenerator : MonoBehaviour {
 
                 // 隣接マスが存在し、かつ他エリアにはみ出していない場合のみ属性を付与
                 if(neighbor != null && areaTiles.Contains(neighbor)) {
-                    neighbor.SetAttribute(eAttribute.Town);
+                    neighbor.SetAttributeTile(AttributeFactory.Create(eAttribute.Town));
                 }
             }
         }
@@ -194,7 +194,7 @@ public class HexMapGenerator : MonoBehaviour {
     /// </summary>
     private void GenerateSpecialAttributes(List<HexTileData> allGeneratedTiles, MapGenerationConfig config, System.Random mapRand) {
         // まだ何の属性も付与されていない（山脈でも街でもない）完全な空きマスを抽出
-        List<HexTileData> emptyTiles = allGeneratedTiles.FindAll(t => t.attribute == eAttribute.None);
+        List<HexTileData> emptyTiles = allGeneratedTiles.FindAll(t => t.Attribute == eAttribute.None);
 
         // 3-A: 敵の前哨基地を、設定された個数に達するまでランダムに配置
         int outpostsPlaced = 0;
@@ -202,7 +202,12 @@ public class HexMapGenerator : MonoBehaviour {
             int randIdx = mapRand.Next(0, emptyTiles.Count);
             HexTileData targetTile = emptyTiles[randIdx];
 
-            targetTile.SetAttribute(eAttribute.Outpost);
+            targetTile.SetAttributeTile(AttributeFactory.Create(eAttribute.Outpost));
+            // クラスを直接取得して処理する
+            if(targetTile.attributeTile is OutpostAttribute outpostTile) {
+                // TODO : そのうち難易度等に応じて外部での設定を行う
+                outpostTile.Setup(3);
+            }
             emptyTiles.RemoveAt(randIdx); // 配置済みのマスは候補から除外
             outpostsPlaced++;
         }
@@ -212,9 +217,13 @@ public class HexMapGenerator : MonoBehaviour {
             double roll = mapRand.NextDouble();
 
             if(roll < config.EventTileChance) {
-                tile.SetAttribute(eAttribute.Event);
+                tile.SetAttributeTile(AttributeFactory.Create(eAttribute.Event));
+                if(tile.attributeTile is EventAttribute eventTile) 
+                    eventTile.Setup(0); 
             } else if(roll < config.EventTileChance + config.CropsTileChance) {
-                tile.SetAttribute(eAttribute.Crops);
+                tile.SetAttributeTile(AttributeFactory.Create(eAttribute.Crops));
+            }else {
+                tile.SetAttributeTile(AttributeFactory.Create(eAttribute.None));
             }
         }
     }

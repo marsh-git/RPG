@@ -23,7 +23,7 @@ public class HexTileData {
     // タイル属性
     public IAttributeTile attributeTile { get; private set; } = null;
     // タイルの属性
-    public eAttribute attribute { get; private set; } = eAttribute.None;
+    public eAttribute Attribute => attributeTile?.AttributeType ?? eAttribute.None;
     // タイルのバイオーム
     public eBiome biome { get; private set; } = eBiome.None;
 
@@ -65,13 +65,6 @@ public class HexTileData {
     /// <param name="setAttribute"></param>
     public void SetAttributeTile(IAttributeTile setAttribute) {
         attributeTile = setAttribute;
-    }
-    /// <summary>
-    /// 属性の設定
-    /// </summary>
-    /// <param name="setAttribute"></param>
-    public void SetAttribute(eAttribute setAttribute) {
-        attribute = setAttribute;
     }
     /// <summary>
     /// バイオームの設定

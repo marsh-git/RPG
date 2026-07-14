@@ -39,7 +39,7 @@ public static class HexRouteSearcher {
 
         // ゴール地点そのものが進入不可能な状態（山岳・移動不可属性・別ユニットの存在）であれば即座に終了
         if(goal.terrain == eTerrain.Mountain ||
-           goal.attribute == eAttribute.CannotMove ||
+           goal.Attribute == eAttribute.CannotMove ||
            goal.tileState == eTileState.CharacterIn) return null;
 
         // 探索候補ノード（オープンリスト）と探索完了ノード（クローズドリスト）の初期化
@@ -74,7 +74,7 @@ public static class HexRouteSearcher {
 
                 // 基本的な進入不可条件のフィルタリング（マップ外、探索済、山岳、移動不可属性）
                 if(neighbor == null || closedSet.Contains(neighbor)) continue;
-                if(neighbor.terrain == eTerrain.Mountain || neighbor.attribute == eAttribute.CannotMove) continue;
+                if(neighbor.terrain == eTerrain.Mountain || neighbor.Attribute == eAttribute.CannotMove) continue;
 
                 // ユニット衝突判定：道中に別のキャラクターが配置されている、または移動予約がある場合は通行不可（壁）として処理
                 if(neighbor.tileState == eTileState.CharacterIn
@@ -129,7 +129,7 @@ public static class HexRouteSearcher {
                 HexTileData neighbor = HexTileManager.instance.GetToDirTile(current.gridPosX, current.gridPosY, dir);
 
                 // 基本的な進入不可判定（マップ外、山岳地形、移動不可属性）
-                if(neighbor == null || neighbor.terrain == eTerrain.Mountain || neighbor.attribute == eAttribute.CannotMove) continue;
+                if(neighbor == null || neighbor.terrain == eTerrain.Mountain || neighbor.Attribute == eAttribute.CannotMove) continue;
 
                 int movementCost = (int)neighbor.GetMovementCost();
                 if(movementCost < 0) continue;
@@ -184,7 +184,7 @@ public static class HexRouteSearcher {
                 HexTileData neighbor = HexTileManager.instance.GetToDirTile(current.gridPosX, current.gridPosY, dir);
 
                 // 基本的な進入不可判定（マップ外・山岳・移動不可属性）
-                if(neighbor == null || neighbor.terrain == eTerrain.Mountain || neighbor.attribute == eAttribute.CannotMove) continue;
+                if(neighbor == null || neighbor.terrain == eTerrain.Mountain || neighbor.Attribute == eAttribute.CannotMove) continue;
 
                 // ユニット衝突判定：他キャラや移動予約があるマスは、侵入もすり抜けも不可（壁扱い）
                 if(neighbor.tileState == eTileState.CharacterIn || neighbor.tileState == eTileState.Reserved) continue;

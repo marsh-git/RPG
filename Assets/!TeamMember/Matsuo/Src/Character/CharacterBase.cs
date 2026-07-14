@@ -112,6 +112,10 @@ public abstract class CharacterBase : MonoBehaviour
             }
         });
         IsMoving = false;
+        HexTileData tile = HexTileManager.instance.GetTileData(tileID);
+        if(tile != null) {
+            tile.attributeTile?.OnEnterTile(tile, this);
+        }
     }
 
     /// <summary>

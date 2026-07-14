@@ -73,7 +73,7 @@ public static class TileRangeExpansion {
             // このリング内に歩行可能かつキャラがいないマスがあるかフィルタリング
             validTilesInRing.RemoveAll(neighbor =>
                 neighbor == null ||
-                neighbor.attribute == eAttribute.CannotMove ||
+                neighbor.Attribute == eAttribute.CannotMove ||
                 neighbor.tileState == eTileState.CharacterIn ||
                 neighbor.tileState == eTileState.Reserved
             );
@@ -200,7 +200,7 @@ public static class TileRangeExpansion {
         // 有効なマス以外を除外
         radiusTileList.RemoveAll(neighbor =>
             neighbor == null ||
-            neighbor.attribute == eAttribute.CannotMove ||
+            neighbor.Attribute == eAttribute.CannotMove ||
             neighbor.tileState == eTileState.CharacterIn ||
             neighbor.tileState == eTileState.Reserved
         );

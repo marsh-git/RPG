@@ -10,7 +10,6 @@ public class CustomNetworkManager : NetworkManager
     public static CustomNetworkManager instance;
 
     public GameObject lobbyPlayerPrefab;
-    private GameObject lobbyPlayer;
     public override void Awake()
     {
         base.Awake();
@@ -68,14 +67,14 @@ public class CustomNetworkManager : NetworkManager
         }
         base.OnServerConnect(_conn);
 
-        lobbyPlayer = Instantiate(lobbyPlayerPrefab);
        
     }
 
     public override void OnServerReady(NetworkConnectionToClient _conn)
     {
         base.OnServerReady(_conn);
-        NetworkServer.Spawn(lobbyPlayer);
+
+        GameObject lobbyPlayer = Instantiate(lobbyPlayerPrefab);
         NetworkServer.AddPlayerForConnection(_conn, lobbyPlayer);
 
 

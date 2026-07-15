@@ -65,7 +65,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 
+  m_text: "\u3053\u308C\u306F\u30B5\u30D6"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: d60a585882e9ba845b53716cdf7fe2c9, type: 2}
   m_sharedMaterial: {fileID: 31089763190391191, guid: d60a585882e9ba845b53716cdf7fe2c9, type: 2}
@@ -74,7 +74,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4281479730
+    rgba: 4278190080
   m_fontColor: {r: 0, g: 0, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -202,7 +202,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: c17c2cfb4ce65c843be7f9fe6b57b8b3, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 804815938d58ab44a88a335abccbcbde, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

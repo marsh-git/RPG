@@ -15,9 +15,6 @@ public abstract class EventDataBase : ScriptableObject
     [Header("イベント画像")]
     [SerializeField] protected Sprite eventImage;
 
-    [Header("ボタン")]
-    [SerializeField] protected Button eventButton;
-
     [Header("キャラクターに与えるステータス補正(何もなければ0)")]
     [SerializeField] protected CharacterStatus addStatus;
 
@@ -47,6 +44,15 @@ public abstract class EventDataBase : ScriptableObject
         uiChildren[EVENTUI_IMAGE].GetComponent<Image>().sprite = eventImage;
         uiChildren[EVENTUI_NAME].GetComponent<TextMeshProUGUI>().text = eventName;
         uiChildren[EVENTUI_DESCRIPTION].GetComponent<TextMeshProUGUI>().text = eventDescription;
+    }
+
+    /// <summary>
+    /// ボタンを設定
+    /// </summary>
+    /// <returns></returns>
+    protected Button SetButton()
+    {
+        return Instantiate(EventManager.instance.eventButton, uiChildren[EVENTUI_BUTTON_PARENT]);
     }
 
     /// <summary>

@@ -19,7 +19,6 @@ public enum eGameLevel {
 public enum eBiome {
     None,
     Grassland,      // 草原　    移動+1
-    Savanna,        // サバンナ
     Desert,         // 砂漠      移動-1
     Rainforest,     // 熱帯雨林　視界-1
     Tundra,         // ツンドラ  移動-1

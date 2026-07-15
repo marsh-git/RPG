@@ -6,12 +6,17 @@ using UnityEngine;
 
 public class MainGamePart : BasePart
 {
-
     public override async UniTask Init()
     {
         await base.Init();
+        
     }
 
+    /// <summary>
+    /// メインゲームのセットアップ
+    /// マップやプレイヤーの生成、同期
+    /// </summary>
+    /// <returns></returns>
     public override async UniTask Setup()
     {
         await base.Setup();
@@ -23,14 +28,12 @@ public class MainGamePart : BasePart
     /// <returns></returns>
     public override async UniTask Execute()
     {
-        UniTask task = ServerExecute();
-        task = ClientExecute();
-
         await UniTask.CompletedTask;
     }
 
     /// <summary>
     /// サーバー側の実行処理
+    /// ゲーム進行系はこっち
     /// </summary>
     /// <returns></returns>
     public override async UniTask ServerExecute()
@@ -40,6 +43,7 @@ public class MainGamePart : BasePart
 
     /// <summary>
     /// クライアント側の実行処理
+    /// 入力系はこっち
     /// </summary>
     /// <returns></returns>
     public override async UniTask ClientExecute()

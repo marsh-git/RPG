@@ -2,6 +2,7 @@ using Cysharp.Threading.Tasks;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class EventManager : MonoBehaviour
 {
@@ -9,6 +10,9 @@ public class EventManager : MonoBehaviour
 
     [Header("イベントUI")]
     [SerializeField] public Canvas eventUI;
+
+    [Header("ボタン")]
+    [SerializeField] public Button eventButton;
 
     [Header("ゲーム内で使用するイベントデータの配列")]
     [SerializeField] public EventDataBase[] eventDatas;

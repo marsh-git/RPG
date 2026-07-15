@@ -102,6 +102,7 @@ public class PlayerBase : CharacterBase, IClickable
         //  永続バフを適応
         status.Add(permanentStatus);
 
+        if(status.maxHp <= 0) status.maxHp = 1;
     }
 
     /// <summary>

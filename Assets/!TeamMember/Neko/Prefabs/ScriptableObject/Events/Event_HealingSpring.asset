@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 340c96511a26fc24ea002e46ffdfca32, type: 3}
+  m_Name: Event_HealingSpring
+  m_EditorClassIdentifier: 
+  eventName: "\u7652\u3057\u306E\u6CC9"
+  eventDescription: "\u68EE\u306E\u5965\u306B\u6F84\u307F\u5207\u3063\u305F\u6CC9\u304C\u6E67\u3044\u3066\u3044\u308B\u3002\n\u50B7\u3064\u3044\u305F\u8005\u3092\u7652\u3059\u529B\u304C\u5BBF\u308B\u3068\u8A00\u308F\u308C\u3066\u3044\u308B\u3002"
+  eventImage: {fileID: 0}
+  eventButton: {fileID: 7616611666898629563, guid: cb2318a830a7a96419ef062bea32304c, type: 3}
+  addStatus:
+    maxHp: 0
+    attack: 0
+    defense: 0
+    luck: -5
+    radius: 0
+  buttonInfos:
+  - buttonText: "\u6CC9\u306E\u6C34\u3092\u4E00\u53E3\u98F2\u3080"
+    subText: "HP\u309250%\u56DE\u5FA9\u3059\u308B"
+  - buttonText: "\u6CC9\u306B\u6D78\u304B\u308B"
+    subText: "HP\u304C\u5168\u5FEB\u3059\u308B\u3002\u904B-5"
+  - buttonText: "\u4F55\u3082\u305B\u305A\u7ACB\u3061\u53BB\u308B"
+    subText: 

@@ -18,10 +18,14 @@ public abstract class EventDataBase : ScriptableObject
     [Header("ボタン")]
     [SerializeField] protected Button eventButton;
 
+    [Header("キャラクターに与えるステータス補正(何もなければ0)")]
+    [SerializeField] protected CharacterStatus addStatus;
+
     //  子オブジェクトのUI配置（固定）
     protected readonly int EVENTUI_IMAGE = 1;
-    protected readonly int EVENTUI_DESCRIPTION = 2;
-    protected readonly int EVENTUI_BUTTON_PARENT = 3;
+    protected readonly int EVENTUI_NAME = 2;
+    protected readonly int EVENTUI_DESCRIPTION = 3;
+    protected readonly int EVENTUI_BUTTON_PARENT = 4;
 
     protected Transform[] uiChildren;
 
@@ -41,6 +45,7 @@ public abstract class EventDataBase : ScriptableObject
         Transform uiParent = eventUI.transform;
         uiChildren = GetChildren(uiParent);
         uiChildren[EVENTUI_IMAGE].GetComponent<Image>().sprite = eventImage;
+        uiChildren[EVENTUI_NAME].GetComponent<TextMeshProUGUI>().text = eventName;
         uiChildren[EVENTUI_DESCRIPTION].GetComponent<TextMeshProUGUI>().text = eventDescription;
     }
 

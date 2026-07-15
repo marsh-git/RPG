@@ -114,8 +114,6 @@ public class HexTileData {
         switch(biome) {
             case eBiome.Grassland:
             break;
-            case eBiome.Savanna:
-            break;
             case eBiome.Desert:
             moveCost += 0.5f;
             break;

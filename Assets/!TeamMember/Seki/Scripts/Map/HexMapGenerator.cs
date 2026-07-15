@@ -28,7 +28,7 @@ public class HexMapGenerator : MonoBehaviour {
 
     [Header("UnitPrefabs")]
     [SerializeField] private PlayerSpawner playerSpawner = null;
-    [SerializeField] private EnemySpawner enemySpawner = null;
+    [SerializeField] private OutpostSpawner enemySpawner = null;
 
     [Header("Debug Settings")]
     [Tooltip("チェックを入れると、下の debugSeed で指定したシード値で固定されます")]
@@ -236,7 +236,7 @@ public class HexMapGenerator : MonoBehaviour {
     /// </summary>
     private void SpawnCharacters(List<HexTileObject> playerSpawnCandidates) {
         playerSpawner.Spawn(playerSpawnCandidates);
-        enemySpawner.SpawnEnemy(playerSpawnCandidates, 5);
+        enemySpawner.SpawnOutpost(playerSpawnCandidates, 3);
     }
     /// <summary>
     /// 各エリアの中心と、そこから隣接する6方向のすべての「街予定地」のグローバル座標を事前に計算する

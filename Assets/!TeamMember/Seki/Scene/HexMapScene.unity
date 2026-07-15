@@ -177,17 +177,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ed9e2d71fe6a954ca290c6cbd9a7909, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &789193881 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4237554396071198374, guid: 8c04e53b60ba3fc43b09d5d6bf5999ca, type: 3}
+--- !u!1 &876799602 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7583651550109867487, guid: 8c04e53b60ba3fc43b09d5d6bf5999ca, type: 3}
   m_PrefabInstance: {fileID: 565317314148611281}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+--- !u!114 &876799604
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 876799602}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fea920c432cadb24d8843ad8ad16b50d, type: 3}
+  m_Script: {fileID: 11500000, guid: 68e5bcd7c5b80bf469cf95b89737de80, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  outpostPrefab: {fileID: -7664422670795588050, guid: 6271264ce28ca92419a8799041688170, type: 3}
 --- !u!1 &1023764354
 GameObject:
   m_ObjectHideFlags: 0
@@ -1013,7 +1020,7 @@ PrefabInstance:
     - target: {fileID: 2595365664090884219, guid: 8c04e53b60ba3fc43b09d5d6bf5999ca, type: 3}
       propertyPath: enemySpawner
       value: 
-      objectReference: {fileID: 789193881}
+      objectReference: {fileID: 876799604}
     - target: {fileID: 2595365664090884219, guid: 8c04e53b60ba3fc43b09d5d6bf5999ca, type: 3}
       propertyPath: playerPrefab
       value: 
@@ -1078,10 +1085,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: HexTileManager
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 7583651550109867487, guid: 8c04e53b60ba3fc43b09d5d6bf5999ca, type: 3}
+      propertyPath: m_Name
+      value: OutpostSpawner
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 4237554396071198374, guid: 8c04e53b60ba3fc43b09d5d6bf5999ca, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 7583651550109867487, guid: 8c04e53b60ba3fc43b09d5d6bf5999ca, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 876799604}
   m_SourcePrefab: {fileID: 100100000, guid: 8c04e53b60ba3fc43b09d5d6bf5999ca, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:

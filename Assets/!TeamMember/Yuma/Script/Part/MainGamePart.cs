@@ -6,10 +6,10 @@ using UnityEngine;
 
 public class MainGamePart : BasePart
 {
-    
     public override async UniTask Init()
     {
         await base.Init();
+        
     }
 
     /// <summary>

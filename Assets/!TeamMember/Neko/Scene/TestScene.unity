@@ -1465,14 +1465,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: EventCanvas
       objectReference: {fileID: 0}
-    - target: {fileID: 6350478659009490400, guid: da20d0f2f1a540146b28d19e9a641bd2, type: 3}
-      propertyPath: m_fontSize
-      value: 30
-      objectReference: {fileID: 0}
-    - target: {fileID: 6350478659009490400, guid: da20d0f2f1a540146b28d19e9a641bd2, type: 3}
-      propertyPath: m_fontSizeBase
-      value: 30
-      objectReference: {fileID: 0}
     - target: {fileID: 7455575431707799928, guid: da20d0f2f1a540146b28d19e9a641bd2, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -1552,10 +1544,6 @@ PrefabInstance:
     - target: {fileID: 7455575431707799928, guid: da20d0f2f1a540146b28d19e9a641bd2, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 9220393604407233326, guid: da20d0f2f1a540146b28d19e9a641bd2, type: 3}
-      propertyPath: m_SizeDelta.x
-      value: 1000
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

@@ -121,7 +121,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4db9170631450734498f6f74e44ac09b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  status:
+    maxHp: 100
+    attack: 0
+    defense: 0
+    luck: 0
+    radius: 0
+  hp: 0
   jobData: {fileID: 11400000, guid: b5c9ecdacf12543478ef2b320c4b806d, type: 2}
+  currentRelic: []
 --- !u!1001 &1134602050100677850
 PrefabInstance:
   m_ObjectHideFlags: 0

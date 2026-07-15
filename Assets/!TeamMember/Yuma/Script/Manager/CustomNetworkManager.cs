@@ -23,15 +23,7 @@ public class CustomNetworkManager : NetworkManager
     {
         base.OnStartServer();
 
-        // サーバーが起動したタイミングで SystemManager に Network 系の Spawn を任せる
-        //if (SystemManager.Instance != null)
-        //{
-        //    SystemManager.Instance.SpawnNetworkSystems();
-        //}
-        if(true)
-        {
-            Debug.LogWarning("SystemManager が見つかりません。SystemManager は最初のシーンに配置しておいてください。");
-        }
+        
         //起動時タイトルマネージャーのインスタンスが存在していたら、
         if (TitleManager.instance != null)
         {
@@ -73,10 +65,8 @@ public class CustomNetworkManager : NetworkManager
     public override void OnServerReady(NetworkConnectionToClient _conn)
     {
         base.OnServerReady(_conn);
-
-        GameObject lobbyPlayer = Instantiate(lobbyPlayerPrefab);
-        NetworkServer.AddPlayerForConnection(_conn, lobbyPlayer);
-
+        PlayerConnection(_conn, lobbyPlayerPrefab);
+       
 
     }
 
@@ -151,5 +141,15 @@ public class CustomNetworkManager : NetworkManager
         if (udpBroadcaster != null)
             Destroy(udpBroadcaster.gameObject);
         Destroy(gameObject);
+    }
+
+    /// <summary>
+    /// プレイヤーをスポーンさせて結びつける
+    /// </summary>
+    public void PlayerConnection(NetworkConnectionToClient _conn,GameObject _playerPrefab)
+    {
+        GameObject player = Instantiate(_playerPrefab);
+        NetworkServer.AddPlayerForConnection(_conn, player);
+
     }
 }

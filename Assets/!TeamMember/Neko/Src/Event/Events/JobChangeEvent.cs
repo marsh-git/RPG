@@ -69,15 +69,6 @@ public class JobChangeEvent : EventDataBase
 
     }
 
-    /// <summary>
-    /// ボタンを設定
-    /// </summary>
-    /// <returns></returns>
-    private Button SetButton()
-    {
-        return Instantiate(eventButton, uiChildren[EVENTUI_BUTTON_PARENT]);
-    }
-
     private void DestroyButton(int num)
     {
         Destroy(button[num].gameObject);

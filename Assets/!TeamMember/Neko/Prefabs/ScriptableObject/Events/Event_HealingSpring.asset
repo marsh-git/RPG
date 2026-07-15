@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   eventName: "\u7652\u3057\u306E\u6CC9"
   eventDescription: "\u68EE\u306E\u5965\u306B\u6F84\u307F\u5207\u3063\u305F\u6CC9\u304C\u6E67\u3044\u3066\u3044\u308B\u3002\n\u50B7\u3064\u3044\u305F\u8005\u3092\u7652\u3059\u529B\u304C\u5BBF\u308B\u3068\u8A00\u308F\u308C\u3066\u3044\u308B\u3002"
-  eventImage: {fileID: 0}
+  eventImage: {fileID: 21300000, guid: ccdb245437fa52d4fbc5b1b3f1dd58cf, type: 3}
   eventButton: {fileID: 7616611666898629563, guid: cb2318a830a7a96419ef062bea32304c, type: 3}
   addStatus:
     maxHp: 0

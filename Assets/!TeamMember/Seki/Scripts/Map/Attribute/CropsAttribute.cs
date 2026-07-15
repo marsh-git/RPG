@@ -3,19 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class CropsAttribute : IAttributeTile {
-    /// <summary>
-    /// 作物の成長過程
-    /// </summary>
-    public enum eGrowProcess {
-        None,       // なし
-        Seeds,      // 種
-        Growing,    // 成長中
-        Harvest,    // 収穫可能
-    }
     // 作物ID
     public int cropsID { get; private set; } = -1;
     // 作物の進捗
-    public eGrowProcess process { get; private set; } = eGrowProcess.None;
+    public eCropsProcess process { get; private set; } = eCropsProcess.None;
     // 成長カウンタ
     private int _growCounter = -1;
     // 要求ターン数
@@ -46,7 +37,7 @@ public class CropsAttribute : IAttributeTile {
     /// </summary>
     /// <param name="tile"></param>
     public void OnTickTile(HexTileData tile) {
-        if(process == eGrowProcess.None || process == eGrowProcess.Harvest) return;
+        if(process == eCropsProcess.None || process == eCropsProcess.Harvest) return;
         // カウンタを増やす
         _growCounter++;
         // 一定ターン経過で成長させる
@@ -61,7 +52,7 @@ public class CropsAttribute : IAttributeTile {
     public void Setup(int setID) {
         cropsID = setID;
         // 生成時は収穫可能にしておく
-        process = eGrowProcess.Harvest;
+        process = eCropsProcess.Harvest;
         _growCounter = 0;
     }
     /// <summary>
@@ -70,7 +61,7 @@ public class CropsAttribute : IAttributeTile {
     /// <param name="setID"></param>
     public void PlantCrops(int setID) {
         cropsID = setID;
-        process = eGrowProcess.Seeds;
+        process = eCropsProcess.Seed;
     }
     /// <summary>
     /// 成長処理

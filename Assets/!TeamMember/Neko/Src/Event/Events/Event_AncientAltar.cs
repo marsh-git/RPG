@@ -1,14 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
-using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
-[CreateAssetMenu(menuName = "ScriptableObject/EventData/HealingSpring")]
-public class Event_HealingSpring : EventDataBase
+[CreateAssetMenu(menuName = "ScriptableObject/EventData/AncientAltar")]
+public class Event_AncientAltar : EventDataBase
 {
-
     private Button[] button;
 
     private readonly int BUTTON_COUNT = 2;
@@ -31,7 +28,7 @@ public class Event_HealingSpring : EventDataBase
 
     protected override void EventUpdate()
     {
-        
+
     }
 
     public override void SetEventUI(Canvas eventUI)
@@ -47,8 +44,8 @@ public class Event_HealingSpring : EventDataBase
             buttonInfos[i].SetButtonText(button[i].transform);
         }
 
-        button[0].onClick.AddListener(OnHealHpEvent);
-        button[1].onClick.AddListener(OnAllHealHpEvent);
+        button[0].onClick.AddListener(AddMaxHP);
+        button[1].onClick.AddListener(AddAttack);
     }
 
     private void DestroyButton(int num)
@@ -56,22 +53,21 @@ public class Event_HealingSpring : EventDataBase
         Destroy(button[num].gameObject);
     }
 
-    //  最大HPの50パーセント回復
-    private void OnHealHpEvent()
+    private void AddMaxHP()
     {
-        int healAmout = PlayerBase.instance.Status.maxHp / 2;
-        PlayerBase.instance.Heal(healAmout);
-        EndEvent();
-    }
-
-    //  HPを全快させる。ステータス補正を与える
-    private void OnAllHealHpEvent()
-    {
-        int healAmout = PlayerBase.instance.Status.maxHp;
-        PlayerBase.instance.Heal(healAmout);
+        addStatus.maxHp = 5;
         PlayerBase.instance.AddPermanentStatus(addStatus);
+        PlayerBase.instance.Heal(addStatus.maxHp);
         EndEvent();
     }
 
+    private void AddAttack()
+    {
+        addStatus.maxHp = -5;
+        addStatus.attack = 3;
+        PlayerBase.instance.AddPermanentStatus(addStatus);
+        PlayerBase.instance.TakeDamage(addStatus.maxHp);
+        EndEvent();
+    }
 
 }

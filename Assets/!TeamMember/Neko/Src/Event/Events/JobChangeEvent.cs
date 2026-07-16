@@ -35,10 +35,12 @@ public class JobChangeEvent : EventDataBase
     protected override void EndEvent()
     {
         //  ボタン破棄
-        for (int i = 0; i < BUTTON_COUNT; i++)
+        for (int i = 0; i < button.Length; i++)
         {
-            DestroyButton(i);
+            if (button[i] != null) DestroyButton(i);
         }
+
+        endEventFlag = true;
 
         EventManager.instance.CloseEventUI();
     }

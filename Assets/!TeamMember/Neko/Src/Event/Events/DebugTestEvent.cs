@@ -19,6 +19,8 @@ public class DebugTestEvent : EventDataBase
     {
         DestroyButton();
 
+        endEventFlag = true;
+
         EventManager.instance.CloseEventUI();
     }
 

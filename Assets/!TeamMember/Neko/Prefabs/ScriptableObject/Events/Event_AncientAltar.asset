@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9aaaad7a83b824849834d6840317344a, type: 3}
+  m_Name: Event_AncientAltar
+  m_EditorClassIdentifier: 
+  eventName: "\u53E4\u3073\u305F\u796D\u58C7"
+  eventDescription: "\u796D\u58C7\u306B\u306F\u4ECA\u3082\u4E0D\u601D\u8B70\u306A\u529B\u304C\u6B8B\u3063\u3066\u3044\u308B\u3002\n\u4F55\u304B\u3092\u6367\u3052\u308C\u3070\u5FDC\u3048\u3066\u304F\u308C\u308B\u304B\u3082\u3057\u308C\u306A\u3044\u3002"
+  eventImage: {fileID: 21300000, guid: 5885032e50414904ca356b8d9b275e2f, type: 3}
+  addStatus:
+    maxHp: 10
+    attack: 3
+    defense: 0
+    luck: 0
+    radius: 0
+  buttonInfos:
+  - buttonText: "\u9759\u304B\u306B\u7948\u308A\u3092\u6367\u3052\u308B"
+    subText: "\u6700\u5927\u4F53\u529B+5"
+  - buttonText: "\u5DF1\u306E\u8840\u3092\u796D\u58C7\u3078\u6367\u3052\u308B"
+    subText: "\u6700\u5927HP-5\u3000\u653B\u6483\u529B+3"

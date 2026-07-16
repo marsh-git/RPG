@@ -1,3 +1,4 @@
+using Mirror.BouncyCastle.Asn1.Pkcs;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,14 +7,70 @@ using UnityEngine;
 /// </summary>
 [System.Serializable]
 public struct TerrainVisual {
-    public eTerrain terrainType;
-    public GameObject prefab; // 平原なら空、森林なら木、山脈なら岩など
+    public GameObject plain;    // 平原
+    public GameObject hill;     // 丘陵
+    public GameObject forest;   // 森林
+    public GameObject mountain; // 山脈
+
+    /// <summary>
+    /// 地形に応じたオブジェクトを返す
+    /// </summary>
+    /// <param name="type"></param>
+    /// <returns></returns>
+    public GameObject GetPrefab(eTerrain type) {
+        switch(type) {
+            case eTerrain.Plain:
+            return plain;
+            case eTerrain.Hill:
+            return hill;
+            case eTerrain.Forest:
+            return forest;
+            case eTerrain.Mountain:
+            return mountain;
+        }
+        return null;
+    }
 }
 /// <summary>
 /// 属性ごとの見た目
 /// </summary>
 [System.Serializable]
 public struct AttributeVisual {
-    public eAttribute attributeType;
-    public GameObject prefab; // 街、前哨基地、ショップなどの静的プレハブ
+    public GameObject eventTile; // イベント
+    public GameObject crops;     // 作物
+    public GameObject town;      // 街
+    public GameObject outpost;   // 前哨基地
+    public GameObject shop;      // ショップ
+
+    /// <summary>
+    /// 属性に応じたオブジェクトを返す
+    /// </summary>
+    /// <param name="type"></param>
+    /// <returns></returns>
+    public GameObject GetPrefab(eAttribute type) {
+        switch(type) {
+            case eAttribute.Event:
+            return eventTile;
+            case eAttribute.Crops:
+            return crops;
+            case eAttribute.Town:
+            return town;
+            case eAttribute.Outpost:
+            return outpost;
+            case eAttribute.Shop:
+            return shop;
+        }
+        return null;
+    }
+}
+/// <summary>
+/// バイオームごとのデータ
+/// </summary>
+[System.Serializable]
+public struct BiomeData {
+    public Material terrainMaterial; // 地形マテリアル
+
+    public TerrainVisual terrainLayer;   // 地形階層
+
+    public AttributeVisual attributeLayer; // 属性階層
 }

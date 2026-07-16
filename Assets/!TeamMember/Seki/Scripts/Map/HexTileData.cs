@@ -122,7 +122,7 @@ public class HexTileData {
             break;
             case eBiome.Tundra:
             break;
-            case eBiome.VolcanicZone:
+            case eBiome.Volcanic:
             break;
         }
         return moveCost;

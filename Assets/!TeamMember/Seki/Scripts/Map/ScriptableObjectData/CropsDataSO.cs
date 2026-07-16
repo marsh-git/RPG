@@ -1,18 +1,23 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "CropsDatabase", menuName = "Map/Crops Database")]
+[CreateAssetMenu(fileName = "CropsDatabase", menuName = "ScriptableObject/Map/Crops Database")]
 public class CropsDatabaseSO : ScriptableObject {
     [Header("全バイオーム共通の作物設定 (種/苗/収穫)")]
-    public List<CropsVisual> cropsPhases = new List<CropsVisual>();
+    public List<CropsVisual> cropsDataList = new List<CropsVisual>();
 
     /// <summary>
-    /// 指定された成長段階のプレハブを高速検索
+    /// IDに応じたオブジェクトを返す
     /// </summary>
-    public GameObject GetCropsPrefab(eCropsProcess state) {
-        for(int i = 0; i < cropsPhases.Count; i++) {
-            if(cropsPhases[i].state == state) return cropsPhases[i].prefab;
+    /// <param name="ID"></param>
+    /// <returns></returns>
+    public CropsVisual GetCropsVisual(int ID) {
+        if(CommonModule.IsEmpty(cropsDataList)) return new CropsVisual();
+
+        for(int i = 0, max = cropsDataList.Count; i < max; i++) {
+            CropsVisual cropsData = cropsDataList[i];
+            if(cropsData.ID == ID) return cropsData;
         }
-        return null;
+        return new CropsVisual();
     }
 }

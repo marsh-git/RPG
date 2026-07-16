@@ -2,20 +2,32 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "NewBiomeData", menuName = "Map/Biome Data")]
+[CreateAssetMenu(fileName = "NewBiomeData", menuName = "ScriptableObject/Map/Biome Data")]
 public class BiomeDataSO : ScriptableObject {
-    public eBiome biomeType;
-    public Material terrainMaterial;
 
-    public List<TerrainVisual> terrainList = new List<TerrainVisual>();
-    public List<AttributeVisual> attributeList = new List<AttributeVisual>();
+    [Header("ーーー 全バイオーム一括管理マスター ーーー")]
+    public BiomeData grassland;   // 草原
+    public BiomeData desert;      // 砂漠
+    public BiomeData rainforest;  // 熱帯雨林
+    public BiomeData tundra;      // ツンドラ
+    public BiomeData volcanic;    // 火山帯
 
-    public GameObject GetTerrainPrefab(eTerrain type) {
-        return terrainList.Find(t => t.terrainType == type).prefab;
-    }
-
-    // 属性の基本プレハブ取得
-    public GameObject GetAttributePrefab(eAttribute type) {
-        return attributeList.Find(a => a.attributeType == type).prefab;
+    /// <summary>
+    /// バイオームタイプに応じて、そのバイオームデータを返す
+    /// </summary>
+    public BiomeData GetBiomeVisual(eBiome type) {
+        switch(type) {
+            case eBiome.Grassland:
+            return grassland;
+            case eBiome.Desert:
+            return desert;
+            case eBiome.Rainforest:
+            return rainforest;
+            case eBiome.Tundra:
+            return tundra;
+            case eBiome.Volcanic:
+            return volcanic;
+        }
+        return new BiomeData();
     }
 }

@@ -15,6 +15,26 @@ public enum eCropsProcess {
 /// </summary>
 [System.Serializable]
 public struct CropsVisual {
-    public eCropsProcess state;
-    public GameObject prefab;
+    public int ID;
+    public string name;
+    public GameObject seed;
+    public GameObject sprout;
+    public GameObject harvest;
+
+    /// <summary>
+    /// オブジェクトを返す
+    /// </summary>
+    /// <param name="type"></param>
+    /// <returns></returns>
+    public GameObject GetPrefab(eCropsProcess type) {
+        switch(type) {
+            case eCropsProcess.Seed:
+            return seed;
+            case eCropsProcess.Sprout:
+            return sprout;
+            case eCropsProcess.Harvest:
+            return harvest;
+        }
+        return null;
+    }
 }

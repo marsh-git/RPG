@@ -1,4 +1,5 @@
 using Cysharp.Threading.Tasks;
+using Mirror;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -20,6 +21,12 @@ public class MainGamePart : BasePart
     public override async UniTask Setup()
     {
         await base.Setup();
+        if (!NetworkServer.active) return;
+
+        foreach(var conn in NetworkServer.connections.Values)
+        {
+            NetworkServer.AddPlayerForConnection(conn, CustomNetworkManager.instance.playerPrefab);
+        }
     }
 
     /// <summary>

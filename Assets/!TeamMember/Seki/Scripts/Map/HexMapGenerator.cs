@@ -19,16 +19,15 @@ public class HexMapGenerator : MonoBehaviour {
         public int ForestWeight;
         public int MountainWeight;
     }
-
-    [Header("TilePrefabs")]
-    [SerializeField] private HexTileObject tilePrefabPlain = null;
-    [SerializeField] private HexTileObject tilePrefabHill = null;
-    [SerializeField] private HexTileObject tilePrefabForest = null;
-    [SerializeField] private HexTileObject tilePrefabMountain = null;
+    [Header("Tile")]
+    [SerializeField] private HexTileObject _spawnTile = null;
 
     [Header("UnitPrefabs")]
     [SerializeField] private PlayerSpawner playerSpawner = null;
     [SerializeField] private OutpostSpawner enemySpawner = null;
+
+    [Header("一括管理マスターデータベース参照")]
+    [SerializeField] private BiomeDataSO mapConfig = null;
 
     [Header("Debug Settings")]
     [Tooltip("チェックを入れると、下の debugSeed で指定したシード値で固定されます")]
@@ -55,30 +54,33 @@ public class HexMapGenerator : MonoBehaviour {
 
         // 生成プロセス中の一時管理用プール
         List<HexTileObject> playerSpawnCandidates = new List<HexTileObject>();
-        List<HexTileData> allGeneratedTiles = new List<HexTileData>();
+        List<HexTileData> allTileList = new List<HexTileData>();
         Dictionary<int, List<HexTileData>> areaTileMap = new Dictionary<int, List<HexTileData>>();
 
         // 街の配置予定地（中心座標）を先んじて決定する（mapRandを伝播させて方角も固定）
         List<Vector2Int> areaCenters = DecideDirArea(mapRand);
 
-        // --- フェーズ 1: 基礎地形の生成 ---
+        // フェーズ1: 基礎地形の生成 ---
         // この内部で「街マス予定地」の事前判定と山脈の排除（平滑化）を同時に完結させる
-        GenerateBaseTerrain(areaCenters, config, mapRand, ref allGeneratedTiles, ref areaTileMap, ref playerSpawnCandidates);
+        GenerateBaseTerrain(areaCenters, config, mapRand, ref allTileList, ref areaTileMap, ref playerSpawnCandidates);
 
-        // --- フェーズ 2: 街マスの属性付与 ---
+        // フェーズ2: 街マスの属性付与 ---
         // Viewの破壊・再生成を行わず、純粋なデータ（Model）の属性設定のみを安全に行う
         GenerateTowns(areaCenters, areaTileMap);
 
-        // --- フェーズ 3: 特殊属性（前哨基地・イベント・作物）の配置 ---
+        // フェーズ3: 特殊属性（前哨基地・イベント・作物）の配置 ---
         // 街や山脈ではない「プレーンな空きマス」に対して確率抽選で配置する
-        GenerateSpecialAttributes(allGeneratedTiles, config, mapRand);
+        GenerateSpecialAttributes(allTileList, config, mapRand);
 
-        // --- フェーズ 4: キャラクターのスポーン ---
+        // フェーズ4: タイルの見た目の変更
+        SetAllTileObjectView(allTileList);
+
+        // フェーズ5: キャラクターのスポーン ---
         // 構築が完了したマップデータ上にプレイヤーと敵を配置
         SpawnCharacters(playerSpawnCandidates);
 
         // デバッグログに現在のシード値を明記（バグ遭遇時にこの数値をインスペクターにコピペできるようにする）
-        Debug.Log($"【マップ生成完了】シード値: {config.Seed} / 総エリア数: {areaCenters.Count} / 総タイル数: {allGeneratedTiles.Count}");
+        Debug.Log($"【マップ生成完了】シード値: {config.Seed} / 総エリア数: {areaCenters.Count} / 総タイル数: {allTileList.Count}");
     }
     /// <summary>
     /// すべてのエリアの基礎地形とViewをループ生成する。
@@ -122,8 +124,7 @@ public class HexMapGenerator : MonoBehaviour {
                     }
 
                     // View（3Dオブジェクト）のインスタンス化
-                    HexTileObject prefabToSpawn = GetTerrainPrefab(chosenTerrain);
-                    HexTileObject newTileObject = Instantiate(prefabToSpawn, Vector3.zero, Quaternion.Euler(0, 30, 0), this.transform);
+                    HexTileObject newTileObject = Instantiate(_spawnTile, Vector3.zero, Quaternion.Euler(0, 30, 0), this.transform);
                     newTileObject.Setup(currentTileID, spawnPosition);
                     newTileObject.name = $"Tile_[ID:{currentTileID}]_Area:{areaID}_G({globalQ},{globalR})";
 
@@ -192,11 +193,11 @@ public class HexMapGenerator : MonoBehaviour {
     /// <summary>
     /// 特殊属性（前哨基地・イベント・作物）を、開いたマスに対して確率配置する
     /// </summary>
-    private void GenerateSpecialAttributes(List<HexTileData> allGeneratedTiles, MapGenerationConfig config, System.Random mapRand) {
+    private void GenerateSpecialAttributes(List<HexTileData> allTileList, MapGenerationConfig config, System.Random mapRand) {
         // まだ何の属性も付与されていない（山脈でも街でもない）完全な空きマスを抽出
-        List<HexTileData> emptyTiles = allGeneratedTiles.FindAll(t => t.Attribute == eAttribute.None);
+        List<HexTileData> emptyTiles = allTileList.FindAll(t => t.Attribute == eAttribute.None);
 
-        // 3-A: 敵の前哨基地を、設定された個数に達するまでランダムに配置
+        // 敵の前哨基地を、設定された個数に達するまでランダムに配置
         int outpostsPlaced = 0;
         while(outpostsPlaced < config.EnemyOutpostCount && emptyTiles.Count > 0) {
             int randIdx = mapRand.Next(0, emptyTiles.Count);
@@ -212,7 +213,7 @@ public class HexMapGenerator : MonoBehaviour {
             outpostsPlaced++;
         }
 
-        // 3-B: 残りの空きマスに対して、イベントマス・作物マスを設定された確率に基づいて配置
+        // 残りの空きマスに対して、イベントマス・作物マスを設定された確率に基づいて配置
         foreach(var tile in emptyTiles) {
             double roll = mapRand.NextDouble();
 
@@ -220,6 +221,7 @@ public class HexMapGenerator : MonoBehaviour {
                 tile.SetAttributeTile(AttributeFactory.Create(eAttribute.Event));
                 if(tile.attributeTile is EventAttribute eventTile) {
                     // イベントの設定
+
                     int eventID = mapRand.Next(0, EventManager.instance.eventDatas.Length);
                     eventTile.Setup(eventID);
                 }
@@ -230,7 +232,27 @@ public class HexMapGenerator : MonoBehaviour {
             }
         }
     }
-
+    /// <summary>
+    /// 全てのタイルの見た目の変更
+    /// </summary>
+    /// <param name="allTileList"></param>
+    public void SetAllTileObjectView(List<HexTileData> allTileList) {
+        foreach(var tileData in allTileList) {
+            SetTileObjectView(tileData);
+        }
+    }
+    /// <summary>
+    /// タイルの見た目設定
+    /// </summary>
+    /// <param name="data"></param>
+    public void SetTileObjectView(HexTileData data) {
+        if(data == null) return;
+        HexTileObject tileObject = data.GetObject();
+        // バイオームデータの取得
+        BiomeData biomeData = mapConfig.GetBiomeData(data.biome);
+        // 見た目の適応
+        tileObject.RefreshVisuals(data, biomeData);
+    }
     /// <summary>
     /// 確定したマップオブジェクト群に対してユニットのスポーン命令を出す
     /// </summary>
@@ -284,20 +306,6 @@ public class HexMapGenerator : MonoBehaviour {
         if(roll < config.ForestWeight) return eTerrain.Forest;
 
         return eTerrain.Mountain;
-    }
-    /// <summary>
-    /// 地形に合わせたオブジェクトを返す
-    /// </summary>
-    /// <param name="terrain"></param>
-    /// <returns></returns>
-    private HexTileObject GetTerrainPrefab(eTerrain terrain) {
-        switch(terrain) {
-            case eTerrain.Plain: return tilePrefabPlain;
-            case eTerrain.Hill: return tilePrefabHill;
-            case eTerrain.Forest: return tilePrefabForest;
-            case eTerrain.Mountain: return tilePrefabMountain;
-        }
-        return null;
     }
     /// <summary>
     /// 選択された難易度プリセットから、マップ生成の設定オブジェクト（Config）をビルドして返す

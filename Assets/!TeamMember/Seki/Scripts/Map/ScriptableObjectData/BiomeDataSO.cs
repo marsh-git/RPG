@@ -15,7 +15,7 @@ public class BiomeDataSO : ScriptableObject {
     /// <summary>
     /// バイオームタイプに応じて、そのバイオームデータを返す
     /// </summary>
-    public BiomeData GetBiomeVisual(eBiome type) {
+    public BiomeData GetBiomeData(eBiome type) {
         switch(type) {
             case eBiome.Grassland:
             return grassland;

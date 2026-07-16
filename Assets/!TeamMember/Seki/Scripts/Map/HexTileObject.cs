@@ -7,8 +7,16 @@ using UnityEngine;
 public class HexTileObject : MonoBehaviour, IClickable {
     public int ID { get; private set; } = -1;
 
-    [Header("Visuals")]
+    [Header("ハイライトの見た目")]
     [SerializeField] private GameObject[] _highlightEffectList = null;
+
+    [Header("コンポーネント参照")]
+    [SerializeField] private MeshRenderer tileMeshRenderer = null;
+    [SerializeField] private Transform _terrainRoot = null;
+    [SerializeField] private Transform _attributeRoot = null;
+
+    private GameObject _terrainObj = null;
+    private GameObject _attributeObj = null;
 
     /// <summary>
     /// 座標のセットアップ
@@ -22,6 +30,10 @@ public class HexTileObject : MonoBehaviour, IClickable {
         position.z = setPosition.z;
         transform.position = position;
     }
+    /// <summary>
+    /// タイルデータの取得
+    /// </summary>
+    /// <returns></returns>
     public HexTileData GetTileData() {
         HexTileData tileData = HexTileManager.instance.GetTileData(ID);
         if(tileData == null) return null;
@@ -37,6 +49,33 @@ public class HexTileObject : MonoBehaviour, IClickable {
         if(!CommonModule.IsEnableIndex(_highlightEffectList, highlightIndex)) return;
 
         if(_highlightEffectList != null) _highlightEffectList[highlightIndex].SetActive(isActive);
+    }
+    /// <summary>
+    /// 見た目の設定
+    /// </summary>
+    /// <param name="data"></param>
+    public void RefreshVisuals(HexTileData data, BiomeData biomeData) {
+        if(data == null) return;
+
+        // 地形マテリアルの適用
+        if(biomeData.terrainMaterial != null) tileMeshRenderer.material = biomeData.terrainMaterial;
+
+        ClearDecorations();
+
+        // 地形オブジェクトの生成
+        GameObject terrainPrefab = biomeData.terrainLayer.GetPrefab(data.terrain);
+        if(terrainPrefab != null) _terrainObj = Instantiate(terrainPrefab, _terrainRoot);
+
+        // 属性オブジェクトの生成
+        GameObject attributePrefab = biomeData.attributeLayer.GetPrefab(data.Attribute);
+        if(attributePrefab != null) _attributeObj = Instantiate(attributePrefab, _attributeRoot);
+    }
+    /// <summary>
+    /// 見た目オブジェクトの削除
+    /// </summary>
+    private void ClearDecorations() {
+        if(_terrainObj != null) Destroy(_terrainObj);
+        if(_attributeObj != null) Destroy(_attributeObj);
     }
     /// <summary>
     /// クリックされたときの処理
@@ -96,8 +135,7 @@ public class HexTileObject : MonoBehaviour, IClickable {
     /// <summary>
     /// プレイヤーを移動させ、移動終了後にターンを終了する
     /// </summary>
-    private async UniTaskVoid MovePlayer()
-    {
+    private async UniTaskVoid MovePlayer(){
         await CharacterMovementManager.instance.MoveCharacter();
 
         TurnManager.Instance.EndPlayerTurn();

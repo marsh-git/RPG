@@ -26,7 +26,8 @@ public class TitlePart : BasePart
     public override async UniTask Setup()
     {
         await base.Setup();
-        startHostButton.onClick.AddListener(() => CustomNetworkManager.instance.StartSteamHost());
+        startHostButton.onClick.AddListener(() =>StartIsHost());
+        startClientButton.onClick.AddListener(() => StartClient());
 
     }
 
@@ -51,7 +52,7 @@ public class TitlePart : BasePart
     /// <summary>
     /// クライアントで始める(部屋検索)
     /// </summary>
-    public void StartClient(CSteamID _lobbyID)
+    public void StartClient()
     {
         Debug.Log("StartClient");
         isHost = false;

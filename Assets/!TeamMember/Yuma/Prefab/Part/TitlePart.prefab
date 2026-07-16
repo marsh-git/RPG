@@ -47,6 +47,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   goToSelectPart: 0
+  startHostButton: {fileID: 5896843329240754615}
+  startClientButton: {fileID: 2201516469159971752}
 --- !u!1 &2110504536360674929
 GameObject:
   m_ObjectHideFlags: 0

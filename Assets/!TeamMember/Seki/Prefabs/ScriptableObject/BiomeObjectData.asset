@@ -1,0 +1,79 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f15003f0d762b8e4894f54639fe3981e, type: 3}
+  m_Name: BiomeObjectData
+  m_EditorClassIdentifier: 
+  grassland:
+    terrainMaterial: {fileID: 2100000, guid: ea08560f7d1d41746b68a867eb19abbe, type: 2}
+    terrainLayer:
+      plain: {fileID: 0}
+      hill: {fileID: 0}
+      forest: {fileID: 0}
+      mountain: {fileID: 0}
+    attributeLayer:
+      eventTile: {fileID: 0}
+      crops: {fileID: 0}
+      town: {fileID: 0}
+      outpost: {fileID: 0}
+      shop: {fileID: 0}
+  desert:
+    terrainMaterial: {fileID: 0}
+    terrainLayer:
+      plain: {fileID: 0}
+      hill: {fileID: 0}
+      forest: {fileID: 0}
+      mountain: {fileID: 0}
+    attributeLayer:
+      eventTile: {fileID: 0}
+      crops: {fileID: 0}
+      town: {fileID: 0}
+      outpost: {fileID: 0}
+      shop: {fileID: 0}
+  rainforest:
+    terrainMaterial: {fileID: 0}
+    terrainLayer:
+      plain: {fileID: 0}
+      hill: {fileID: 0}
+      forest: {fileID: 0}
+      mountain: {fileID: 0}
+    attributeLayer:
+      eventTile: {fileID: 0}
+      crops: {fileID: 0}
+      town: {fileID: 0}
+      outpost: {fileID: 0}
+      shop: {fileID: 0}
+  tundra:
+    terrainMaterial: {fileID: 0}
+    terrainLayer:
+      plain: {fileID: 0}
+      hill: {fileID: 0}
+      forest: {fileID: 0}
+      mountain: {fileID: 0}
+    attributeLayer:
+      eventTile: {fileID: 0}
+      crops: {fileID: 0}
+      town: {fileID: 0}
+      outpost: {fileID: 0}
+      shop: {fileID: 0}
+  volcanic:
+    terrainMaterial: {fileID: 0}
+    terrainLayer:
+      plain: {fileID: 0}
+      hill: {fileID: 0}
+      forest: {fileID: 0}
+      mountain: {fileID: 0}
+    attributeLayer:
+      eventTile: {fileID: 0}
+      crops: {fileID: 0}
+      town: {fileID: 0}
+      outpost: {fileID: 0}
+      shop: {fileID: 0}

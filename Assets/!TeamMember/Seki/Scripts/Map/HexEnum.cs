@@ -22,7 +22,7 @@ public enum eBiome {
     Desert,         // 砂漠      移動-1
     Rainforest,     // 熱帯雨林　視界-1
     Tundra,         // ツンドラ  移動-1
-    VolcanicZone,   // 火山帯    仮)毎ターンダメージ
+    Volcanic,       // 火山帯    仮)毎ターンダメージ
 
     Max
 }

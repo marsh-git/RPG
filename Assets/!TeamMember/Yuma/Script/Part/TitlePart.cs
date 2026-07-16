@@ -37,7 +37,7 @@ public class TitlePart : BasePart
     public void StartIsHost()
     {
         Debug.Log("StartHost");
-        steamLobby.CreateLobby();
+        //steamLobby.CreateLobby();
         isHost = true;
         goToSelectPart = true;
     }
@@ -48,7 +48,7 @@ public class TitlePart : BasePart
     public void StartClient(CSteamID _lobbyID)
     {
         Debug.Log("StartClient");
-        SteamMatchmaking.JoinLobby(_lobbyID);
+        //SteamMatchmaking.JoinLobby(_lobbyID);
         isHost = false;
         goToSelectPart = true;
     }

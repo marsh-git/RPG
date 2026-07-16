@@ -1,9 +1,9 @@
-using Custom.Network;
 using Cysharp.Threading.Tasks;
 using Steamworks;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 /// <summary>
 /// タイトルパート
 /// </summary>
@@ -11,16 +11,23 @@ public class TitlePart : BasePart
 {
     public static bool isHost { get; private set; } = false;
     public bool goToSelectPart = false;
-    private SteamLobby steamLobby;
+
+    [SerializeField]
+    private Button startHostButton;
+
+    [SerializeField]
+    private Button startClientButton;
+
     public override async UniTask Init()
     {
         await base.Init();
-        steamLobby = FindAnyObjectByType<SteamLobby>();
         await UniTask.CompletedTask;
     }
     public override async UniTask Setup()
     {
         await base.Setup();
+        startHostButton.onClick.AddListener(() => CustomNetworkManager.instance.StartSteamHost());
+
     }
 
 
@@ -37,7 +44,6 @@ public class TitlePart : BasePart
     public void StartIsHost()
     {
         Debug.Log("StartHost");
-        //steamLobby.CreateLobby();
         isHost = true;
         goToSelectPart = true;
     }
@@ -48,7 +54,6 @@ public class TitlePart : BasePart
     public void StartClient(CSteamID _lobbyID)
     {
         Debug.Log("StartClient");
-        //SteamMatchmaking.JoinLobby(_lobbyID);
         isHost = false;
         goToSelectPart = true;
     }

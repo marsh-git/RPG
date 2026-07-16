@@ -31,6 +31,8 @@ public class Event_Forge : EventDataBase
             if (button[i] != null) DestroyButton(i);
         }
 
+        endEventFlag = true;
+
         EventManager.instance.CloseEventUI();
     }
 

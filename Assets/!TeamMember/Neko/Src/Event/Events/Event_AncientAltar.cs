@@ -21,6 +21,8 @@ public class Event_AncientAltar : EventDataBase
             if (button[i] != null) DestroyButton(i);
         }
 
+        endEventFlag = true;
+
         EventManager.instance.CloseEventUI();
     }
 

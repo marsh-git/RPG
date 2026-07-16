@@ -24,6 +24,8 @@ public class Event_HealingSpring : EventDataBase
             if (button[i] != null) DestroyButton(i);
         }
 
+        endEventFlag = true;
+
         EventManager.instance.CloseEventUI();
     }
 

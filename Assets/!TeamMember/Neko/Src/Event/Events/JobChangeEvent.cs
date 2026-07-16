@@ -40,6 +40,8 @@ public class JobChangeEvent : EventDataBase
             if (button[i] != null) DestroyButton(i);
         }
 
+        endEventFlag = true;
+
         EventManager.instance.CloseEventUI();
     }
 

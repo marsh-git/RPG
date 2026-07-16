@@ -1,4 +1,6 @@
+using Custom.Network;
 using Cysharp.Threading.Tasks;
+using Steamworks;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,9 +11,11 @@ public class TitlePart : BasePart
 {
     public static bool isHost { get; private set; } = false;
     public bool goToSelectPart = false;
+    private SteamLobby steamLobby;
     public override async UniTask Init()
     {
         await base.Init();
+        steamLobby = FindAnyObjectByType<SteamLobby>();
         await UniTask.CompletedTask;
     }
     public override async UniTask Setup()
@@ -33,6 +37,7 @@ public class TitlePart : BasePart
     public void StartIsHost()
     {
         Debug.Log("StartHost");
+        steamLobby.CreateLobby();
         isHost = true;
         goToSelectPart = true;
     }
@@ -40,9 +45,10 @@ public class TitlePart : BasePart
     /// <summary>
     /// クライアントで始める(部屋検索)
     /// </summary>
-    public void StartClient()
+    public void StartClient(CSteamID _lobbyID)
     {
         Debug.Log("StartClient");
+        SteamMatchmaking.JoinLobby(_lobbyID);
         isHost = false;
         goToSelectPart = true;
     }

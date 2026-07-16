@@ -19,12 +19,8 @@ public class HexMapGenerator : MonoBehaviour {
         public int ForestWeight;
         public int MountainWeight;
     }
-
-    [Header("TilePrefabs")]
-    [SerializeField] private HexTileObject tilePrefabPlain = null;
-    [SerializeField] private HexTileObject tilePrefabHill = null;
-    [SerializeField] private HexTileObject tilePrefabForest = null;
-    [SerializeField] private HexTileObject tilePrefabMountain = null;
+    [Header("Tile")]
+    [SerializeField] private HexTileObject _spawnTile = null;
 
     [Header("UnitPrefabs")]
     [SerializeField] private PlayerSpawner playerSpawner = null;
@@ -77,7 +73,7 @@ public class HexMapGenerator : MonoBehaviour {
         GenerateSpecialAttributes(allTileList, config, mapRand);
 
         // フェーズ4: タイルの見た目の変更
-        //SetAllTileObjectView(allTileList);
+        SetAllTileObjectView(allTileList);
 
         // フェーズ5: キャラクターのスポーン ---
         // 構築が完了したマップデータ上にプレイヤーと敵を配置
@@ -128,8 +124,7 @@ public class HexMapGenerator : MonoBehaviour {
                     }
 
                     // View（3Dオブジェクト）のインスタンス化
-                    HexTileObject prefabToSpawn = GetTerrainPrefab(chosenTerrain);
-                    HexTileObject newTileObject = Instantiate(prefabToSpawn, Vector3.zero, Quaternion.Euler(0, 30, 0), this.transform);
+                    HexTileObject newTileObject = Instantiate(_spawnTile, Vector3.zero, Quaternion.Euler(0, 30, 0), this.transform);
                     newTileObject.Setup(currentTileID, spawnPosition);
                     newTileObject.name = $"Tile_[ID:{currentTileID}]_Area:{areaID}_G({globalQ},{globalR})";
 
@@ -311,20 +306,6 @@ public class HexMapGenerator : MonoBehaviour {
         if(roll < config.ForestWeight) return eTerrain.Forest;
 
         return eTerrain.Mountain;
-    }
-    /// <summary>
-    /// 地形に合わせたオブジェクトを返す
-    /// </summary>
-    /// <param name="terrain"></param>
-    /// <returns></returns>
-    private HexTileObject GetTerrainPrefab(eTerrain terrain) {
-        switch(terrain) {
-            case eTerrain.Plain: return tilePrefabPlain;
-            case eTerrain.Hill: return tilePrefabHill;
-            case eTerrain.Forest: return tilePrefabForest;
-            case eTerrain.Mountain: return tilePrefabMountain;
-        }
-        return null;
     }
     /// <summary>
     /// 選択された難易度プリセットから、マップ生成の設定オブジェクト（Config）をビルドして返す

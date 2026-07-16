@@ -46,11 +46,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a4e92c262ce19f43ae24d3a7d6202ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tilePrefabPlain: {fileID: 6108452813158840557, guid: e42c72ab1e0f6e54e9b8468450055f49, type: 3}
-  tilePrefabHill: {fileID: -6515622206780606783, guid: e9cb6720fd6b36e47ba03814bc93d072, type: 3}
-  tilePrefabForest: {fileID: 7447876712286650317, guid: 42ccbca2037156f44a036962a947e7cd, type: 3}
-  tilePrefabMountain: {fileID: 3985186524730036689, guid: dee84cbb9fa000a49adfe37e6b86114c, type: 3}
-  playerPrefab: {fileID: 0}
+  _spawnTile: {fileID: 1027954200922897724, guid: e7779f7551533e24f8d6004aa8546d53, type: 3}
+  playerSpawner: {fileID: 2155969094092179325}
+  enemySpawner: {fileID: 3919919912482775474}
+  mapConfig: {fileID: 11400000, guid: bea8557d1e6566b4295906b706264ef7, type: 2}
+  useStaticSeed: 0
+  debugSeed: 12345
 --- !u!1 &4508912418598723066
 GameObject:
   m_ObjectHideFlags: 0
@@ -95,8 +96,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 539a2e7995aceed439f878c23adc5b45, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerPrefab: {fileID: 0}
-  characterManager: {fileID: 0}
+  playerPrefab: {fileID: 8455049079611734360, guid: 1cfb8d09c4dffe7438f9a7c71649a394, type: 3}
 --- !u!1 &5257948402742160823
 GameObject:
   m_ObjectHideFlags: 0
@@ -152,7 +152,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7591382933600607991}
-  - component: {fileID: 4237554396071198374}
+  - component: {fileID: 3919919912482775474}
   m_Layer: 0
   m_Name: EnemySpawner
   m_TagString: Untagged
@@ -175,7 +175,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 8761524683004981651}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4237554396071198374
+--- !u!114 &3919919912482775474
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -184,8 +184,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7583651550109867487}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fea920c432cadb24d8843ad8ad16b50d, type: 3}
+  m_Script: {fileID: 11500000, guid: 68e5bcd7c5b80bf469cf95b89737de80, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyPrefab: {fileID: 0}
-  characterManager: {fileID: 0}
+  outpostPrefab: {fileID: -7664422670795588050, guid: 6271264ce28ca92419a8799041688170, type: 3}

@@ -83,7 +83,7 @@ public class HexTileData {
     /// 対応するタイルオブジェクト取得
     /// </summary>
     /// <returns></returns>
-    private HexTileObject GetObject() {
+    public HexTileObject GetObject() {
         return HexTileManager.instance.GetTileObject(ID);
     }
     public Vector3 GetTilePos() {

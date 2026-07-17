@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class CheckPointAttribute : IAttributeTile {
     private List<int> _checkPlayerIDList = null;
+
     /// <summary>
     /// 自身の属性取得
     /// </summary>
@@ -14,7 +15,7 @@ public class CheckPointAttribute : IAttributeTile {
     /// <param name="tile"></param>
     /// <param name="character"></param>
     public void OnEnterTile(HexTileData tile, CharacterBase character = null) {
-        throw new System.NotImplementedException();
+        
     }
     /// <summary>
     /// キャラクターがこのマスでターンを終了時処理

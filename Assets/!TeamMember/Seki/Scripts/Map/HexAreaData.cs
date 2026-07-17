@@ -13,6 +13,7 @@ public class HexAreaData {
     public eBiome biome { get; private set; } = eBiome.None;
     // エリア制圧フラグ
     public bool isSubjugationArea { get; private set; } = false;
+    public bool isBossArea { get; private set; }
     // エリア内のマスIDリスト
     public List<int> tileIDList { get; private set; } = null;
 

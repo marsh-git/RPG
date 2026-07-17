@@ -162,14 +162,7 @@ public class CustomNetworkManager : NetworkManager
     /// </summary>
     public void StartSteamHost()
     {
-        var fizzyTransport = GetComponent<Mirror.FizzySteam.FizzySteamworks>();
         var steamLobby = GetComponent<SteamLobby>();
-
-        if(fizzyTransport == null)
-        {
-            Debug.LogError("FizzySteamworks Transport not found");
-            return;
-        }
 
         if(steamLobby == null)
         {
@@ -177,8 +170,15 @@ public class CustomNetworkManager : NetworkManager
             return;
         }
 
-        transport = fizzyTransport;
-
         steamLobby.CreateLobby();
+    }
+
+    /// <summary>
+    /// SteamLobbyからルーム検索(ロビー一覧作成)
+    /// ボタンからロビーIDを取得しルームに入る
+    /// </summary>
+    public void SearchSteamLobby()
+    {
+        
     }
 }

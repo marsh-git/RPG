@@ -10,11 +10,15 @@ namespace Custom.Network
     /// </summary>
     public class SteamLobby : MonoBehaviour
     {
+        public System.Action<CSteamID[]> OnLobbyListUpdated;
+
         private const string HOST_ADDRESS_KEY = "HostAddress";
 
         private Callback<LobbyCreated_t> lobbyCreated;
         private Callback<GameLobbyJoinRequested_t> gameLobbyJoinRequested;
         private Callback<LobbyEnter_t> lobbyEntered;
+        private Callback<LobbyMatchList_t> lobbyMatchList;
+
 
         private CSteamID currentLobbyID;
 
@@ -30,6 +34,7 @@ namespace Custom.Network
             lobbyCreated = Callback<LobbyCreated_t>.Create(OnLobbyCreated);
             gameLobbyJoinRequested = Callback<GameLobbyJoinRequested_t>.Create(OnGameLobbyJoinRequested);
             lobbyEntered = Callback<LobbyEnter_t>.Create(OnLobbyEntered);
+            lobbyMatchList = Callback<LobbyMatchList_t>.Create(OnLobbyMatchList);
         }
 
         /// <summary>
@@ -40,6 +45,17 @@ namespace Custom.Network
             if (networkManager == null) return;
 
             SteamMatchmaking.CreateLobby(ELobbyType.k_ELobbyTypeFriendsOnly, networkManager.maxConnections);
+        }
+
+        /// <summary>
+        /// SteamLobby一覧作成
+        /// </summary>
+        /// <param name="_root"></param>
+        public void ShowRequesetLobbyList(RectTransform _root)
+        {
+            if (networkManager == null) return;
+
+            SteamMatchmaking.RequestLobbyList();
         }
 
         /// <summary>
@@ -76,6 +92,10 @@ namespace Custom.Network
             SteamMatchmaking.JoinLobby(_callback.m_steamIDLobby);
         }
 
+        /// <summary>
+        /// Lobby参加完了時コールバック
+        /// </summary>
+        /// <param name="_callback"></param>
         private void OnLobbyEntered(LobbyEnter_t _callback)
         {
             currentLobbyID = new CSteamID(_callback.m_ulSteamIDLobby);
@@ -96,6 +116,19 @@ namespace Custom.Network
 
             networkManager.networkAddress = hostAddress;
             networkManager.StartClient();
+        }
+
+        private void OnLobbyMatchList(LobbyMatchList_t _callback)
+        {
+            uint lobbyCount = _callback.m_nLobbiesMatching;
+            CSteamID[] lobbyIDs = new CSteamID[lobbyCount];
+
+            for(int i = 0; i < lobbyCount; i++)
+            {
+                lobbyIDs[i] = SteamMatchmaking.GetLobbyByIndex(i);
+            }
+
+            OnLobbyListUpdated?.Invoke(lobbyIDs);
         }
 
         private void OnDestroy()

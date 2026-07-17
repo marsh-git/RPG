@@ -147,17 +147,6 @@ public class PlayerBase : CharacterBase, IClickable
     }
 
     /// <summary>
-    /// アクションをする際に一時バフ、デバフを含めたステータスの計算結果を返す
-    /// </summary>
-    /// <returns></returns>
-    private CharacterStatus GetActionStatus()
-    {
-        CharacterStatus current = status;
-        current.Add(temporaryStatus);
-        return current;
-    }
-
-    /// <summary>
     /// 一時バフ、デバフを追加する
     /// </summary>
     public void AddTemporaryStatus(CharacterStatus addStatus)
@@ -171,6 +160,22 @@ public class PlayerBase : CharacterBase, IClickable
     public void ResetTemporaryStatus()
     {
         temporaryStatus.Reset();
+    }
+
+    /// <summary>
+    /// アクションをする際に一時バフ、デバフを含めたステータスの計算結果を返す
+    /// </summary>
+    /// <returns></returns>
+    private CharacterStatus GetActionStatus()
+    {
+        CharacterStatus current = status;
+        current.Add(temporaryStatus);
+        return current;
+    }
+
+    public void UseAction()
+    {
+        
     }
 
     /// <summary>

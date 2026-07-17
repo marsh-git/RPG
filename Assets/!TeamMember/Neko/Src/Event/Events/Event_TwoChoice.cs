@@ -4,6 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+[CreateAssetMenu(menuName = "ScriptableObject/EventData/TwoChoice")]
 public class Event_TwoChoice : EventDataBase
 {
     private Button[] button;
@@ -17,7 +18,7 @@ public class Event_TwoChoice : EventDataBase
     [TextArea(3, 6)] public string[] nextEventDescription;
 
     [Header("イベントを作製する際ステータスを追加するかなどの設定構造体")]
-    EventChoiceData[] choiceData;
+    [SerializeField] EventChoiceData[] choiceData;
 
     protected override void EventUpdate()
     {

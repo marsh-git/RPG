@@ -977,6 +977,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   eventUI: {fileID: 1076690669}
+  eventButton: {fileID: 0}
   eventDatas:
   - {fileID: 11400000, guid: 2cb58444a9755f74998728e666f41186, type: 2}
   - {fileID: 11400000, guid: 633a8e180317f5a4e9750b1795d22a34, type: 2}
@@ -1015,7 +1016,7 @@ PrefabInstance:
       objectReference: {fileID: 1446562999}
     - target: {fileID: 2595365664090884219, guid: 8c04e53b60ba3fc43b09d5d6bf5999ca, type: 3}
       propertyPath: debugSeed
-      value: 12345
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2595365664090884219, guid: 8c04e53b60ba3fc43b09d5d6bf5999ca, type: 3}
       propertyPath: enemySpawner
@@ -1031,7 +1032,7 @@ PrefabInstance:
       objectReference: {fileID: 1819134655}
     - target: {fileID: 2595365664090884219, guid: 8c04e53b60ba3fc43b09d5d6bf5999ca, type: 3}
       propertyPath: useStaticSeed
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3212008869848674931, guid: 8c04e53b60ba3fc43b09d5d6bf5999ca, type: 3}
       propertyPath: m_LocalPosition.x

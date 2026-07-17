@@ -1,6 +1,7 @@
+using Custom.Network;
 using Mirror;
+using Steamworks;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 /// <summary>
 /// 元あるNetworkManagerの派生クラス
@@ -15,6 +16,7 @@ public class CustomNetworkManager : NetworkManager
         base.Awake();
         instance = this;
     }
+    
 
     /// <summary>
     /// サーバー開始時処理
@@ -151,5 +153,32 @@ public class CustomNetworkManager : NetworkManager
         GameObject player = Instantiate(_playerPrefab);
         NetworkServer.AddPlayerForConnection(_conn, player);
 
+    }
+
+
+    /// <summary>
+    /// SteamLobbyを使ってホストを開始
+    /// UIから呼べるよ
+    /// </summary>
+    public void StartSteamHost()
+    {
+        var steamLobby = GetComponent<SteamLobby>();
+
+        if(steamLobby == null)
+        {
+            Debug.LogError("SteamLobby conponent not found");
+            return;
+        }
+
+        steamLobby.CreateLobby();
+    }
+
+    /// <summary>
+    /// SteamLobbyからルーム検索(ロビー一覧作成)
+    /// ボタンからロビーIDを取得しルームに入る
+    /// </summary>
+    public void SearchSteamLobby()
+    {
+        
     }
 }

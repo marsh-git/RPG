@@ -57,7 +57,7 @@ public class HexMapGenerator : MonoBehaviour {
         List<HexTileData> allTileList = new List<HexTileData>();
         Dictionary<int, List<HexTileData>> areaTileMap = new Dictionary<int, List<HexTileData>>();
 
-        // 街の配置予定地（中心座標）を先んじて決定する（mapRandを伝播させて方角も固定）
+        // 街の配置予定地（中心座標）を先んじて決定する（エリア0 -> エリア1 -> エリア2 と数珠繋ぎに決定）
         List<Vector2Int> areaCenters = DecideDirArea(mapRand);
 
         // フェーズ1: 基礎地形の生成 ---
@@ -82,9 +82,9 @@ public class HexMapGenerator : MonoBehaviour {
         // デバッグログに現在のシード値を明記（バグ遭遇時にこの数値をインスペクターにコピペできるようにする）
         Debug.Log($"【マップ生成完了】シード値: {config.Seed} / 総エリア数: {areaCenters.Count} / 総タイル数: {allTileList.Count}");
     }
+
     /// <summary>
     /// すべてのエリアの基礎地形とViewをループ生成する。
-    /// 街マス予定地である場合は、山脈を弾いて最初から「平原」として生成する。
     /// </summary>
     private void GenerateBaseTerrain(
         List<Vector2Int> areaCenters,
@@ -97,6 +97,15 @@ public class HexMapGenerator : MonoBehaviour {
 
         // 街マス（全エリアの中心＋周囲6マス）の座標を事前に計算し、検索が高速なHashSetにプールする
         HashSet<Vector2Int> townCoordinates = PrecomputeTownCoordinates(areaCenters);
+
+        // バイオーム決定用のプールを作成（エリア0は固定で除外、エリア1, 2にランダム割り当て用）
+        List<eBiome> availableBiomes = new List<eBiome>();
+        for(int i = 1; i < (int)eBiome.Max; i++) {
+            eBiome b = (eBiome)i;
+            if(b != eBiome.Grassland) { // エリア0が草原(Plain)と仮定
+                availableBiomes.Add(b);
+            }
+        }
 
         for(int areaID = 0; areaID < areaCenters.Count; areaID++) {
             Vector2Int areaCenter = areaCenters[areaID];
@@ -153,15 +162,30 @@ public class HexMapGenerator : MonoBehaviour {
                 }
             }
 
-            // エリアデータの生成と登録
+            // エリアデータの生成と登録（バイオーム決定ロジックの改善）
+            eBiome areaBiome;
+            if(areaID == 0) {
+                areaBiome = eBiome.Grassland; // エリア0は「草原」で確定
+            } else {
+                // エリア1以降は重複しないよう、プールからランダムに取得して消費する
+                if(availableBiomes.Count > 0) {
+                    int randBiomeIdx = mapRand.Next(0, availableBiomes.Count);
+                    areaBiome = availableBiomes[randBiomeIdx];
+                    availableBiomes.RemoveAt(randBiomeIdx); // 重複回避のため削除
+                } else {
+                    // 万が一プールが枯渇した場合はセーフティとしてフォールバック
+                    areaBiome = (eBiome)((areaID % (int)eBiome.Max) + 1);
+                }
+            }
+
             HexAreaData newAreaData = new HexAreaData();
-            eBiome areaBiome = (eBiome)((areaID % (int)eBiome.Max) + 1);
             newAreaData.Setup(areaID, areaCenter.x, areaCenter.y, areaBiome, registeredTileIDs);
             HexTileManager.instance.AddArea(newAreaData);
 
             areaTileMap[areaID] = areaTiles;
         }
     }
+
     /// <summary>
     /// 各エリアの中心に街マス（1+6マス）の「属性（データ）」を付与する。
     /// </summary>
@@ -190,6 +214,7 @@ public class HexMapGenerator : MonoBehaviour {
             }
         }
     }
+
     /// <summary>
     /// 特殊属性（前哨基地・イベント・作物）を、開いたマスに対して確率配置する
     /// </summary>
@@ -214,24 +239,26 @@ public class HexMapGenerator : MonoBehaviour {
         }
 
         // 残りの空きマスに対して、イベントマス・作物マスを設定された確率に基づいて配置
+        List<EventDataBase> eventDataList = new List<EventDataBase>(EventManager.instance.eventDatas);
         foreach(var tile in emptyTiles) {
             double roll = mapRand.NextDouble();
-
-            if(roll < config.EventTileChance) {
+            // イベントマス
+            if(roll < config.EventTileChance && eventDataList.Count > 0) {
                 tile.SetAttributeTile(AttributeFactory.Create(eAttribute.Event));
                 if(tile.attributeTile is EventAttribute eventTile) {
-                    // イベントの設定
-
-                    int eventID = mapRand.Next(0, EventManager.instance.eventDatas.Length);
-                    eventTile.Setup(eventID);
+                    int eventID = mapRand.Next(0, eventDataList.Count);
+                    EventDataBase eventData = eventDataList[eventID];
+                    eventTile.Setup(eventID, eventData.endEventFlag);
+                    eventDataList.RemoveAt(eventID);
                 }
             } else if(roll < config.EventTileChance + config.CropsTileChance) {
                 tile.SetAttributeTile(AttributeFactory.Create(eAttribute.Crops));
-            }else {
+            } else {
                 tile.SetAttributeTile(AttributeFactory.Create(eAttribute.None));
             }
         }
     }
+
     /// <summary>
     /// 全てのタイルの見た目の変更
     /// </summary>
@@ -241,6 +268,7 @@ public class HexMapGenerator : MonoBehaviour {
             SetTileObjectView(tileData);
         }
     }
+
     /// <summary>
     /// タイルの見た目設定
     /// </summary>
@@ -253,6 +281,7 @@ public class HexMapGenerator : MonoBehaviour {
         // 見た目の適応
         tileObject.RefreshVisuals(data, biomeData);
     }
+
     /// <summary>
     /// 確定したマップオブジェクト群に対してユニットのスポーン命令を出す
     /// </summary>
@@ -260,6 +289,7 @@ public class HexMapGenerator : MonoBehaviour {
         playerSpawner.Spawn(playerSpawnCandidates);
         enemySpawner.SpawnOutpost(playerSpawnCandidates, 3);
     }
+
     /// <summary>
     /// 各エリアの中心と、そこから隣接する6方向のすべての「街予定地」のグローバル座標を事前に計算する
     /// </summary>
@@ -307,6 +337,7 @@ public class HexMapGenerator : MonoBehaviour {
 
         return eTerrain.Mountain;
     }
+
     /// <summary>
     /// 選択された難易度プリセットから、マップ生成の設定オブジェクト（Config）をビルドして返す
     /// </summary>
@@ -332,6 +363,7 @@ public class HexMapGenerator : MonoBehaviour {
         }
         return config;
     }
+
     /// <summary>
     /// デバッグ用のランダム生成エントリ（HexTileManagerのAwakeから呼ばれる）
     /// </summary>
@@ -349,23 +381,50 @@ public class HexMapGenerator : MonoBehaviour {
         MapGenerationConfig debugConfig = DecideConfigByLevel(eGameLevel.Normal, seed);
         CreateMap(debugConfig);
     }
+
     /// <summary>
-    /// 決定論的に隣接エリアの方向・座標を算出する
+    /// 決定論的に隣接エリアの方向・座標を、数珠繋ぎに(エリア0 -> エリア1 -> エリア2)重複を回避して算出する
     /// </summary>
     private static List<Vector2Int> DecideDirArea(System.Random rand) {
+        // スタート: エリア0は原点(0,0)から
         List<Vector2Int> areaCentersToCreate = new List<Vector2Int> { new Vector2Int(0, 0) };
+
+        // 1ステップあたりの移動オフセット（隣り合う大きなヘックスマップの中心間距離）
         Vector2Int[] bigHexOffsets = new Vector2Int[] {
             new Vector2Int(21, -10), new Vector2Int(10, 11), new Vector2Int(-11, 21),
             new Vector2Int(-21, 10), new Vector2Int(-10, -11), new Vector2Int(11, -21)
         };
 
-        List<int> directionIndices = new List<int> { 0, 1, 2, 3, 4, 5 };
-        for(int i = 0; i < 2; i++) {
-            int randIdx = rand.Next(0, directionIndices.Count);
-            int chosenDirIdx = directionIndices[randIdx];
-            directionIndices.RemoveAt(randIdx);
-            areaCentersToCreate.Add(bigHexOffsets[chosenDirIdx]);
+        // エリア1の方向を決定（エリア0を基準）
+        int dirIndexArea1 = rand.Next(0, bigHexOffsets.Length);
+        Vector2Int area1Center = bigHexOffsets[dirIndexArea1];
+        areaCentersToCreate.Add(area1Center);
+
+        // エリア2の方向を決定（エリア1を基準。エリア0へ戻らないようにする）
+        Vector2Int area2Center = Vector2Int.zero;
+        List<Vector2Int> possibleOffsetsForArea2 = new List<Vector2Int>();
+
+        foreach(var offset in bigHexOffsets) {
+            Vector2Int candidatePos = area1Center + offset;
+
+            // 重要：エリア0（原点）の位置に重複して重ならない（=逆流しない）かつ、
+            // すでに登録されている位置と被らない安全な移動候補のみを許可
+            if(candidatePos != Vector2Int.zero && !areaCentersToCreate.Contains(candidatePos)) {
+                possibleOffsetsForArea2.Add(offset);
+            }
         }
+
+        // 安全に進行方向を抽選
+        if(possibleOffsetsForArea2.Count > 0) {
+            int randIdx = rand.Next(0, possibleOffsetsForArea2.Count);
+            area2Center = area1Center + possibleOffsetsForArea2[randIdx];
+        } else {
+            // 万が一のデッドロック回避のフォールバック
+            area2Center = area1Center + bigHexOffsets[(dirIndexArea1 + 2) % bigHexOffsets.Length];
+        }
+
+        areaCentersToCreate.Add(area2Center);
+
         return areaCentersToCreate;
     }
 }

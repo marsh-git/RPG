@@ -5,16 +5,21 @@ using UnityEngine;
 public class EventAttribute : IAttributeTile{
     // イベントID
     public int eventID { get; private set; } = -1;
+    // イベント削除フラグ
+    private bool _isDeleteEvent = false;
     /// <summary>
     /// 自身の属性取得
     /// </summary>
     public eAttribute AttributeType => eAttribute.Event;
+
     /// <summary>
     /// 準備処理
     /// </summary>
-    /// <param name="setID"></param>
-    public void Setup(int setEventID) {
+    /// <param name="setEventID"></param>
+    /// <param name="setDeleteFlag"></param>
+    public void Setup(int setEventID, bool setDeleteFlag) {
         eventID = setEventID;
+        _isDeleteEvent = setDeleteFlag;
     }
     /// <summary>
     /// キャラクターがこのマスを踏んだ瞬間の処理
@@ -26,7 +31,7 @@ public class EventAttribute : IAttributeTile{
         // イベント開始
         EventManager.instance.StartEvent(eventID);
         // 自身の属性をクリア
-        tile.ClearAtrribute();
+        if(_isDeleteEvent) tile.ClearAtrribute();
     }
     /// <summary>
     /// キャラクターがこのマスでターン終了した時の処理

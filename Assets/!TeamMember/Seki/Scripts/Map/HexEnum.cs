@@ -48,6 +48,7 @@ public enum eAttribute {
     Town,       // 街マス
     Outpost,    // 敵の前哨基地マス
     Shop,       // ショップ
+    CheckPoint, // チェックポイント
     CannotMove, // 進行不可能マス
 
     Max

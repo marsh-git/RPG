@@ -161,8 +161,7 @@ public class HexMapGenerator : MonoBehaviour {
                     currentTileID++;
                 }
             }
-
-            // エリアデータの生成と登録（バイオーム決定ロジックの改善）
+            // エリアデータの生成と登録
             eBiome areaBiome;
             if(areaID == 0) {
                 areaBiome = eBiome.Grassland; // エリア0は「草原」で確定

@@ -179,6 +179,14 @@ public class CustomNetworkManager : NetworkManager
     /// </summary>
     public void SearchSteamLobby()
     {
-        
+        var steamLobby = GetComponent<SteamLobby>();
+
+        if (steamLobby == null)
+        {
+            Debug.LogError("SteamLobby conponent not found");
+            return;
+        }
+
+        steamLobby.ShowRequesetLobbyList();
     }
 }

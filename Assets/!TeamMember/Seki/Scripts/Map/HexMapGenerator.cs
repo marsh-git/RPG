@@ -238,23 +238,45 @@ public class HexMapGenerator : MonoBehaviour {
         }
 
         // 残りの空きマスに対して、イベントマス・作物マスを設定された確率に基づいて配置
+        // イベントマスの配置
+        // ※ 確率から算出した目標配置数を決め、使用したマスは emptyTiles から除外する
         List<EventDataBase> eventDataList = new List<EventDataBase>(EventManager.instance.eventDatas);
-        foreach(var tile in emptyTiles) {
-            double roll = mapRand.NextDouble();
-            // イベントマス
-            if(roll < config.EventTileChance && eventDataList.Count > 0) {
-                tile.SetAttributeTile(AttributeFactory.Create(eAttribute.Event));
-                if(tile.attributeTile is EventAttribute eventTile) {
-                    int eventID = mapRand.Next(0, eventDataList.Count);
-                    EventDataBase eventData = eventDataList[eventID];
-                    eventTile.Setup(eventID, eventData.endEventFlag);
-                    eventDataList.RemoveAt(eventID);
-                }
-            } else if(roll < config.EventTileChance + config.CropsTileChance) {
-                tile.SetAttributeTile(AttributeFactory.Create(eAttribute.Crops));
-            } else {
-                tile.SetAttributeTile(AttributeFactory.Create(eAttribute.None));
+        int targetEventCount = Mathf.RoundToInt(emptyTiles.Count * config.EventTileChance);
+
+        while(targetEventCount > 0 && eventDataList.Count > 0 && emptyTiles.Count > 0) {
+            int tileIdx = mapRand.Next(0, emptyTiles.Count);
+            HexTileData targetTile = emptyTiles[tileIdx];
+
+            targetTile.SetAttributeTile(AttributeFactory.Create(eAttribute.Event));
+            if(targetTile.attributeTile is EventAttribute eventTile) {
+                int eventID = mapRand.Next(0, eventDataList.Count);
+                EventDataBase eventData = eventDataList[eventID];
+
+                eventTile.Setup(eventID, eventData.endEventFlag);
+                eventDataList.RemoveAt(eventID); // イベントデータの重複を防止
             }
+
+            emptyTiles.RemoveAt(tileIdx); // 配置したタイルをリストから除外して重複を防止
+            targetEventCount--;
+        }
+
+        // 作物マスの配置
+        // ※ イベントマスを除外した後の「残りの空きマス」に対して個数を算出して配置する
+        int targetCropsCount = Mathf.RoundToInt(emptyTiles.Count * config.CropsTileChance);
+
+        while(targetCropsCount > 0 && emptyTiles.Count > 0) {
+            int tileIdx = mapRand.Next(0, emptyTiles.Count);
+            HexTileData targetTile = emptyTiles[tileIdx];
+
+            targetTile.SetAttributeTile(AttributeFactory.Create(eAttribute.Crops));
+
+            emptyTiles.RemoveAt(tileIdx); // 配置したタイルをリストから除外
+            targetCropsCount--;
+        }
+
+        // 残ったタイルは明確に None（何もないマス）として確定
+        foreach(var tile in emptyTiles) {
+            tile.SetAttributeTile(AttributeFactory.Create(eAttribute.None));
         }
     }
 

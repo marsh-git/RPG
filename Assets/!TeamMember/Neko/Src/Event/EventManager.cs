@@ -8,7 +8,7 @@ public class EventManager : MonoBehaviour
 {
     public static EventManager instance { get; private set; }
 
-    [Header("イベントUI")]
+    [Header("生成するイベントUI")]
     [SerializeField] public Canvas eventUI;
 
     [Header("ボタン")]
@@ -17,16 +17,14 @@ public class EventManager : MonoBehaviour
     [Header("ゲーム内で使用するイベントデータの配列")]
     [SerializeField] public EventDataBase[] eventDatas;
 
+    //  生成したCanvasを格納する専用変数
+    private Canvas canvas;
+
     private bool doingEvent = false;
 
     private void Awake()
     {
         instance = this;
-    }
-
-    private void Start()
-    {
-        if(eventUI != null) eventUI.gameObject.SetActive(false);
     }
 
     /// <summary>
@@ -37,7 +35,7 @@ public class EventManager : MonoBehaviour
     {
         if(eventDatas == null)
         {
-            Debug.LogWarning("eventUIが取得できませんでした");
+            Debug.LogWarning("イベントデータが取得できませんでした");
             return;
         }
 
@@ -51,14 +49,10 @@ public class EventManager : MonoBehaviour
     /// </summary>
     private void SetEventUI(int eventNum)
     {
-        if (eventUI == null)
-        {
-            Debug.LogWarning("eventUIが取得できませんでした");
-            return;
-        }
-        eventUI.gameObject.SetActive(true);
+        canvas = Instantiate(eventUI);
+        
 
-        eventDatas[eventNum].SetEventUI(eventUI);
+        eventDatas[eventNum].SetEventUI(canvas);
     }
 
     /// <summary>
@@ -67,7 +61,7 @@ public class EventManager : MonoBehaviour
     public void CloseEventUI()
     {
         doingEvent = false;
-        eventUI.gameObject.SetActive(false);
+        Destroy(canvas.gameObject);
     }
 
     /// <summary>

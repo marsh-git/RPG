@@ -977,7 +977,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   eventUI: {fileID: 1076690669}
-  eventButton: {fileID: 0}
+  eventButton: {fileID: 7616611666898629563, guid: cb2318a830a7a96419ef062bea32304c, type: 3}
   eventDatas:
   - {fileID: 11400000, guid: 2cb58444a9755f74998728e666f41186, type: 2}
   - {fileID: 11400000, guid: 633a8e180317f5a4e9750b1795d22a34, type: 2}

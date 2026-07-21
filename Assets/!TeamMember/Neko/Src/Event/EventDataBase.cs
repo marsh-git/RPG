@@ -6,6 +6,10 @@ using UnityEngine.UI;
 
 public abstract class EventDataBase : ScriptableObject
 {
+    //  イベント固有ID
+    private int eventID;
+    public int EventID => eventID;
+
     [Header("イベント名")]
     [SerializeField] protected string eventName;
 
@@ -74,4 +78,9 @@ public abstract class EventDataBase : ScriptableObject
         return children;
     }
 
+
+    public void SetEventID(int id)
+    {
+        eventID = id;
+    }
 }

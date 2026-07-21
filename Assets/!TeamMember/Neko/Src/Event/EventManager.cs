@@ -25,6 +25,11 @@ public class EventManager : MonoBehaviour
     private void Awake()
     {
         instance = this;
+
+        for (int i = 0; i < eventDatas.Length; i++)
+        {
+            eventDatas[i].SetEventID(i);
+        }
     }
 
     /// <summary>

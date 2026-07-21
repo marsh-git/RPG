@@ -252,7 +252,7 @@ public class HexMapGenerator : MonoBehaviour {
                 int eventID = mapRand.Next(0, eventDataList.Count);
                 EventDataBase eventData = eventDataList[eventID];
 
-                eventTile.Setup(eventID, eventData.endEventFlag);
+                eventTile.Setup(eventData.EventID, eventData.endEventFlag);
                 eventDataList.RemoveAt(eventID); // イベントデータの重複を防止
             }
 

@@ -15,6 +15,7 @@ public class JobData : ScriptableObject
 
     //  アクションのデータ配列
 
+
     //  初期アクションデータ
 
 }

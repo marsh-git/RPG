@@ -51,7 +51,7 @@ namespace Custom.Network
         /// SteamLobby一覧作成
         /// </summary>
         /// <param name="_root"></param>
-        public void ShowRequesetLobbyList(RectTransform _root)
+        public void ShowRequesetLobbyList()
         {
             if (networkManager == null) return;
 

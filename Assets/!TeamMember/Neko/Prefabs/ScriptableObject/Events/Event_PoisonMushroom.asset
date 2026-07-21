@@ -1,0 +1,79 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cef4ff9f28dc0c44c9edc45840142fe8, type: 3}
+  m_Name: Event_PoisonMushroom
+  m_EditorClassIdentifier: 
+  eventName: "\u4E0D\u601D\u8B70\u306A\u30AD\u30CE\u30B3"
+  eventDescription: "\u9BAE\u3084\u304B\u306A\u8272\u306E\u30AD\u30CE\u30B3\u304C\u751F\u3048\u3066\u3044\u308B\u3002\n\u98DF\u3079\u3089\u308C\u305D\u3046\u3060\u304C\u5371\u967A\u306A\u9999\u308A\u3082\u3059\u308B\u3002"
+  eventImage: {fileID: 21300000, guid: ec28b324762dae7469079c6b051a9212, type: 3}
+  addStatus:
+    maxHp: 0
+    attack: 0
+    defense: 0
+    luck: 0
+    radius: 0
+  endEventFlag: 1
+  buttonInfos:
+  - buttonText: "\u30AD\u30CE\u30B3\u3092\u53E3\u306B\u3059\u308B"
+    subText: "HP-10\u3000\u30E9\u30F3\u30C0\u30E0\u3067\u30B9\u30C6\u30FC\u30BF\u30B9\u304C\u4E0A\u6607"
+  - buttonText: "\u4F55\u3082\u305B\u305A\u7ACB\u3061\u53BB\u308B"
+    subText: 
+  - buttonText: "\u7ACB\u3061\u53BB\u308B"
+    subText: 
+  nextEventDescription:
+  - "\u6FC0\u3057\u3044\u8179\u75DB\u3068\u5410\u304D\u6C17\u306B\u8972\u308F\u308C\u305F\u304C\n\u306A\u306B\u304B\u529B\u3092\u5F97\u308C\u305F\u6C17\u304C\u3059\u308B\u3002"
+  choiceData:
+  - addStatus: 1
+    addRelic: 0
+    takeDamage: 1
+    takeHeal: 0
+    status:
+    - maxHp: 5
+      attack: 0
+      defense: 0
+      luck: 0
+      radius: 0
+    - maxHp: 0
+      attack: 2
+      defense: 0
+      luck: 0
+      radius: 0
+    - maxHp: 0
+      attack: 0
+      defense: 2
+      luck: 0
+      radius: 0
+    - maxHp: 0
+      attack: 0
+      defense: 0
+      luck: 2
+      radius: 0
+    - maxHp: 0
+      attack: 0
+      defense: 0
+      luck: 5
+      radius: 1
+    relicData: []
+    damage: 10
+    heal: 0
+    nextPage: 1
+    addRandom: 1
+  - addStatus: 0
+    addRelic: 0
+    takeDamage: 0
+    takeHeal: 0
+    status: []
+    relicData: []
+    damage: 0
+    heal: 0
+    nextPage: 0
+    addRandom: 0

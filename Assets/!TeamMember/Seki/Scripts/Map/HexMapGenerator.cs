@@ -28,6 +28,7 @@ public class HexMapGenerator : MonoBehaviour {
 
     [Header("一括管理マスターデータベース参照")]
     [SerializeField] private BiomeDataSO mapConfig = null;
+    [SerializeField] private CropsDataSO cropsConfig = null;
 
     [Header("Debug Settings")]
     [Tooltip("チェックを入れると、下の debugSeed で指定したシード値で固定されます")]
@@ -133,7 +134,7 @@ public class HexMapGenerator : MonoBehaviour {
                     }
 
                     // View（3Dオブジェクト）のインスタンス化
-                    HexTileObject newTileObject = Instantiate(_spawnTile, Vector3.zero, Quaternion.Euler(0, 30, 0), this.transform);
+                    HexTileObject newTileObject = Instantiate(_spawnTile, Vector3.zero, Quaternion.Euler(0, 30, 0), transform);
                     newTileObject.Setup(currentTileID, spawnPosition);
                     newTileObject.name = $"Tile_[ID:{currentTileID}]_Area:{areaID}_G({globalQ},{globalR})";
 

@@ -12,4 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ef534717168738448522dbbc24fdbcc, type: 3}
   m_Name: CropsDataBase
   m_EditorClassIdentifier: 
-  cropsPhases: []
+  cropsDataList:
+  - ID: 0
+    name: "\u3058\u3083\u304C\u3044\u3082"
+    seed: {fileID: 3926867340351292747, guid: 3218543e6cc66b64c87cad2b088cbe84, type: 3}
+    sprout: {fileID: 1436343783164111762, guid: dd8a02333d3a9a8488afabb492be8fe0, type: 3}
+    harvest: {fileID: 8899319340355469315, guid: aeb677831dcb36449b4c6c540f65c922, type: 3}

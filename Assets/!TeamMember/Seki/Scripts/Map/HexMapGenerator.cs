@@ -406,7 +406,7 @@ public class HexMapGenerator : MonoBehaviour {
         foreach(var offset in bigHexOffsets) {
             Vector2Int candidatePos = area1Center + offset;
 
-            // 重要：エリア0（原点）の位置に重複して重ならない（=逆流しない）かつ、
+            // エリア0（原点）の位置に重複して重ならない（=逆流しない）かつ、
             // すでに登録されている位置と被らない安全な移動候補のみを許可
             if(candidatePos != Vector2Int.zero && !areaCentersToCreate.Contains(candidatePos)) {
                 possibleOffsetsForArea2.Add(offset);

@@ -31,7 +31,11 @@ public class TitlePart : BasePart
 
     }
 
-
+    /// <summary>
+    /// UI等共通処理(ローカル)
+    /// ネット起動前は全部こっち
+    /// </summary>
+    /// <returns></returns>
     public override async UniTask Execute()
     {
         await UniTask.WaitUntil(()=>goToSelectPart);

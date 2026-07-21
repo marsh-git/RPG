@@ -25,6 +25,7 @@ public class MainGamePart : BasePart
 
         foreach(var conn in NetworkServer.connections.Values)
         {
+            //プレイヤー生成はここ
             NetworkServer.AddPlayerForConnection(conn, CustomNetworkManager.instance.playerPrefab);
         }
     }

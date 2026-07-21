@@ -26,7 +26,7 @@ MonoBehaviour:
       outpost: {fileID: 4032082283423262648, guid: 96f15f3a3d748ee439e416d55a853452, type: 3}
       shop: {fileID: 1372424057073421254, guid: 0d69ad3ff5aa07149b8f36e0b906c045, type: 3}
   desert:
-    terrainMaterial: {fileID: 2100000, guid: 567ffde350fbcaf4b9c62a0177a09824, type: 2}
+    terrainMaterial: {fileID: 2100000, guid: da86e0e9da248f44685781dc53d77c8f, type: 2}
     terrainLayer:
       plain: {fileID: 4662350808750457627, guid: 201b6ca96d363a340a9698e7778a202c, type: 3}
       hill: {fileID: 2990853941399782062, guid: e3dbbcf07d93d434da0f532bbdf6c662, type: 3}

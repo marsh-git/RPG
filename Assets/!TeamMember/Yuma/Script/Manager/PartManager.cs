@@ -74,7 +74,6 @@ public class PartManager : SystemObject
 
         //実行処理
         currentPart.ServerExecute().Forget();
-        currentPart.Execute().Forget();
 
 
         PartNetworkGame.instance.SetPart(_nextPart);

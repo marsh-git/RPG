@@ -7,17 +7,12 @@ public class CropsDataSO : ScriptableObject {
     public List<CropsVisual> cropsDataList = new List<CropsVisual>();
 
     /// <summary>
-    /// IDに応じたオブジェクトを返す
+    /// 指定した作物IDと成長段階に応じたPrefabを取得する
     /// </summary>
-    /// <param name="ID"></param>
-    /// <returns></returns>
-    public CropsVisual GetCropsVisual(int ID) {
-        if(CommonModule.IsEmpty(cropsDataList)) return new CropsVisual();
+    public GameObject GetCropsPrefab(int cropsID, eCropsProcess process) {
+        if(CommonModule.IsEmpty(cropsDataList)) return null;
 
-        for(int i = 0, max = cropsDataList.Count; i < max; i++) {
-            CropsVisual cropsData = cropsDataList[i];
-            if(cropsData.ID == ID) return cropsData;
-        }
-        return new CropsVisual();
+        CropsVisual visual = cropsDataList.Find(c => c.ID == cropsID);
+        return visual.GetPrefab(process);
     }
 }

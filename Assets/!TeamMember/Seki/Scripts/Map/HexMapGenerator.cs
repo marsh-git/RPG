@@ -50,6 +50,8 @@ public class HexMapGenerator : MonoBehaviour {
     /// </summary>
     /// <param name="config">生成ルールパラメータ</param>
     public void CreateMap(MapGenerationConfig config) {
+        // マスターデータ管理クラスの初期化
+        TileVisualAssignor.Initialize(mapConfig, cropsConfig);
         // マップ生成専用に独立した乱数インスタンスをシード値固定で生成（非決定的な挙動の排除）
         System.Random mapRand = new System.Random(config.Seed);
 
@@ -263,15 +265,20 @@ public class HexMapGenerator : MonoBehaviour {
 
         // 作物マスの配置
         // ※ イベントマスを除外した後の「残りの空きマス」に対して個数を算出して配置する
-        int targetCropsCount = Mathf.RoundToInt(emptyTiles.Count * config.CropsTileChance);
+        List<HexTileData> cropsCandidates = emptyTiles.FindAll(t => t.terrain == eTerrain.Plain || t.terrain == eTerrain.Hill);
+        int targetCropsCount = Mathf.RoundToInt(cropsCandidates.Count * config.CropsTileChance);
 
-        while(targetCropsCount > 0 && emptyTiles.Count > 0) {
-            int tileIdx = mapRand.Next(0, emptyTiles.Count);
-            HexTileData targetTile = emptyTiles[tileIdx];
+        while(targetCropsCount > 0 && cropsCandidates.Count > 0) {
+            int tileIdx = mapRand.Next(0, cropsCandidates.Count);
+            HexTileData targetTile = cropsCandidates[tileIdx];
 
             targetTile.SetAttributeTile(AttributeFactory.Create(eAttribute.Crops));
 
-            emptyTiles.RemoveAt(tileIdx); // 配置したタイルをリストから除外
+            // 初期状態の作物データのセットアップ（TODO : 現在の作物IDは0（じゃがいも）固定）
+            if(targetTile.attributeTile is CropsAttribute cropsTile) cropsTile.Setup(0);
+
+            emptyTiles.Remove(targetTile);
+            cropsCandidates.RemoveAt(tileIdx);
             targetCropsCount--;
         }
 
@@ -280,30 +287,15 @@ public class HexMapGenerator : MonoBehaviour {
             tile.SetAttributeTile(AttributeFactory.Create(eAttribute.None));
         }
     }
-
     /// <summary>
     /// 全てのタイルの見た目の変更
     /// </summary>
     /// <param name="allTileList"></param>
     public void SetAllTileObjectView(List<HexTileData> allTileList) {
         foreach(var tileData in allTileList) {
-            SetTileObjectView(tileData);
+            TileVisualAssignor.SetTileObjectView(tileData);
         }
     }
-
-    /// <summary>
-    /// タイルの見た目設定
-    /// </summary>
-    /// <param name="data"></param>
-    public void SetTileObjectView(HexTileData data) {
-        if(data == null) return;
-        HexTileObject tileObject = data.GetObject();
-        // バイオームデータの取得
-        BiomeData biomeData = mapConfig.GetBiomeData(data.biome);
-        // 見た目の適応
-        tileObject.RefreshVisuals(data, biomeData);
-    }
-
     /// <summary>
     /// 確定したマップオブジェクト群に対してユニットのスポーン命令を出す
     /// </summary>

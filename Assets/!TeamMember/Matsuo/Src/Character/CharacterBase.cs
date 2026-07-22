@@ -28,6 +28,12 @@ public abstract class CharacterBase : MonoBehaviour
 
     // 移動ルート
     public List<HexTileData> currentMoveRoute { get; private set; } = new List<HexTileData>();
+
+    // 属性
+    [SerializeField]
+    private ElementType element;
+    public ElementType Element => element;
+
     /// <summary>
     /// キャラクターの初期化
     /// </summary>
@@ -121,15 +127,40 @@ public abstract class CharacterBase : MonoBehaviour
     }
 
     /// <summary>
-    /// ダメージを受ける
+    /// 防御などのダメージ計算をしない定数ダメージを受ける
     /// </summary>
-    /// <param name="damage">受けるダメージ量</param>
+    /// <param name="damage">攻撃力</param>
     public virtual void TakeDamage(int damage)
     {
+
+        // HPを減らす
+        hp -= damage;
+
+        // HPが0以下なら死亡
+        if (hp <= 0)
+        {
+            Die();
+        }
+    }
+
+    /// <summary>
+    /// ダメージを受ける
+    /// </summary>
+    /// <param name="damage">攻撃力</param>
+    /// <param name="attackElement">攻撃側の属性</param>
+    public virtual void TakeDamage(int damage, ElementType attackElement)
+    {
+        // 防御力を考慮したダメージ
         int finalDamage = Mathf.Max(1, damage - status.defense);
 
+        // 属性相性を適用
+        float rate = ElementCalculator.GetRate(attackElement, Element);
+        finalDamage = Mathf.Max(1, Mathf.RoundToInt(finalDamage * rate));
+
+        // HPを減らす
         hp -= finalDamage;
 
+        // HPが0以下なら死亡
         if (hp <= 0)
         {
             Die();

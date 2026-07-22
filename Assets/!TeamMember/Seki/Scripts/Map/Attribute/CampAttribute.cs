@@ -2,13 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CheckPointAttribute : IAttributeTile {
-    private List<int> _checkPlayerIDList = null;
+public class CampAttribute : IAttributeTile {
+    // クールタイマーを計るカウンター
+    private int _useCoolTimer = -1;
+    // キャンプ使用フラグ
+    private bool _isUse = false;
+
+    private const int _COOL_TIMER = 5;
 
     /// <summary>
     /// 自身の属性取得
     /// </summary>
-    public eAttribute AttributeType => eAttribute.CheckPoint;
+    public eAttribute AttributeType => eAttribute.Camp;
     /// <summary>
     /// キャラクターがこのマスを踏んだ瞬間
     /// </summary>
@@ -30,7 +35,25 @@ public class CheckPointAttribute : IAttributeTile {
     /// </summary>
     /// <param name="tile"></param>
     public void OnTickTile(HexTileData tile) {
-        throw new System.NotImplementedException();
-    }
+        if(!_isUse) return;
 
+        _useCoolTimer--;
+        if(_useCoolTimer <= 0) {
+            _useCoolTimer = _COOL_TIMER;
+            _isUse = false;
+        }
+    }
+    /// <summary>
+    /// 準備処理
+    /// </summary>
+    public void Setup() {
+        _isUse = false;
+        _useCoolTimer = _COOL_TIMER;
+    }
+    /// <summary>
+    /// キャンプ使用処理
+    /// </summary>
+    public void UseCamp() {
+        _isUse = true;
+    }
 }

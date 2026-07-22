@@ -1555,6 +1555,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: EventManager
       objectReference: {fileID: 0}
+    - target: {fileID: 3278065201190670609, guid: 6ad3b299ad271f54c8f53cb7339f96c4, type: 3}
+      propertyPath: eventDatas.Array.size
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3278065201190670609, guid: 6ad3b299ad271f54c8f53cb7339f96c4, type: 3}
+      propertyPath: eventDatas.Array.data[4]
+      value: 
+      objectReference: {fileID: 11400000, guid: 9c55c2f8fdf94a042a77eae7bfb9fabf, type: 2}
     - target: {fileID: 8862157623003850392, guid: 6ad3b299ad271f54c8f53cb7339f96c4, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

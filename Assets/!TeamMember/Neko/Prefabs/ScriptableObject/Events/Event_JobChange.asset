@@ -23,14 +23,14 @@ MonoBehaviour:
     radius: 0
   endEventFlag: 0
   buttonInfos:
-  - buttonText: 
-    subText: 
-  - buttonText: 
-    subText: 
-  - buttonText: 
-    subText: 
-  - buttonText: "\u7ACB\u3061\u53BB\u308B"
+  - mainText: "{0}\u306E\u904B\u547D\u3092\u8FBF\u308B"
+    subText: "{0}\u306B\u8EE2\u8077\u3059\u308B"
+  - mainText: "{0}\u306E\u904B\u547D\u3092\u8FBF\u308B"
+    subText: "{0}\u306B\u8EE2\u8077\u3059\u308B"
+  - mainText: "{0}\u306E\u904B\u547D\u3092\u8FBF\u308B"
+    subText: "{0}\u306B\u8EE2\u8077\u3059\u308B"
+  - mainText: "\u7ACB\u3061\u53BB\u308B"
     subText: 
   nextEventDescription:
-  - "\u7D50\u6676\u306B\u89E6\u308C\u305F\u77AC\u9593\u3001\u7729\u3044\u5149\u304C\u3042\u306A\u305F\u3092\u5305\u307F\u8FBC\u3080\u3002"
+  - "\u7D50\u6676\u306B\u89E6\u308C\u305F\u77AC\u9593\u3001\u7729\u3044\u5149\u304C\u3042\u306A\u305F\u3092\u5305\u307F\u8FBC\u3080\u3002\n{0}"
   jobNum: 000000000100000002000000

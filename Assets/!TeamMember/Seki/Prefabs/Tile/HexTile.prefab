@@ -757,7 +757,7 @@ MonoBehaviour:
   - {fileID: 8027961657661291795}
   - {fileID: 3472349046304048849}
   - {fileID: 6159889957026136349}
-  tileMeshRenderer: {fileID: 8705097495837771255}
+  _tileMeshRenderer: {fileID: 8705097495837771255}
   _terrainRoot: {fileID: 7870041971177714432}
   _attributeRoot: {fileID: 434430598688446641}
 --- !u!1 &7696542002427507210

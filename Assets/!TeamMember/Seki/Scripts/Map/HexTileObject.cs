@@ -11,12 +11,12 @@ public class HexTileObject : MonoBehaviour, IClickable {
     [SerializeField] private GameObject[] _highlightEffectList = null;
 
     [Header("コンポーネント参照")]
-    [SerializeField] private MeshRenderer tileMeshRenderer = null;
+    [SerializeField] private MeshRenderer _tileMeshRenderer = null;
     [SerializeField] private Transform _terrainRoot = null;
     [SerializeField] private Transform _attributeRoot = null;
 
-    private GameObject _terrainObj = null;
-    private GameObject _attributeObj = null;
+    private GameObject _terrainObject = null;
+    private GameObject _attributeObject = null;
 
     /// <summary>
     /// 座標のセットアップ
@@ -54,28 +54,22 @@ public class HexTileObject : MonoBehaviour, IClickable {
     /// 見た目の設定
     /// </summary>
     /// <param name="data"></param>
-    public void RefreshVisuals(HexTileData data, BiomeData biomeData) {
-        if(data == null) return;
-
-        // 地形マテリアルの適用
-        if(biomeData.terrainMaterial != null) tileMeshRenderer.material = biomeData.terrainMaterial;
-
+    public void RefreshVisuals(GameObject terrainObject, GameObject attributeObject, Material terrainMaterial) {
+        // 地形マテリアルの適応
+        if(terrainMaterial != null) _tileMeshRenderer.material = terrainMaterial;
+        // 既存オブジェクトのクリア
         ClearDecorations();
-
         // 地形オブジェクトの生成
-        GameObject terrainPrefab = biomeData.terrainLayer.GetPrefab(data.terrain);
-        if(terrainPrefab != null) _terrainObj = Instantiate(terrainPrefab, _terrainRoot);
-
+        if(terrainObject != null) _terrainObject = Instantiate(terrainObject, _terrainRoot);
         // 属性オブジェクトの生成
-        GameObject attributePrefab = biomeData.attributeLayer.GetPrefab(data.Attribute);
-        if(attributePrefab != null) _attributeObj = Instantiate(attributePrefab, _attributeRoot);
+        if(attributeObject != null)  _attributeObject = Instantiate(attributeObject, _attributeRoot);
     }
     /// <summary>
     /// 見た目オブジェクトの削除
     /// </summary>
     private void ClearDecorations() {
-        if(_terrainObj != null) Destroy(_terrainObj);
-        if(_attributeObj != null) Destroy(_attributeObj);
+        if(_terrainObject != null) Destroy(_terrainObject);
+        if(_attributeObject != null) Destroy(_attributeObject);
     }
     /// <summary>
     /// クリックされたときの処理

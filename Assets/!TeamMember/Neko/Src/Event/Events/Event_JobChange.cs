@@ -62,13 +62,17 @@ public class Event_JobChange : EventDataBase
         {
             button[i] = SetButton();
 
-            buttonInfos[i].SetButtonText(button[i].transform, jobManager.GetJobData(jobNum[i]).jobName);
+            int count = i;
+            if(count >= jobNum.Length) count = jobNum.Length -1;
+
+            buttonInfos[i].SetButtonText(button[i].transform, jobManager.GetJobData(jobNum[count]).jobName);
         }
         
         //  ボタンイベント適応
         for(int i = 0; i < jobNum.Length; i++)
         {
-            button[i].onClick.AddListener(() => OnJobChangeEvent(i));
+            int index = i;
+            button[i].onClick.AddListener(() => OnJobChangeEvent(index));
         }
         button[jobNum.Length].onClick.AddListener(EndEvent);
 

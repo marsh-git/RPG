@@ -70,6 +70,7 @@ public class SelectModePart : BasePart
     {
         foreach(var conn in NetworkServer.connections)
         {
+            //ロビープレイヤーを全削除
             if (conn.Value.identity != null)
                 NetworkServer.Destroy(conn.Value.identity.gameObject);
         }

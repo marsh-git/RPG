@@ -9,7 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f15003f0d762b8e4894f54639fe3981e, type: 3}
+  m_Script: {fileID: 11500000, guid: fb9a17577dce88647b2c2bef71a866fc, type: 3}
   m_Name: BiomeVisualData
   m_EditorClassIdentifier: 
   grassland:
@@ -21,10 +21,10 @@ MonoBehaviour:
       mountain: {fileID: 1937122588696306313, guid: 2c7ee1e005b3a3e438717529a258dde1, type: 3}
     attributeLayer:
       eventTile: {fileID: 5544279110666274664, guid: 702388defc1af534f972214c2d7dbea9, type: 3}
-      crops: {fileID: 1436343783164111762, guid: dd8a02333d3a9a8488afabb492be8fe0, type: 3}
       town: {fileID: 5307299691471629096, guid: c6407ddb55442f54baadfb4334703f62, type: 3}
       outpost: {fileID: 4032082283423262648, guid: 96f15f3a3d748ee439e416d55a853452, type: 3}
       shop: {fileID: 1372424057073421254, guid: 0d69ad3ff5aa07149b8f36e0b906c045, type: 3}
+      camp: {fileID: 2094273672868721967, guid: 9b90e4a241c67d340aed05f9ede22151, type: 3}
   desert:
     terrainMaterial: {fileID: 2100000, guid: da86e0e9da248f44685781dc53d77c8f, type: 2}
     terrainLayer:
@@ -34,10 +34,10 @@ MonoBehaviour:
       mountain: {fileID: 1937122588696306313, guid: 2c7ee1e005b3a3e438717529a258dde1, type: 3}
     attributeLayer:
       eventTile: {fileID: 5544279110666274664, guid: 702388defc1af534f972214c2d7dbea9, type: 3}
-      crops: {fileID: 1436343783164111762, guid: dd8a02333d3a9a8488afabb492be8fe0, type: 3}
       town: {fileID: 5307299691471629096, guid: c6407ddb55442f54baadfb4334703f62, type: 3}
       outpost: {fileID: 4032082283423262648, guid: 96f15f3a3d748ee439e416d55a853452, type: 3}
       shop: {fileID: 1372424057073421254, guid: 0d69ad3ff5aa07149b8f36e0b906c045, type: 3}
+      camp: {fileID: 2094273672868721967, guid: 9b90e4a241c67d340aed05f9ede22151, type: 3}
   rainforest:
     terrainMaterial: {fileID: 2100000, guid: 9664f0b8b9becfc40b5b338479727af0, type: 2}
     terrainLayer:
@@ -47,10 +47,10 @@ MonoBehaviour:
       mountain: {fileID: 1937122588696306313, guid: 2c7ee1e005b3a3e438717529a258dde1, type: 3}
     attributeLayer:
       eventTile: {fileID: 5544279110666274664, guid: 702388defc1af534f972214c2d7dbea9, type: 3}
-      crops: {fileID: 1436343783164111762, guid: dd8a02333d3a9a8488afabb492be8fe0, type: 3}
       town: {fileID: 5307299691471629096, guid: c6407ddb55442f54baadfb4334703f62, type: 3}
       outpost: {fileID: 4032082283423262648, guid: 96f15f3a3d748ee439e416d55a853452, type: 3}
       shop: {fileID: 1372424057073421254, guid: 0d69ad3ff5aa07149b8f36e0b906c045, type: 3}
+      camp: {fileID: 2094273672868721967, guid: 9b90e4a241c67d340aed05f9ede22151, type: 3}
   tundra:
     terrainMaterial: {fileID: 2100000, guid: 50a4cc89bae2d744b871b26775165cd0, type: 2}
     terrainLayer:
@@ -60,10 +60,10 @@ MonoBehaviour:
       mountain: {fileID: 1937122588696306313, guid: 2c7ee1e005b3a3e438717529a258dde1, type: 3}
     attributeLayer:
       eventTile: {fileID: 5544279110666274664, guid: 702388defc1af534f972214c2d7dbea9, type: 3}
-      crops: {fileID: 1436343783164111762, guid: dd8a02333d3a9a8488afabb492be8fe0, type: 3}
       town: {fileID: 5307299691471629096, guid: c6407ddb55442f54baadfb4334703f62, type: 3}
       outpost: {fileID: 4032082283423262648, guid: 96f15f3a3d748ee439e416d55a853452, type: 3}
       shop: {fileID: 1372424057073421254, guid: 0d69ad3ff5aa07149b8f36e0b906c045, type: 3}
+      camp: {fileID: 2094273672868721967, guid: 9b90e4a241c67d340aed05f9ede22151, type: 3}
   volcanic:
     terrainMaterial: {fileID: 2100000, guid: a701c06082eb05f449e0d5c05debabc9, type: 2}
     terrainLayer:
@@ -73,7 +73,7 @@ MonoBehaviour:
       mountain: {fileID: 1937122588696306313, guid: 2c7ee1e005b3a3e438717529a258dde1, type: 3}
     attributeLayer:
       eventTile: {fileID: 5544279110666274664, guid: 702388defc1af534f972214c2d7dbea9, type: 3}
-      crops: {fileID: 1436343783164111762, guid: dd8a02333d3a9a8488afabb492be8fe0, type: 3}
       town: {fileID: 5307299691471629096, guid: c6407ddb55442f54baadfb4334703f62, type: 3}
       outpost: {fileID: 4032082283423262648, guid: 96f15f3a3d748ee439e416d55a853452, type: 3}
       shop: {fileID: 1372424057073421254, guid: 0d69ad3ff5aa07149b8f36e0b906c045, type: 3}
+      camp: {fileID: 2094273672868721967, guid: 9b90e4a241c67d340aed05f9ede22151, type: 3}

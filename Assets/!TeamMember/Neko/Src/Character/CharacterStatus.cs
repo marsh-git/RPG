@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.AssetImporters;
 using UnityEngine;
 
 [System.Serializable]
@@ -10,6 +11,7 @@ public struct CharacterStatus
     public int defense;
     public int luck;
     public int radius;
+    public int coin;
 
     public void Add(CharacterStatus status)
     {
@@ -18,6 +20,7 @@ public struct CharacterStatus
         defense += status.defense;
         luck += status.luck;
         radius += status.radius;
+        coin += status.coin;
     }
 
     public void Reset()
@@ -27,5 +30,6 @@ public struct CharacterStatus
         defense = 0;
         luck = 0;
         radius = 0;
+        coin = 0;
     }
 }

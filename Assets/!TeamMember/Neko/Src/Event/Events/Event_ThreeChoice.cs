@@ -4,15 +4,15 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-[CreateAssetMenu(menuName = "ScriptableObject/EventData/TwoChoice")]
-public class Event_TwoChoice : EventDataBase
+[CreateAssetMenu(menuName = "ScriptableObject/EventData/ThreeChoice")]
+public class Event_ThreeChoice : EventDataBase
 {
     private Button[] button;
 
-    private readonly int BUTTON_COUNT = 2;
+    private readonly int BUTTON_COUNT = 3;
 
     [Header("イベントを決めるボタンのテキスト")]
-    [SerializeField] EventButtonInfo[] buttonInfos = new EventButtonInfo[3];
+    [SerializeField] EventButtonInfo[] buttonInfos = new EventButtonInfo[4];
 
     [Header("次のページのイベントの説明")]
     [TextArea(3, 6)] public string[] nextEventDescription;
@@ -71,7 +71,7 @@ public class Event_TwoChoice : EventDataBase
 
         button = new Button[1];
         button[0] = SetButton();
-        buttonInfos[2].SetButtonText(button[0].transform);
+        buttonInfos[3].SetButtonText(button[0].transform);
 
         button[0].onClick.AddListener(EndEvent);
     }
@@ -91,5 +91,4 @@ public class Event_TwoChoice : EventDataBase
         if (choice.nextPage) EventUpdate();
         else EndEvent();
     }
-
 }

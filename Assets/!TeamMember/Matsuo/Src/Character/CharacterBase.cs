@@ -127,6 +127,23 @@ public abstract class CharacterBase : MonoBehaviour
     }
 
     /// <summary>
+    /// 防御などのダメージ計算をしない定数ダメージを受ける
+    /// </summary>
+    /// <param name="damage">攻撃力</param>
+    public virtual void TakeDamage(int damage)
+    {
+
+        // HPを減らす
+        hp -= damage;
+
+        // HPが0以下なら死亡
+        if (hp <= 0)
+        {
+            Die();
+        }
+    }
+
+    /// <summary>
     /// ダメージを受ける
     /// </summary>
     /// <param name="damage">攻撃力</param>

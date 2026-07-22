@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f15003f0d762b8e4894f54639fe3981e, type: 3}
-  m_Name: BiomeObjectData
+  m_Name: BiomeVisualData
   m_EditorClassIdentifier: 
   grassland:
     terrainMaterial: {fileID: 2100000, guid: ea08560f7d1d41746b68a867eb19abbe, type: 2}

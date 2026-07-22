@@ -37,10 +37,10 @@ public struct TerrainVisual {
 [System.Serializable]
 public struct AttributeVisual {
     public GameObject eventTile; // イベント
-    public GameObject crops;     // 作物
     public GameObject town;      // 街
     public GameObject outpost;   // 前哨基地
     public GameObject shop;      // ショップ
+    public GameObject camp;
 
     /// <summary>
     /// 属性に応じたオブジェクトを返す
@@ -51,14 +51,14 @@ public struct AttributeVisual {
         switch(type) {
             case eAttribute.Event:
             return eventTile;
-            case eAttribute.Crops:
-            return crops;
             case eAttribute.Town:
             return town;
             case eAttribute.Outpost:
             return outpost;
             case eAttribute.Shop:
             return shop;
+            case eAttribute.Camp:
+            return camp;
         }
         return null;
     }
@@ -67,7 +67,7 @@ public struct AttributeVisual {
 /// バイオームごとのデータ
 /// </summary>
 [System.Serializable]
-public struct BiomeData {
+public struct BiomeVisual {
     public Material terrainMaterial; // 地形マテリアル
 
     public TerrainVisual terrainLayer;   // 地形階層

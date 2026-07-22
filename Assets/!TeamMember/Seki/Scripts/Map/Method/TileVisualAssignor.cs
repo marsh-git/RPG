@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public static class TileVisualAssignor {
-    private static BiomeDataSO _biomeData = null;
-    private static CropsDataSO _cropsData = null;
+    private static BiomeVisualDataSO _biomeData = null;
+    private static CropsVisualDataSO _cropsData = null;
 
     /// <summary>
     /// データベースの初期設定（マップ生成開始時等に呼ぶ）
     /// </summary>
-    public static void Initialize(BiomeDataSO biomeData, CropsDataSO cropsData) {
+    public static void Initialize(BiomeVisualDataSO biomeData, CropsVisualDataSO cropsData) {
         _biomeData = biomeData;
         _cropsData = cropsData;
     }
@@ -23,7 +23,7 @@ public static class TileVisualAssignor {
         if(tileObject == null) return;
 
         // バイオームデータの取得
-        BiomeData biomeData = _biomeData.GetBiomeData(data.biome);
+        BiomeVisual biomeData = _biomeData.GetBiomeData(data.biome);
         // 地形オブジェクトの取得
         GameObject terrainObject = biomeData.terrainLayer.GetPrefab(data.terrain);
         // 属性オブジェクトの取得

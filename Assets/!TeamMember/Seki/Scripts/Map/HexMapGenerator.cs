@@ -27,8 +27,8 @@ public class HexMapGenerator : MonoBehaviour {
     [SerializeField] private OutpostSpawner enemySpawner = null;
 
     [Header("一括管理マスターデータベース参照")]
-    [SerializeField] private BiomeDataSO mapConfig = null;
-    [SerializeField] private CropsDataSO cropsConfig = null;
+    [SerializeField] private BiomeVisualDataSO mapConfig = null;
+    [SerializeField] private CropsVisualDataSO cropsConfig = null;
 
     [Header("Debug Settings")]
     [Tooltip("チェックを入れると、下の debugSeed で指定したシード値で固定されます")]

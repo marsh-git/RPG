@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d79a45cdf2084d43b13feac13c8d798, type: 3}
+  m_Name: "\u30B9\u30BF\u30F3"
+  m_EditorClassIdentifier: 
+  EffectName: "\u30B9\u30BF\u30F3"
+  Icon: {fileID: 0}
+  Description: "\u30B9\u30BF\u30F3"
+  Type: 1
+  Duration: 1
+  DamagePerTurn: 0
+  DamageMultiplier: 1
+  MoveLimit: 0
+  ForceDiceToOne: 1
+  IgnoreFireEnemy: 0

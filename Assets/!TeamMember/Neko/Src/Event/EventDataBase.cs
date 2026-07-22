@@ -30,7 +30,7 @@ public abstract class EventDataBase : ScriptableObject
 
     protected Transform[] uiChildren;
 
-    public bool endEventFlag = false;
+    [HideInInspector] public bool endEventFlag = false;
 
     protected abstract void EventUpdate();
 

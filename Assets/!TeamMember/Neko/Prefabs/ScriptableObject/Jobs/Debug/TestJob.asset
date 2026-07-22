@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: TestJob
   m_EditorClassIdentifier: 
   jobName: "\u30CB\u30FC\u30C8"
+  eventDescription: "\u306A\u306B\u304B\u50CD\u304D\u305F\u304F\u306A\u3044\u6C17\u5206\u306B\u306A\u3063\u305F"
   status:
     maxHp: 100
     attack: 0

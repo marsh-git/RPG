@@ -21,6 +21,10 @@ public class Event_JobChange : EventDataBase
     [Header("転職する役職の番号（JobManagerから参照）")]
     [SerializeField] private int[] jobNum = new int[3];
 
+    private JobManager jobManager;
+
+    private int choiceNum;
+
     protected override void EventUpdate()
     {
         //  ボタン破棄
@@ -50,19 +54,25 @@ public class Event_JobChange : EventDataBase
     {
         base.SetEventUI(eventUI);
 
+        jobManager = JobManager.instance;
+
         //  ボタン追加
         button = new Button[BUTTON_COUNT];
         for (int i = 0; i < BUTTON_COUNT; i++)
         {
             button[i] = SetButton();
 
-            buttonInfos[i].SetButtonText(button[i].transform);
+            int count = i;
+            if(count >= jobNum.Length) count = jobNum.Length -1;
+
+            buttonInfos[i].SetButtonText(button[i].transform, jobManager.GetJobData(jobNum[count]).jobName);
         }
         
         //  ボタンイベント適応
         for(int i = 0; i < jobNum.Length; i++)
         {
-            button[i].onClick.AddListener(() => OnJobChangeEvent(i));
+            int index = i;
+            button[i].onClick.AddListener(() => OnJobChangeEvent(index));
         }
         button[jobNum.Length].onClick.AddListener(EndEvent);
 
@@ -70,7 +80,8 @@ public class Event_JobChange : EventDataBase
 
     private void SetUpdateEventUI()
     {
-        uiChildren[EVENTUI_DESCRIPTION].GetComponent<TextMeshProUGUI>().text = nextEventDescription[0];
+        uiChildren[EVENTUI_DESCRIPTION].GetComponent<TextMeshProUGUI>().text
+            = string.Format(nextEventDescription[0], jobManager.GetJobData(choiceNum).jobDescription);
 
         button = new Button[1];
         button[0] = SetButton();
@@ -88,6 +99,7 @@ public class Event_JobChange : EventDataBase
     private void OnJobChangeEvent(int num)
     {
         PlayerBase.instance.SetJob(jobNum[num]);
+        choiceNum = num;
         EventUpdate();
     }
 }

@@ -21,12 +21,13 @@ MonoBehaviour:
     defense: 0
     luck: 0
     radius: 0
+  endEventFlag: 1
   buttonInfos:
-  - buttonText: "\u5263\u3092\u5236\u4F5C\u3059\u308B"
+  - mainText: "\u6B66\u5668\u3092\u5236\u4F5C\u3059\u308B"
     subText: "\u30EC\u30EA\u30C3\u30AF\u3092\u5165\u624B\u3059\u308B"
-  - buttonText: "\u76FE\u3092\u5236\u4F5C\u3059\u308B"
+  - mainText: "\u9632\u5177\u3092\u5236\u4F5C\u3059\u308B"
     subText: "\u30EC\u30EA\u30C3\u30AF\u3092\u5165\u624B\u3059\u308B"
-  - buttonText: "\u7ACB\u3061\u53BB\u308B"
+  - mainText: "\u7ACB\u3061\u53BB\u308B"
     subText: 
   relicData:
   - {fileID: 11400000, guid: c3d9f55b9e5f7b448a20962c7fbe7e0a, type: 2}

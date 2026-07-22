@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c21ebc47d11280a43a3937252dc1fc86, type: 3}
   m_Name: TestJob 2
   m_EditorClassIdentifier: 
-  jobName: "\u30C6\u30B9\u30C8\u7528\u30AB\u30CB"
+  jobName: "\u30C6\u30B9\u30C8\u7528"
+  jobDescription: "\u30C7\u30D0\u30C3\u30B0\u306E\u529B\u624B\u306B\u5165\u308C\u3066\u4F55\u306B\u306A\u308B\u3093"
   status:
     maxHp: 1000
     attack: 0

@@ -28,6 +28,7 @@ public class HexMapGenerator : MonoBehaviour {
     [Header("一括管理マスターデータベース参照")]
     [SerializeField] private BiomeVisualDataSO mapConfig = null;
     [SerializeField] private CropsVisualDataSO cropsConfig = null;
+    [SerializeField] private BiomeTerrainDataSO biomeTerrainConfig = null;
 
     [Header("Debug Settings")]
     [Tooltip("チェックを入れると、下の debugSeed で指定したシード値で固定されます")]
@@ -139,10 +140,8 @@ public class HexMapGenerator : MonoBehaviour {
         ref List<HexTileObject> playerSpawnCandidates) {
         int currentTileID = 0;
 
-        // 街マス（中心＋周囲6マス）の座標を事前に計算し、検索が高速なHashSetにプールする
         HashSet<Vector2Int> townCoordinates = PrecomputeTownCoordinates(townCenters);
 
-        // バイオーム決定用のプールを作成（エリア0は固定で除外、エリア1, 2にランダム割り当て用）
         List<eBiome> availableBiomes = new List<eBiome>();
         for(int i = 1; i < (int)eBiome.Max; i++) {
             eBiome b = (eBiome)i;
@@ -154,6 +153,24 @@ public class HexMapGenerator : MonoBehaviour {
             List<int> registeredTileIDs = new List<int>();
             List<HexTileData> areaTiles = new List<HexTileData>();
 
+            // 1. 先に当エリアのバイオームを決定
+            eBiome areaBiome;
+            if(areaID == 0) {
+                areaBiome = eBiome.Grassland;
+            } else {
+                if(availableBiomes.Count > 0) {
+                    int randBiomeIdx = mapRand.Next(0, availableBiomes.Count);
+                    areaBiome = availableBiomes[randBiomeIdx];
+                    availableBiomes.RemoveAt(randBiomeIdx);
+                } else {
+                    areaBiome = (eBiome)((areaID % (int)eBiome.Max) + 1);
+                }
+            }
+
+            // 2. エリア内のタイルの座標リストを作成＆オブジェクト生成
+            List<Vector2Int> assignableCoords = new List<Vector2Int>();
+            Dictionary<Vector2Int, HexTileData> coordToTileMap = new Dictionary<Vector2Int, HexTileData>();
+
             for(int q = -MAP_RADIUS; q <= MAP_RADIUS; q++) {
                 int rStart = Mathf.Max(-MAP_RADIUS, -q - MAP_RADIUS);
                 int rEnd = Mathf.Min(MAP_RADIUS, -q + MAP_RADIUS);
@@ -163,40 +180,26 @@ public class HexMapGenerator : MonoBehaviour {
                     int globalR = areaCenter.y + r;
                     Vector2Int currentCoord = new Vector2Int(globalQ, globalR);
 
-                    // 3D物理空間への座標変換
                     Vector3 spawnPosition = CalculateHex3DPosition(globalQ, globalR);
 
-                    // 地形の決定（街マス予定地なら山脈を生成させない安全弁として強制平滑化）
-                    eTerrain chosenTerrain;
-                    if(townCoordinates.Contains(currentCoord)) {
-                        chosenTerrain = eTerrain.Plain;
-                    } else {
-                        chosenTerrain = ChooseTerrainDeterministic(config, mapRand);
-                    }
-
-                    // View（3Dオブジェクト）のインスタンス化
                     HexTileObject newTileObject = Instantiate(_spawnTile, Vector3.zero, Quaternion.Euler(0, 30, 0), transform);
                     newTileObject.Setup(currentTileID, spawnPosition);
                     newTileObject.name = $"Tile_[ID:{currentTileID}]_Area:{areaID}_G({globalQ},{globalR})";
 
-                    // Model（データ）の生成と初期設定
                     HexTileData newTileData = new HexTileData();
                     newTileData.Setup(currentTileID, globalQ, globalR);
-                    newTileData.SetTerrain(chosenTerrain);
 
-                    // 山脈マスの場合は、ゲームロジック用に進行不可属性を付与
-                    if(chosenTerrain == eTerrain.Mountain) {
-                        newTileData.SetAttributeTile(AttributeFactory.Create(eAttribute.CannotMove));
-                    }
-
-                    // マネージャーへ登録
                     HexTileManager.instance.AddTile(newTileData, newTileObject);
                     allGeneratedTiles.Add(newTileData);
                     areaTiles.Add(newTileData);
+                    coordToTileMap[currentCoord] = newTileData;
 
-                    // 初期エリア（Area 0）の歩けるマスをプレイヤーの初期スポーン候補とする
-                    if(chosenTerrain != eTerrain.Mountain && areaID == 0) {
-                        playerSpawnCandidates.Add(newTileObject);
+                    // 街マス以外のマスを、地形ランダム割り当ての候補プールに追加
+                    if(!townCoordinates.Contains(currentCoord)) {
+                        assignableCoords.Add(currentCoord);
+                    } else {
+                        // 街マスは平原固定
+                        newTileData.SetTerrain(eTerrain.Plain);
                     }
 
                     registeredTileIDs.Add(currentTileID);
@@ -204,17 +207,46 @@ public class HexMapGenerator : MonoBehaviour {
                 }
             }
 
-            // エリア固有バイオームの決定
-            eBiome areaBiome;
+            // 3. SOに基づいてバイオームごとの地形配置目標数を決定
+            int mountainTarget = biomeTerrainConfig.EvaluateTerrainCount(areaBiome, eTerrain.Mountain, mapRand);
+            int forestTarget = biomeTerrainConfig.EvaluateTerrainCount(areaBiome, eTerrain.Forest, mapRand);
+            int hillTarget = biomeTerrainConfig.EvaluateTerrainCount(areaBiome, eTerrain.Hill, mapRand);
+
+            // 4. シャッフル候補地に対して優先度順（例：山脈 -> 森林 -> 丘陵 -> 残り平原）で割り振る
+            ShuffleList(assignableCoords, mapRand);
+
+            int assignedIndex = 0;
+            System.Action<eTerrain, int> assignTerrainBatch = (terrain, count) => {
+                for(int i = 0; i < count && assignedIndex < assignableCoords.Count; i++) {
+                    Vector2Int coord = assignableCoords[assignedIndex];
+                    HexTileData tile = coordToTileMap[coord];
+                    tile.SetTerrain(terrain);
+
+                    if(terrain == eTerrain.Mountain) {
+                        tile.SetAttributeTile(AttributeFactory.Create(eAttribute.CannotMove));
+                    }
+                    assignedIndex++;
+                }
+            };
+
+            assignTerrainBatch(eTerrain.Mountain, mountainTarget);
+            assignTerrainBatch(eTerrain.Forest, forestTarget);
+            assignTerrainBatch(eTerrain.Hill, hillTarget);
+
+            // 残ったマスはすべて Plain（平原）を割り振る
+            while(assignedIndex < assignableCoords.Count) {
+                Vector2Int coord = assignableCoords[assignedIndex];
+                coordToTileMap[coord].SetTerrain(eTerrain.Plain);
+                assignedIndex++;
+            }
+
+            // プレイヤースポーン候補地の登録（Area 0 の非山脈マス）
             if(areaID == 0) {
-                areaBiome = eBiome.Grassland; // エリア0は「草原」で固定
-            } else {
-                if(availableBiomes.Count > 0) {
-                    int randBiomeIdx = mapRand.Next(0, availableBiomes.Count);
-                    areaBiome = availableBiomes[randBiomeIdx];
-                    availableBiomes.RemoveAt(randBiomeIdx); // 重複回避のため削除
-                } else {
-                    areaBiome = (eBiome)((areaID % (int)eBiome.Max) + 1);
+                foreach(var tile in areaTiles) {
+                    if(tile.terrain != eTerrain.Mountain) {
+                        HexTileObject tileObj = HexTileManager.instance.GetTileObject(tile.ID);
+                        if(tileObj != null) playerSpawnCandidates.Add(tileObj);
+                    }
                 }
             }
 
@@ -421,7 +453,7 @@ public class HexMapGenerator : MonoBehaviour {
         if(useStaticSeed) {
             seed = debugSeed; // 固定シードが有効なら指定値を使用
         } else {
-            seed = UnityEngine.Random.Range(0, 99999);
+            seed = Random.Range(0, 99999);
         }
         MapGenerationConfig debugConfig = DecideConfigByLevel(eGameLevel.Normal, seed);
         CreateMap(debugConfig);
@@ -469,5 +501,18 @@ public class HexMapGenerator : MonoBehaviour {
 
         areaCentersToCreate.Add(area2Center);
         return areaCentersToCreate;
+    }
+    /// <summary>
+    /// シード乱数を使用してリスト要素をシャッフル（Fisher-Yates アルゴリズム）する。
+    /// </summary>
+    private void ShuffleList<T>(List<T> list, System.Random rand) {
+        int n = list.Count;
+        while(n > 1) {
+            n--;
+            int k = rand.Next(n + 1);
+            T value = list[k];
+            list[k] = list[n];
+            list[n] = value;
+        }
     }
 }

@@ -14,7 +14,7 @@ public static class TileVisualAssignor {
         _cropsData = cropsData;
     }
     /// <summary>
-    /// タイル
+    /// タイルの見た目設定
     /// </summary>
     /// <param name="data"></param>
     public static void SetTileObjectView(HexTileData data) {

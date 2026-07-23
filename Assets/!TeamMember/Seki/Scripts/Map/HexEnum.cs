@@ -91,3 +91,12 @@ public enum eTileState {
 
     Max
 }
+/// <summary>
+/// 数量列挙体
+/// </summary>
+public enum eAmount {
+    None,
+    Low,
+    Medium,
+    High
+}

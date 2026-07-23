@@ -747,7 +747,6 @@ MonoBehaviour:
     defense: 0
     luck: 0
     radius: 0
-    coin: 0
   hp: 0
   element: 0
   jobData: {fileID: 0}

@@ -28,6 +28,7 @@ public class FadeManeger : SystemObject {
     /// <param name="_duration"></param>
     /// <returns></returns>
     public async UniTask FadeOut(float _duration = DEFAULT_FADE_DURATION) {
+        gameObject.SetActive(true);
         await FadeTargetAlpha(1.0f, _duration);
     }
     /// <summary>
@@ -37,6 +38,7 @@ public class FadeManeger : SystemObject {
     /// <returns></returns>
     public async UniTask FadeIn(float _duration = DEFAULT_FADE_DURATION) {
         await FadeTargetAlpha(0.0f, _duration);
+        gameObject.SetActive(false);
     }
     /// <summary>
     /// フェード画像を指定の不透明度に変化させる

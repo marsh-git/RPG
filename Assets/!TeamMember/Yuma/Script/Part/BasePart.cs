@@ -26,7 +26,6 @@ public abstract class BasePart : MonoBehaviour
     public virtual async UniTask Setup()
     {
         gameObject.SetActive(true);
-        await UniTask.CompletedTask;
     }
 
     /// <summary>
@@ -43,7 +42,6 @@ public abstract class BasePart : MonoBehaviour
     public virtual async UniTask Teardown()
     {
         gameObject.SetActive(false);
-        await UniTask.CompletedTask;
     }
 
     /// <summary>

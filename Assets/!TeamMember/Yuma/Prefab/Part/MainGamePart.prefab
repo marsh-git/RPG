@@ -477,6 +477,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 8455049079611734360, guid: 1cfb8d09c4dffe7438f9a7c71649a394, type: 3}
     - target: {fileID: 2595365664090884219, guid: 8c04e53b60ba3fc43b09d5d6bf5999ca, type: 3}
+      propertyPath: cropsConfig
+      value: 
+      objectReference: {fileID: 11400000, guid: 8b65ffa69cfc45d47a1a37c8c5c044c1, type: 2}
+    - target: {fileID: 2595365664090884219, guid: 8c04e53b60ba3fc43b09d5d6bf5999ca, type: 3}
       propertyPath: enemySpawner
       value: 
       objectReference: {fileID: 495904111323250327}
@@ -484,6 +488,10 @@ PrefabInstance:
       propertyPath: playerSpawner
       value: 
       objectReference: {fileID: 3273024266962081880}
+    - target: {fileID: 2595365664090884219, guid: 8c04e53b60ba3fc43b09d5d6bf5999ca, type: 3}
+      propertyPath: biomeTerrainConfig
+      value: 
+      objectReference: {fileID: 11400000, guid: f032eae8e3dfb05449a91b7c50428766, type: 2}
     - target: {fileID: 3212008869848674931, guid: 8c04e53b60ba3fc43b09d5d6bf5999ca, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

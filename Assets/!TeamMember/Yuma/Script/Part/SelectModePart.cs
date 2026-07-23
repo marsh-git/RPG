@@ -47,7 +47,9 @@ public class SelectModePart : BasePart
 
     public override async UniTask Execute()
     {
-        await UniTask.CompletedTask;
+        await FadeManeger.instance.FadeIn(1.0f);
+        await UniTask.WaitUntil(() => startGame);
+        await FadeManeger.instance.FadeOut(1.0f);
     }
 
     /// <summary>

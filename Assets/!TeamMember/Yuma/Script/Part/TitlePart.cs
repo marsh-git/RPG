@@ -38,8 +38,11 @@ public class TitlePart : BasePart
     /// <returns></returns>
     public override async UniTask Execute()
     {
+        await FadeManeger.instance.FadeIn(1.0f);
+
         await UniTask.WaitUntil(()=>goToSelectPart);
 
+        await FadeManeger.instance.FadeOut(1.0f);
         await PartManager.instance.TransitionPart(GameEnum.eGamePart.SelectStage);
     }
 

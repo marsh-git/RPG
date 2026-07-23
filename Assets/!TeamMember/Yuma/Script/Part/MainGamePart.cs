@@ -36,6 +36,7 @@ public class MainGamePart : BasePart
     /// <returns></returns>
     public override async UniTask Execute()
     {
+        await FadeManeger.instance.FadeIn(1.0f);
         await UniTask.CompletedTask;
     }
 

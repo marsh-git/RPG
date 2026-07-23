@@ -79,7 +79,9 @@ public class HexMapGenerator : MonoBehaviour {
         // 街や山脈ではない「プレーンな空きマス」に対して確率抽選で配置する
         GenerateSpecialAttributes(allTileList, config, mapRand);
 
-        // フェーズ4: タイルの見た目の変更
+        // フェーズ4:　属性確定後、スポーン条件を満たすタイルを摘出
+        playerSpawnCandidates = GetValidPlayerSpawnCandidates(areaTileMap);
+
         SetAllTileObjectView(allTileList);
 
         // フェーズ5: キャラクターのスポーン
@@ -240,16 +242,6 @@ public class HexMapGenerator : MonoBehaviour {
                 assignedIndex++;
             }
 
-            // プレイヤースポーン候補地の登録（Area 0 の非山脈マス）
-            if(areaID == 0) {
-                foreach(var tile in areaTiles) {
-                    if(tile.terrain != eTerrain.Mountain) {
-                        HexTileObject tileObj = HexTileManager.instance.GetTileObject(tile.ID);
-                        if(tileObj != null) playerSpawnCandidates.Add(tileObj);
-                    }
-                }
-            }
-
             // エリアデータの生成と登録
             HexAreaData newAreaData = new HexAreaData();
             newAreaData.Setup(areaID, areaCenter.x, areaCenter.y, areaBiome, registeredTileIDs);
@@ -351,6 +343,40 @@ public class HexMapGenerator : MonoBehaviour {
         foreach(var tile in emptyTiles) {
             tile.SetAttributeTile(AttributeFactory.Create(eAttribute.None));
         }
+    }
+    /// <summary>
+    /// 全属性決定後、Area0の「属性なし」かつ「山脈以外」の有効なスポーン候補タイルオブジェクトを収集する。
+    /// </summary>
+    private List<HexTileObject> GetValidPlayerSpawnCandidates(Dictionary<int, List<HexTileData>> areaTileMap) {
+        List<HexTileObject> candidates = new List<HexTileObject>();
+
+        if(!areaTileMap.TryGetValue(0, out List<HexTileData> area0Tiles)) {
+            Debug.LogError("【エラー】Area 0 のタイルデータが存在しません。");
+            return candidates;
+        }
+
+        foreach(var tileData in area0Tiles) {
+            // 条件: 属性がNone (街/前哨基地/イベント/作物/移動不可のいずれでもない) かつ 山脈でない
+            if(tileData.Attribute == eAttribute.None && tileData.terrain != eTerrain.Mountain) {
+                HexTileObject tileObj = HexTileManager.instance.GetTileObject(tileData.ID);
+                if(tileObj != null) {
+                    candidates.Add(tileObj);
+                }
+            }
+        }
+
+        // 万が一候補がゼロの場合のフォールバック (エリア0の非山脈マスを最小保障)
+        if(candidates.Count == 0) {
+            Debug.LogWarning("【警告】完全な空きマスが存在しないため、街・特殊属性マスを除く非山脈マスをフォールバック検索します。");
+            foreach(var tileData in area0Tiles) {
+                if(tileData.terrain != eTerrain.Mountain && tileData.Attribute != eAttribute.Town) {
+                    HexTileObject tileObj = HexTileManager.instance.GetTileObject(tileData.ID);
+                    if(tileObj != null) candidates.Add(tileObj);
+                }
+            }
+        }
+
+        return candidates;
     }
     /// <summary>
     /// 全てのタイルデータに対応する3Dビジュアル（見た目）を割り当てる。

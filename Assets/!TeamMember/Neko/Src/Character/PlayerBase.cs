@@ -28,7 +28,7 @@ public class PlayerBase : CharacterBase, IClickable
     //  参照用HP
     public int HP => hp;
     //  所持金
-    private int coin = 0;
+    private int coin = 100;
     //  参照用所持金
     public int Coin => coin;
 
@@ -110,6 +110,8 @@ public class PlayerBase : CharacterBase, IClickable
         status.Add(permanentStatus);
 
         if(status.maxHp <= 0) status.maxHp = 1;
+
+        if(hp > status.maxHp) hp = status.maxHp;
     }
 
     /// <summary>

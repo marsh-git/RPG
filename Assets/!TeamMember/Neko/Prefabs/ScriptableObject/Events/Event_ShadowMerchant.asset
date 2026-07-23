@@ -1,0 +1,140 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb8c0ecf850d99b46a1d0b43eb362d95, type: 3}
+  m_Name: Event_ShadowMerchant
+  m_EditorClassIdentifier: 
+  eventName: "\u95C7\u5546\u4EBA"
+  eventDescription: "\u30ED\u30FC\u30D6\u3092\u7E8F\u3063\u305F\u5546\u4EBA\u304C\u3001\u9759\u304B\u306B\u3042\u306A\u305F\u3092\u5F85\u3063\u3066\u3044\u308B\u3002\n\u30D5\u30FC\u30C9\u306E\u5965\u306B\u9854\u306F\u898B\u3048\u305A\u3001\u305D\u306E\u6B63\u4F53\u306F\u8AB0\u306B\u3082\u5206\u304B\u3089\u306A\u3044\u3002\n\u300C\u91D1\u30B5\u30A8\u6255\u30A8\u30D0\u3001\u671B\u30E0\u529B\u30F2\u6388\u30B1\u30E8\u30A6\u3002\u300D\n\u305D\u3046\u8A00\u3063\u3066\u3001\u602A\u3057\u304F\u8F1D\u304F\u54C1\u3005\u3092\u4E26\u3079\u59CB\u3081\u305F\u3002"
+  eventImage: {fileID: 21300000, guid: 18195e6e76e2e5a4fb410b3dd53fe44d, type: 3}
+  addStatus:
+    maxHp: 0
+    attack: 0
+    defense: 0
+    luck: 0
+    radius: 0
+  endEventFlag: 1
+  buttonInfos:
+  - mainText: "\u602A\u3057\u3044\u79D8\u85AC\u3092\u8CB7\u3046"
+    subText: "\u30B3\u30A4\u30F3-100"
+  - mainText: "\u9ED2\u3044\u5B9D\u7BB1\u3092\u8CB7\u3046"
+    subText: "\u30B3\u30A4\u30F3-200"
+  - mainText: "\u4F55\u3082\u305B\u305A\u7ACB\u3061\u53BB\u308B"
+    subText: "\u300C\u30C4\u30DE\u30E9\u30CA\u30A4\u5974\u30C0...\u300D"
+  - mainText: "\u7ACB\u3061\u53BB\u308B"
+    subText: 
+  nextEventDescription:
+  - "\u95C7\u5546\u4EBA\u306F\u4E0D\u6C17\u5473\u306A\u7B11\u307F\u3092\u6D6E\u304B\u3079\u308B\u3068\u3001\u74F6\u3092\u624B\u6E21\u3057\u305F\u3002\n\u98F2\u307F\u5E72\u3057\u305F\u77AC\u9593\u3001\u8EAB\u4F53\u306B\u5F37\u5927\u306A\u529B\u304C\u5BBF\u308B\u3002\n\u3057\u304B\u3057\u540C\u6642\u306B\u3001\u4F55\u304B\u3092\u5931\u3063\u305F\u3088\u3046\u306A\u611F\u899A\u304C\u6B8B\u3063\u305F\u3002"
+  - "\u95C7\u5546\u4EBA\u304B\u3089\u53D7\u3051\u53D6\u3063\u305F\u9ED2\u3044\u5B9D\u7BB1\u304C\u3001\u3072\u3068\u308A\u3067\u306B\u958B\u304D\u59CB\u3081\u308B\u3002\n\u9ED2\u3044\u7159\u3068\u3068\u3082\u306B\u3001\u5947\u5999\u306A\u907A\u7269\u304C\u59FF\u3092\u73FE\u3057\u305F\u3002"
+  choiceData:
+  - addStatus: 1
+    addRelic: 0
+    takeDamage: 0
+    takeHeal: 0
+    addCoin: 0
+    status:
+    - maxHp: 10
+      attack: -10
+      defense: 0
+      luck: 0
+      radius: 0
+    - maxHp: 10
+      attack: 0
+      defense: -10
+      luck: 0
+      radius: 0
+    - maxHp: 10
+      attack: 0
+      defense: 0
+      luck: -10
+      radius: 0
+    - maxHp: -10
+      attack: 10
+      defense: 0
+      luck: 0
+      radius: 0
+    - maxHp: 0
+      attack: 10
+      defense: -10
+      luck: 0
+      radius: 0
+    - maxHp: 0
+      attack: 10
+      defense: 0
+      luck: -10
+      radius: 0
+    - maxHp: -10
+      attack: 0
+      defense: 10
+      luck: 0
+      radius: 0
+    - maxHp: 0
+      attack: -10
+      defense: 10
+      luck: 0
+      radius: 0
+    - maxHp: 0
+      attack: 0
+      defense: 10
+      luck: -10
+      radius: 0
+    - maxHp: -10
+      attack: 0
+      defense: 0
+      luck: 10
+      radius: 0
+    - maxHp: 0
+      attack: -10
+      defense: 0
+      luck: 10
+      radius: 0
+    - maxHp: 0
+      attack: 0
+      defense: -10
+      luck: 10
+      radius: 0
+    relicData: []
+    damage: 0
+    heal: 0
+    coin: 0
+    nextPage: 1
+    addRandom: 1
+    useCoin: 1
+    useCoinAmount: 100
+  - addStatus: 0
+    addRelic: 1
+    takeDamage: 0
+    takeHeal: 0
+    addCoin: 0
+    status: []
+    relicData:
+    - {fileID: 11400000, guid: 8c28c202330ed4944a65a5babc4cf544, type: 2}
+    damage: 0
+    heal: 0
+    coin: 0
+    nextPage: 1
+    addRandom: 1
+    useCoin: 1
+    useCoinAmount: 200
+  - addStatus: 0
+    addRelic: 0
+    takeDamage: 0
+    takeHeal: 0
+    addCoin: 0
+    status: []
+    relicData: []
+    damage: 0
+    heal: 0
+    coin: 0
+    nextPage: 0
+    addRandom: 0
+    useCoin: 0
+    useCoinAmount: 0

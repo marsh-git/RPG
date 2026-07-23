@@ -24,6 +24,8 @@ public static class AttributeFactory{
         Register(eAttribute.Outpost, () => new OutpostAttribute());
         // ショップクラス
         Register(eAttribute.Shop, () => new ShopAttribute());
+        // キャンプ地クラス
+        Register(eAttribute.Camp, () => new CampAttribute());
         // 移動不可能クラス
         Register(eAttribute.CannotMove, () => new CannotMoveAttribute());
     }

@@ -75,13 +75,15 @@ public class HexMapGenerator : MonoBehaviour {
         // Viewの破壊・再生成を行わず、純粋なデータ（Model）の属性設定のみを安全に行う
         GenerateTowns(townCenters, areaTileMap);
 
-        // フェーズ3: 特殊属性（前哨基地・イベント・作物）の配置
+        // フェーズ3: ショップ、キャンプ地の生成
+        GenerateShopAndCampPerArea(areaTileMap, mapRand);
+
+        // フェーズ4: 特殊属性（前哨基地・イベント・作物）の配置
         // 街や山脈ではない「プレーンな空きマス」に対して確率抽選で配置する
         GenerateSpecialAttributes(allTileList, config, mapRand);
 
-        // フェーズ4:　属性確定後、スポーン条件を満たすタイルを摘出
+        // フェーズ5:　属性確定後、スポーン条件を満たすタイルを摘出
         playerSpawnCandidates = GetValidPlayerSpawnCandidates(areaTileMap);
-
         SetAllTileObjectView(allTileList);
 
         // フェーズ5: キャラクターのスポーン
@@ -279,34 +281,72 @@ public class HexMapGenerator : MonoBehaviour {
         }
     }
     /// <summary>
+    /// エリアごとに1つのショップマスと1つのキャンプ地マスを確定生成する。
+    /// </summary>
+    private void GenerateShopAndCampPerArea(Dictionary<int, List<HexTileData>> areaTileMap, System.Random mapRand) {
+        foreach(var areaKvp in areaTileMap) {
+            List<HexTileData> areaTiles = areaKvp.Value;
+
+            // 該当エリア内の「属性が未割り当て」かつ「平原」マスを抽出
+            List<HexTileData> emptyAreaTiles = areaTiles.FindAll(t =>
+                t.Attribute == eAttribute.None && t.terrain == eTerrain.Plain
+            );
+            // ショップの配置（各エリア1点）
+            if(emptyAreaTiles.Count > 0) {
+                int randIdx = mapRand.Next(0, emptyAreaTiles.Count);
+                HexTileData shopTile = emptyAreaTiles[randIdx];
+
+                shopTile.SetAttributeTile(AttributeFactory.Create(eAttribute.Shop));
+                if(shopTile.attributeTile is ShopAttribute shopAttr) {
+                    // shopAttr.Setup(...);
+                }
+
+                RemoveAtSwapLast(emptyAreaTiles, randIdx);
+            }
+
+            // キャンプ地の配置（各エリア1点）
+            if(emptyAreaTiles.Count > 0) {
+                int randIdx = mapRand.Next(0, emptyAreaTiles.Count);
+                HexTileData campTile = emptyAreaTiles[randIdx];
+
+                campTile.SetAttributeTile(AttributeFactory.Create(eAttribute.Camp));
+                if(campTile.attributeTile is CampAttribute campAttr) {
+                    // campAttr.Setup(...);
+                    Debug.Log(campTile.areaID + campTile.ID + "に生成されました");
+                }
+                RemoveAtSwapLast(emptyAreaTiles, randIdx);
+            }
+        }
+    }
+    /// <summary>
     /// 特殊属性（前哨基地・イベント・作物）を、残された空きマスに対して確率・条件に基づき配置する。
     /// </summary>
     private void GenerateSpecialAttributes(List<HexTileData> allTileList, MapGenerationConfig config, System.Random mapRand) {
         // まだ何の属性も付与されていない完全な空きマスを抽出
-        List<HexTileData> emptyTiles = allTileList.FindAll(t => t.Attribute == eAttribute.None);
+        List<HexTileData> emptyTileList = allTileList.FindAll(t => t.Attribute == eAttribute.None);
 
         // 敵の前哨基地を、設定された個数に達するまでランダムに配置
         int outpostsPlaced = 0;
-        while(outpostsPlaced < config.EnemyOutpostCount && emptyTiles.Count > 0) {
-            int randIdx = mapRand.Next(0, emptyTiles.Count);
-            HexTileData targetTile = emptyTiles[randIdx];
+        while(outpostsPlaced < config.EnemyOutpostCount && emptyTileList.Count > 0) {
+            int randIdx = mapRand.Next(0, emptyTileList.Count);
+            HexTileData targetTile = emptyTileList[randIdx];
 
             targetTile.SetAttributeTile(AttributeFactory.Create(eAttribute.Outpost));
             if(targetTile.attributeTile is OutpostAttribute outpostTile) {
                 outpostTile.Setup(3);
             }
 
-            emptyTiles.RemoveAt(randIdx);
+            emptyTileList.RemoveAt(randIdx);
             outpostsPlaced++;
         }
 
         // イベントマスの配置
         List<EventDataBase> eventDataList = new List<EventDataBase>(EventManager.instance.eventDatas);
-        int targetEventCount = Mathf.RoundToInt(emptyTiles.Count * config.EventTileChance);
+        int targetEventCount = Mathf.RoundToInt(emptyTileList.Count * config.EventTileChance);
 
-        while(targetEventCount > 0 && eventDataList.Count > 0 && emptyTiles.Count > 0) {
-            int tileIdx = mapRand.Next(0, emptyTiles.Count);
-            HexTileData targetTile = emptyTiles[tileIdx];
+        while(targetEventCount > 0 && eventDataList.Count > 0 && emptyTileList.Count > 0) {
+            int tileIdx = mapRand.Next(0, emptyTileList.Count);
+            HexTileData targetTile = emptyTileList[tileIdx];
 
             targetTile.SetAttributeTile(AttributeFactory.Create(eAttribute.Event));
             if(targetTile.attributeTile is EventAttribute eventTile) {
@@ -317,12 +357,12 @@ public class HexMapGenerator : MonoBehaviour {
                 eventDataList.RemoveAt(eventID); // 重複防止
             }
 
-            emptyTiles.RemoveAt(tileIdx);
+            emptyTileList.RemoveAt(tileIdx);
             targetEventCount--;
         }
 
         // 作物マスの配置（平原または丘陵の空きマスを対象とする）
-        List<HexTileData> cropsCandidates = emptyTiles.FindAll(t => t.terrain == eTerrain.Plain || t.terrain == eTerrain.Hill);
+        List<HexTileData> cropsCandidates = emptyTileList.FindAll(t => t.terrain == eTerrain.Plain || t.terrain == eTerrain.Hill);
         int targetCropsCount = Mathf.RoundToInt(cropsCandidates.Count * config.CropsTileChance);
 
         while(targetCropsCount > 0 && cropsCandidates.Count > 0) {
@@ -334,13 +374,13 @@ public class HexMapGenerator : MonoBehaviour {
                 cropsTile.Setup(0); // 初期状態のセットアップ
             }
 
-            emptyTiles.Remove(targetTile);
+            emptyTileList.Remove(targetTile);
             cropsCandidates.RemoveAt(tileIdx);
             targetCropsCount--;
         }
 
         // 残ったタイルは明確に None（何もない平坦なマス）として確定
-        foreach(var tile in emptyTiles) {
+        foreach(var tile in emptyTileList) {
             tile.SetAttributeTile(AttributeFactory.Create(eAttribute.None));
         }
     }
@@ -540,5 +580,16 @@ public class HexMapGenerator : MonoBehaviour {
             list[k] = list[n];
             list[n] = value;
         }
+    }
+    /// <summary>
+    /// 指定の要素を高速で削除する
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="list"></param>
+    /// <param name="index"></param>
+    private static void RemoveAtSwapLast<T>(List<T> list, int index) {
+        int lastIndex = list.Count - 1;
+        list[index] = list[lastIndex];
+        list.RemoveAt(lastIndex);
     }
 }

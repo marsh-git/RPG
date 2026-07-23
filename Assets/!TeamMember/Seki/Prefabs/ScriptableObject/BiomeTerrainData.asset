@@ -70,3 +70,11 @@ MonoBehaviour:
       amount: 1
     - terrain: 4
       amount: 2
+  - biome: 5
+    terrainAmountList:
+    - terrain: 2
+      amount: 3
+    - terrain: 3
+      amount: 0
+    - terrain: 4
+      amount: 3

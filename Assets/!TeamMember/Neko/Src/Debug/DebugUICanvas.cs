@@ -19,9 +19,11 @@ public class DebugUICanvas : MonoBehaviour
     {
         GetComponent<TextMeshProUGUI>().SetText(
             "maxHp = " + player.Status.maxHp +
+            "\nHP = " + player.HP +
             "\nattack = " + player.Status.attack +
             "\ndefence = " + player.Status.defense +
             "\nluck = " + player.Status.luck +
-            "\nradius = " + player.Status.radius);
+            "\nradius = " + player.Status.radius +
+            "\ncoin = " + player.Coin);
     }
 }

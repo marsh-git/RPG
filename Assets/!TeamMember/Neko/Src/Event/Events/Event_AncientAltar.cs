@@ -66,7 +66,7 @@ public class Event_AncientAltar : EventDataBase
         addStatus.maxHp = -5;
         addStatus.attack = 3;
         PlayerBase.instance.AddPermanentStatus(addStatus);
-        PlayerBase.instance.TakeDamage(addStatus.maxHp);
+        PlayerBase.instance.TakeDamage(-addStatus.maxHp);
         EndEvent();
     }
 

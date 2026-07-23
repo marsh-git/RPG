@@ -21,7 +21,6 @@ MonoBehaviour:
     defense: 0
     luck: 0
     radius: 0
-    coin: 0
   endEventFlag: 1
   buttonInfos:
   - mainText: "\u5DE6\u306E\u30AB\u30FC\u30C9\u3092\u9078\u3076"
@@ -48,31 +47,26 @@ MonoBehaviour:
       defense: 0
       luck: 0
       radius: 0
-      coin: 0
     - maxHp: 0
       attack: 3
       defense: 0
       luck: 0
       radius: 0
-      coin: 0
     - maxHp: 0
       attack: 0
       defense: 3
       luck: 0
       radius: 0
-      coin: 0
     - maxHp: 0
       attack: 0
       defense: 0
       luck: 3
       radius: 0
-      coin: 0
     - maxHp: 0
       attack: 0
       defense: 0
       luck: 0
       radius: 2
-      coin: 0
     relicData: []
     damage: 0
     heal: 0
@@ -100,7 +94,7 @@ MonoBehaviour:
     addRelic: 0
     takeDamage: 0
     takeHeal: 0
-    addCoin: 0
+    addCoin: 1
     status: []
     relicData: []
     damage: 0

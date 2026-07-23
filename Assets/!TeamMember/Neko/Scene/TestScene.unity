@@ -381,7 +381,7 @@ PrefabInstance:
       objectReference: {fileID: 2019185318}
     - target: {fileID: 8162397954162978796, guid: e42c72ab1e0f6e54e9b8468450055f49, type: 3}
       propertyPath: m_VersionIndex
-      value: 3268
+      value: 3271
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -747,7 +747,9 @@ MonoBehaviour:
     defense: 0
     luck: 0
     radius: 0
+    coin: 0
   hp: 0
+  element: 0
   jobData: {fileID: 0}
   currentRelic: []
 --- !u!1 &982010438
@@ -1555,14 +1557,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: EventManager
       objectReference: {fileID: 0}
-    - target: {fileID: 3278065201190670609, guid: 6ad3b299ad271f54c8f53cb7339f96c4, type: 3}
-      propertyPath: eventDatas.Array.size
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 3278065201190670609, guid: 6ad3b299ad271f54c8f53cb7339f96c4, type: 3}
-      propertyPath: eventDatas.Array.data[4]
-      value: 
-      objectReference: {fileID: 11400000, guid: 9c55c2f8fdf94a042a77eae7bfb9fabf, type: 2}
     - target: {fileID: 8862157623003850392, guid: 6ad3b299ad271f54c8f53cb7339f96c4, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

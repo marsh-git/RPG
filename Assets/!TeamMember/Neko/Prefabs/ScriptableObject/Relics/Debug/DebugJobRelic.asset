@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: DebugJobRelic
   m_EditorClassIdentifier: 
   relicName: "\u30C7\u30D0\u30C3\u30B0\u7528\u30EC\u30EA\u30C3\u30AF"
-  relicImg: {fileID: 21300000, guid: 69c30291565a1407abc7ca25da395ea9, type: 3}
+  relicImg: {fileID: 21300000, guid: fd3e35c933d21f14990c937e6fdaf848, type: 3}
   relicDescription: "\u306A\u3093\u3067\u898B\u3048\u3066\u3093\u306E\n\u30D0\u30D5\u306A\u3044\u306E\u306B\uFF1F\uFF1F"
   status:
     maxHp: 0
@@ -21,3 +21,4 @@ MonoBehaviour:
     defense: 0
     luck: 0
     radius: 0
+    coin: 0

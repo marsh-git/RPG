@@ -41,6 +41,7 @@ MonoBehaviour:
     addRelic: 0
     takeDamage: 0
     takeHeal: 0
+    addCoin: 0
     status:
     - maxHp: 10
       attack: 0
@@ -75,32 +76,37 @@ MonoBehaviour:
     relicData: []
     damage: 0
     heal: 0
+    coin: 0
     nextPage: 1
     addRandom: 1
+    useCoin: 0
+    useCoinAmount: 0
   - addStatus: 0
     addRelic: 1
     takeDamage: 0
     takeHeal: 0
+    addCoin: 0
     status: []
     relicData:
     - {fileID: 11400000, guid: 8c28c202330ed4944a65a5babc4cf544, type: 2}
     damage: 0
     heal: 0
+    coin: 0
     nextPage: 1
     addRandom: 0
-  - addStatus: 1
+    useCoin: 0
+    useCoinAmount: 0
+  - addStatus: 0
     addRelic: 0
     takeDamage: 0
     takeHeal: 0
-    status:
-    - maxHp: 0
-      attack: 0
-      defense: 0
-      luck: 0
-      radius: 0
-      coin: 100
+    addCoin: 0
+    status: []
     relicData: []
     damage: 0
     heal: 0
+    coin: 100
     nextPage: 1
     addRandom: 0
+    useCoin: 0
+    useCoinAmount: 0

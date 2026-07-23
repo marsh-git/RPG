@@ -84,6 +84,8 @@ public class Event_TwoChoice : EventDataBase
     //  イベント中身
     private void OnStartEvent(EventChoiceData choice, int count)
     {
+        if (!choice.CanExecute()) return;
+
         choiceNum = count;
 
         choice.SwichEvent();

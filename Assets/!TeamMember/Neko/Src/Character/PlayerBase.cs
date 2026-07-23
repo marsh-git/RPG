@@ -25,6 +25,13 @@ public class PlayerBase : CharacterBase, IClickable
     //  永続バフ、デバフ(レリックは適応しない。イベントなどで貰えるバフ、デバフ)
     private CharacterStatus permanentStatus;
 
+    //  参照用HP
+    public int HP => hp;
+    //  所持金
+    private int coin = 0;
+    //  参照用所持金
+    public int Coin => coin;
+
     // プレイヤーのダイス
     private DiceManager diceManager;
 
@@ -160,6 +167,28 @@ public class PlayerBase : CharacterBase, IClickable
     public void ResetTemporaryStatus()
     {
         temporaryStatus.Reset();
+    }
+
+    /// <summary>
+    /// 所持金を追加する(永続バフとは別物とする)
+    /// </summary>
+    /// <param name="amout"></param>
+    public void AddCoin(int amout)
+    {
+        coin += amout;
+    }
+
+    /// <summary>
+    /// 所持金を使用する
+    /// </summary>
+    /// <param name="amout"></param>
+    /// <returns></returns>
+    public bool UseCoin(int amout)
+    {
+        if(coin < amout) return false;
+
+        coin -= amout;
+        return true;
     }
 
     /// <summary>

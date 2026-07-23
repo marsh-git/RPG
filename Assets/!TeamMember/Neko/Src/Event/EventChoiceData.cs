@@ -8,6 +8,7 @@ public struct EventChoiceData
     public bool addRelic;
     public bool takeDamage;
     public bool takeHeal;
+    public bool addCoin;
 
     [Header("キャラクターに与えるステータス補正(何もなければ0)")]
     [SerializeField] public CharacterStatus[] status;
@@ -15,15 +16,20 @@ public struct EventChoiceData
     [Header("付与するレリック")]
     [SerializeField] RelicDataBase[] relicData;
 
-    [Header("HP回復、ダメージ")]
+    [Header("HP回復、ダメージ、コイン追加")]
     public int damage;
     public int heal;
+    public int coin;
 
     [Header("次のページへ飛ぶかどうか")]
     public bool nextPage;
 
     [Header("ランダム要素(ランダム要素を入れるか")]
     public bool addRandom;
+
+    [Header("コインを消費するかどうか")]
+    public bool useCoin;
+    public int useCoinAmount;
 
     /// <summary>
     /// イベントスイッチによって行うイベントを実行
@@ -56,6 +62,17 @@ public struct EventChoiceData
 
         if(takeHeal) PlayerBase.instance.Heal(heal);
 
+        if(addCoin) PlayerBase.instance.AddCoin(coin);
+
         return;
     }
+
+    public bool CanExecute()
+    {
+        if (useCoin && !PlayerBase.instance.UseCoin(useCoinAmount))
+            return false;
+
+        return true;
+    }
+
 }

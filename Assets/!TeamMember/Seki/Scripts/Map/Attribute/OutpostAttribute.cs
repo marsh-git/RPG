@@ -5,8 +5,11 @@ using UnityEngine;
 public class OutpostAttribute : IAttributeTile {
     private int _turnSpawnCounter = -1;
     private int _maxSpawnCounter = -1;
-    private int _spawnRange = 2;
+    private int _spawnRange = -1;
     private EnemyBase _enemyPrefab = null;
+    private int _enemySpawnCounter = -1;
+    private int _maxEnemySpawn = -1;
+
 
     /// <summary>
     /// 自身の属性取得
@@ -50,11 +53,13 @@ public class OutpostAttribute : IAttributeTile {
     /// <param name="setCounter">スポーンまでのターンカウント</param>
     /// <param name="enemyPrefab">スポーンさせる敵のプレハブ</param>
     /// <param name="spawnRange">生成範囲（デフォルト: 2）</param>
-    public void Setup(int setCounter, EnemyBase enemyPrefab = null, int spawnRange = 2) {
+    public void Setup(int setCounter, EnemyBase enemyPrefab = null, int spawnRange = 2, int spawnCount = 10) {
         _turnSpawnCounter = setCounter;
         _maxSpawnCounter = setCounter;
         _enemyPrefab = enemyPrefab;
         _spawnRange = spawnRange;
+        _enemySpawnCounter = spawnCount;
+        _maxEnemySpawn = spawnCount;
     }
     /// <summary>
     /// シード値での生成
@@ -76,6 +81,8 @@ public class OutpostAttribute : IAttributeTile {
         enemy.SetTile(spawnTile.ID);
         // 管理クラスへの登録
         CharacterManager.Instance.Register(enemy);
+        // カウンターを増やす
+        _enemySpawnCounter++;
 
         Debug.Log($"[OutpostAttribute] 敵生成完了 : TileID {spawnTile.ID}");
     }
@@ -84,6 +91,8 @@ public class OutpostAttribute : IAttributeTile {
     /// </summary>
     private void SpawnEnemy(HexTileData tile) {
         if(tile == null || _enemyPrefab == null) return;
+        // 一定以上生成した場合、新たに生成しない
+        if(_enemySpawnCounter < _maxEnemySpawn) return;
         // 有効な生成候補を取得
         List<HexTileData> candidates = TileRangeExpansion.GetValidTiles(tile, _spawnRange);
         if(candidates == null || candidates.Count == 0) return;
@@ -97,6 +106,8 @@ public class OutpostAttribute : IAttributeTile {
         enemy.SetTile(spawnTile.ID);
         // 管理クラスへの登録
         CharacterManager.Instance.Register(enemy);
+        // カウンターを増やす
+        _enemySpawnCounter++;
 
         Debug.Log($"[OutpostAttribute] 敵生成完了 : TileID {spawnTile.ID}");
     }

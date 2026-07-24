@@ -8,12 +8,12 @@ public class HexTileManager : MonoBehaviour {
     private List<HexTileData> _tileDataList = new List<HexTileData>();
     private List<HexTileObject> _tileObjectList = new List<HexTileObject>();
     private List<HexAreaData> _areaDataList = new List<HexAreaData>();
+    private List<IAttributeTile> _attributeTileList = new List<IAttributeTile>();
 
     // TODO:そのうち、ゲームシーンステートクラスが持つようになる
     [SerializeField] private HexMapGenerator mapGenerator;
 
-    private void Start()
-    {
+    private void Start() {
         // デバッグ用
         mapGenerator.CreateDebugMap();
     }
@@ -48,8 +48,15 @@ public class HexTileManager : MonoBehaviour {
     /// エリアの追加
     /// </summary>
     /// <param name="area"></param>
-    public void AddArea(HexAreaData area) { 
+    public void AddArea(HexAreaData area) {
         _areaDataList.Add(area);
+    }
+    /// <summary>
+    /// 効果がある属性タイルの追加
+    /// </summary>
+    /// <param name="attributeTile"></param>
+    public void AddEnableAttributeTile(IAttributeTile attributeTile) {
+        _attributeTileList.Add(attributeTile);
     }
     /// <summary>
     /// 座標指定のタイルID取得
@@ -115,24 +122,24 @@ public class HexTileManager : MonoBehaviour {
     private void ToDirPos(ref int x, ref int y, eDirectionHex dir) {
         switch(dir) {
             case eDirectionHex.UpRight:     // 右上
-                y++;
+            y++;
             break;
             case eDirectionHex.Right:       // 右
-                x++;
+            x++;
             break;
             case eDirectionHex.DownRight:   // 右下
-                x++;
-                y--;
+            x++;
+            y--;
             break;
             case eDirectionHex.DownLeft:    // 左下
-                y--;
+            y--;
             break;
             case eDirectionHex.Left:        // 左
-                x--;
+            x--;
             break;
             case eDirectionHex.UpLeft:      // 左上
-                x--;
-                y++;
+            x--;
+            y++;
             break;
         }
     }
@@ -141,8 +148,14 @@ public class HexTileManager : MonoBehaviour {
     /// 全タイルデータ取得
     /// </summary>
     /// <returns>全タイル一覧</returns>
-    public IReadOnlyList<HexTileData> GetAllTiles()
-    {
+    public IReadOnlyList<HexTileData> GetAllTiles() {
         return _tileDataList;
+    }
+    /// <summary>
+    /// 全ての有効な属性タイルの取得
+    /// </summary>
+    /// <returns></returns>
+    public IReadOnlyList<IAttributeTile> GetAllAttributeTiles() {
+        return _attributeTileList;
     }
 }

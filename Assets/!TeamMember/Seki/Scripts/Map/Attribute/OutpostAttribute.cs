@@ -32,15 +32,20 @@ public class OutpostAttribute : IAttributeTile {
     /// </summary>
     /// <param name="tile"></param>
     public void OnTickTile(HexTileData tile) {
+
+        Debug.Log($"前哨基地ターン処理 : {tile.ID}");
+
         // カウンターを減らす
         _turnSpawnCounter--;
-        // カウンターが0になったら敵の生成処理
-        if(_turnSpawnCounter <= 0) {
-            // TODO : そのうち敵のプール内からの生成
 
-            // 有効なタイル取得
-            
-        }
+        // カウンターが0になるまで何もしない
+        if (_turnSpawnCounter > 0) return;
+
+        // 次回生成までのカウンターをリセット
+        _turnSpawnCounter = _maxSpawnCounter;
+
+        // 敵生成
+        EnemySpawner.Instance.SpawnEnemy(tile);
     }
     /// <summary>
     /// 準備処理

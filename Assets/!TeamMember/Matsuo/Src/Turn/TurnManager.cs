@@ -104,6 +104,16 @@ public class TurnManager : MonoBehaviour
     {
         Debug.Log("敵ターン終了");
 
+        // ターン経過によるタイル処理
+        foreach (HexTileData tile in HexTileManager.instance.GetAllTiles())
+        {
+            // 属性が存在するタイルのみ処理
+            if (tile.attributeTile != null)
+            {
+                tile.attributeTile.OnTickTile(tile);
+            }
+        }
+
         StartPlayerTurn();
     }
 

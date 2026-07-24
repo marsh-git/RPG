@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.ProBuilder.Shapes;
 
 public class HexMapGenerator : MonoBehaviour {
     /// <summary>
@@ -23,7 +24,8 @@ public class HexMapGenerator : MonoBehaviour {
 
     [Header("UnitPrefabs")]
     [SerializeField] private PlayerSpawner playerSpawner = null;
-    [SerializeField] private OutpostSpawner enemySpawner = null;
+    // TODO : ここはいずれかは消すようにする
+    [SerializeField] private EnemyBase _enemyObject = null;
 
     [Header("一括管理マスターデータベース参照")]
     [SerializeField] private BiomeVisualDataSO mapConfig = null;
@@ -88,7 +90,7 @@ public class HexMapGenerator : MonoBehaviour {
 
         // フェーズ5: キャラクターのスポーン
         // 構築が完了したマップデータ上にプレイヤーと敵を配置
-        SpawnCharacters(playerSpawnCandidates);
+        SpawnCharacters(playerSpawnCandidates, mapRand);
 
         Debug.Log($"【マップ生成完了】シード値: {config.Seed} / 総エリア数: {areaCenters.Count} / 総タイル数: {allTileList.Count}");
     }
@@ -268,6 +270,8 @@ public class HexMapGenerator : MonoBehaviour {
 
             // 中心タイルに街属性を設定
             townCenter.SetAttributeTile(AttributeFactory.Create(eAttribute.Town));
+            // 管理クラスに追加
+            HexTileManager.instance.AddEnableAttributeTile(townCenter.attributeTile);
 
             // 周囲6方向の隣接マスに対しても街属性を設定
             foreach(eDirectionHex dir in Directions) {
@@ -276,6 +280,8 @@ public class HexMapGenerator : MonoBehaviour {
                 // 隣接マスが存在し、かつ自エリア内に収まっている場合のみ属性を付与
                 if(neighbor != null && areaTiles.Contains(neighbor)) {
                     neighbor.SetAttributeTile(AttributeFactory.Create(eAttribute.Town));
+                    // 管理クラスに追加
+                    HexTileManager.instance.AddEnableAttributeTile(neighbor.attributeTile);
                 }
             }
         }
@@ -297,8 +303,9 @@ public class HexMapGenerator : MonoBehaviour {
                 HexTileData shopTile = emptyAreaTiles[randIdx];
 
                 shopTile.SetAttributeTile(AttributeFactory.Create(eAttribute.Shop));
-                if(shopTile.attributeTile is ShopAttribute shopAttr) {
-                    // shopAttr.Setup(...);
+                if(shopTile.attributeTile is ShopAttribute shopAttribute) {
+                    // 管理クラスに追加
+                    HexTileManager.instance.AddEnableAttributeTile(shopAttribute);
                 }
 
                 RemoveAtSwapLast(emptyAreaTiles, randIdx);
@@ -310,9 +317,11 @@ public class HexMapGenerator : MonoBehaviour {
                 HexTileData campTile = emptyAreaTiles[randIdx];
 
                 campTile.SetAttributeTile(AttributeFactory.Create(eAttribute.Camp));
-                if(campTile.attributeTile is CampAttribute campAttr) {
+                if(campTile.attributeTile is CampAttribute campAttribute) {
                     // campAttr.Setup(...);
                     Debug.Log(campTile.areaID + campTile.ID + "に生成されました");
+                    // 管理クラスに追加
+                    HexTileManager.instance.AddEnableAttributeTile(campAttribute);
                 }
                 RemoveAtSwapLast(emptyAreaTiles, randIdx);
             }
@@ -333,9 +342,12 @@ public class HexMapGenerator : MonoBehaviour {
 
             targetTile.SetAttributeTile(AttributeFactory.Create(eAttribute.Outpost));
             if(targetTile.attributeTile is OutpostAttribute outpostTile) {
-                outpostTile.Setup(3);
+                outpostTile.Setup(3, _enemyObject);
+                // 初期生成
+                outpostTile.FirstSpawnBySeed(targetTile, mapRand);
+                // 管理クラスに追加
+                HexTileManager.instance.AddEnableAttributeTile(outpostTile);
             }
-
             emptyTileList.RemoveAt(randIdx);
             outpostsPlaced++;
         }
@@ -355,6 +367,8 @@ public class HexMapGenerator : MonoBehaviour {
 
                 eventTile.Setup(eventData.EventID, eventData.endEventFlag);
                 eventDataList.RemoveAt(eventID); // 重複防止
+                // 管理クラスに追加
+                HexTileManager.instance.AddEnableAttributeTile(eventTile);
             }
 
             emptyTileList.RemoveAt(tileIdx);
@@ -372,6 +386,8 @@ public class HexMapGenerator : MonoBehaviour {
             targetTile.SetAttributeTile(AttributeFactory.Create(eAttribute.Crops));
             if(targetTile.attributeTile is CropsAttribute cropsTile) {
                 cropsTile.Setup(0); // 初期状態のセットアップ
+                // 管理クラスに追加
+                HexTileManager.instance.AddEnableAttributeTile(cropsTile);
             }
 
             emptyTileList.Remove(targetTile);
@@ -431,9 +447,8 @@ public class HexMapGenerator : MonoBehaviour {
     /// 構築が完了したマップデータに基づき、プレイヤーや敵ユニットのスポーン処理を実行する。
     /// </summary>
     /// <param name="playerSpawnCandidates">プレイヤースポーン候補地のリスト</param>
-    private void SpawnCharacters(List<HexTileObject> playerSpawnCandidates) {
-        playerSpawner.Spawn(playerSpawnCandidates);
-        enemySpawner.SpawnOutpost(playerSpawnCandidates, 3);
+    private void SpawnCharacters(List<HexTileObject> playerSpawnCandidates, System.Random mapRand) {
+        playerSpawner.Spawn(playerSpawnCandidates, mapRand);
     }
     /// <summary>
     /// 決定済みの街の中心座標を基に、中心と隣接する6方向すべての「街予定地」のグローバル座標を事前に計算して収集する。

@@ -13,19 +13,19 @@ public static class AttributeFactory{
     public static void Initialize() {
         _attributeRegistry = new();
         // 何もない
-        Register(eAttribute.None, () => new NoneAttribute());
+        Register(eAttribute.None,       () => new NoneAttribute());
         // イベントクラス
-        Register(eAttribute.Event, () => new EventAttribute());
+        Register(eAttribute.Event,      () => new EventAttribute());
         // 作物クラス
-        Register(eAttribute.Crops, () => new CropsAttribute());
+        Register(eAttribute.Crops,      () => new CropsAttribute());
         // 街クラス
-        Register(eAttribute.Town, () => new TownAttribute());
+        Register(eAttribute.Town,       () => new TownAttribute());
         // 敵の前哨基地クラス
-        Register(eAttribute.Outpost, () => new OutpostAttribute());
+        Register(eAttribute.Outpost,    () => new OutpostAttribute());
         // ショップクラス
-        Register(eAttribute.Shop, () => new ShopAttribute());
+        Register(eAttribute.Shop,       () => new ShopAttribute());
         // キャンプ地クラス
-        Register(eAttribute.Camp, () => new CampAttribute());
+        Register(eAttribute.Camp,       () => new CampAttribute());
         // 移動不可能クラス
         Register(eAttribute.CannotMove, () => new CannotMoveAttribute());
     }

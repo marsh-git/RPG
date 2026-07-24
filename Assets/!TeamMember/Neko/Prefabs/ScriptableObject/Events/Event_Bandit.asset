@@ -1,0 +1,63 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cef4ff9f28dc0c44c9edc45840142fe8, type: 3}
+  m_Name: Event_Bandit
+  m_EditorClassIdentifier: 
+  eventName: "\u76D7\u8CCA"
+  eventDescription: "\u8302\u307F\u306E\u9670\u304B\u3089\u4E00\u4EBA\u306E\u76D7\u8CCA\u304C\u59FF\u3092\u73FE\u3057\u305F\u3002\n\u5203\u3092\u5411\u3051\u306A\u304C\u3089\u3001\u4E0D\u6575\u306A\u7B11\u307F\u3092\u6D6E\u304B\u3079\u308B\u3002\n\u300C\u547D\u30AC\u60DC\u30B7\u30AB\u30C3\u30BF\u30E9\u91D1\u30F2\u7F6E\u30A4\u30C6\u30A4\u30B1\u300D"
+  eventImage: {fileID: 21300000, guid: 2d4eb923b49d9d64588384808aca2312, type: 3}
+  addStatus:
+    maxHp: 0
+    attack: 0
+    defense: 0
+    luck: 0
+    radius: 0
+  endEventFlag: 1
+  buttonInfos:
+  - mainText: "\u62B5\u6297\u3059\u308B"
+    subText: HP-20
+  - mainText: "\u30B3\u30A4\u30F3\u3092\u6E21\u3059"
+    subText: "\u30B3\u30A4\u30F3-200"
+  - mainText: "\u7ACB\u3061\u53BB\u308B"
+    subText: 
+  nextEventDescription:
+  - "\u3042\u306A\u305F\u306F\u76D7\u8CCA\u306B\u7ACB\u3061\u5411\u304B\u3063\u305F\u3002\n\u6FC0\u3057\u3044\u653B\u9632\u306E\u672B\u3001\u76D7\u8CCA\u306F\u9003\u3052\u53BB\u3063\u305F\u304C\u3001\n\u3042\u306A\u305F\u3082\u6DF1\u3044\u50B7\u3092\u8CA0\u3063\u3066\u3057\u307E\u3063\u305F\u3002"
+  - "\u3042\u306A\u305F\u306F\u76D7\u8CCA\u3078\u30B3\u30A4\u30F3\u3092\u5DEE\u3057\u51FA\u3057\u305F\u3002\n\u300C\u8CE2\u30A4\u5224\u65AD\u30C0\u300D\n\u76D7\u8CCA\u306F\u6E80\u8DB3\u305D\u3046\u306B\u7B11\u3046\u3068\u3001\n\u30B3\u30A4\u30F3\u3092\u61D0\u3078\u3057\u307E\u3044\u8FBC\u307F\u3001\u305D\u306E\u307E\u307E\u59FF\u3092\u6D88\u3057\u305F\u3002"
+  choiceData:
+  - addStatus: 0
+    addRelic: 0
+    takeDamage: 1
+    takeHeal: 0
+    addCoin: 0
+    status: []
+    relicData: []
+    damage: 20
+    heal: 0
+    coin: 0
+    nextPage: 1
+    addRandom: 0
+    useCoin: 0
+    useCoinAmount: 0
+  - addStatus: 0
+    addRelic: 0
+    takeDamage: 0
+    takeHeal: 0
+    addCoin: 1
+    status: []
+    relicData: []
+    damage: 0
+    heal: 0
+    coin: -200
+    nextPage: 1
+    addRandom: 0
+    useCoin: 0
+    useCoinAmount: 0

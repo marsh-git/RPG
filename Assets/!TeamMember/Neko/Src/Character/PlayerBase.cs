@@ -172,12 +172,14 @@ public class PlayerBase : CharacterBase, IClickable
     }
 
     /// <summary>
-    /// 所持金を追加する(永続バフとは別物とする)
+    /// 所持金を追加する(減少なら負の値を入れる)
     /// </summary>
     /// <param name="amout"></param>
     public void AddCoin(int amout)
     {
         coin += amout;
+
+        if (coin < 0) coin = 0;
     }
 
     /// <summary>

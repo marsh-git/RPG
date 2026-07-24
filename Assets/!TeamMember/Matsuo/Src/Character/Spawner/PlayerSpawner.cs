@@ -12,7 +12,7 @@ public class PlayerSpawner : MonoBehaviour
     /// </summary>
     /// <param name="candidateTiles">生成候補タイル</param>
     /// <returns>生成したプレイヤー</returns>
-    public PlayerBase Spawn(List<HexTileObject> candidateTiles)
+    public PlayerBase Spawn(List<HexTileObject> candidateTiles, System.Random spawnRand)
     {
         // 候補タイルまたはプレハブが存在しない場合は処理しない
         if (candidateTiles == null || candidateTiles.Count == 0 || playerPrefab == null)
@@ -22,7 +22,7 @@ public class PlayerSpawner : MonoBehaviour
         }
 
         // リストの要素数からランダムタイルを取得する
-        int randomIndex = Random.Range(0, candidateTiles.Count);
+        int randomIndex = spawnRand.Next(0, candidateTiles.Count);
         HexTileObject targetTile = candidateTiles[randomIndex];
 
         // タイル情報を取得

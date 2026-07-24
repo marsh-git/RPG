@@ -234,24 +234,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ed9e2d71fe6a954ca290c6cbd9a7909, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1 &876799602 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7583651550109867487, guid: 8c04e53b60ba3fc43b09d5d6bf5999ca, type: 3}
-  m_PrefabInstance: {fileID: 565317314148611281}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &876799604
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 876799602}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 68e5bcd7c5b80bf469cf95b89737de80, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  outpostPrefab: {fileID: -7664422670795588050, guid: 6271264ce28ca92419a8799041688170, type: 3}
 --- !u!1 &1023764354
 GameObject:
   m_ObjectHideFlags: 0
@@ -920,7 +902,7 @@ PrefabInstance:
       objectReference: {fileID: 1446562999}
     - target: {fileID: 2595365664090884219, guid: 8c04e53b60ba3fc43b09d5d6bf5999ca, type: 3}
       propertyPath: debugSeed
-      value: 0
+      value: 12345
       objectReference: {fileID: 0}
     - target: {fileID: 2595365664090884219, guid: 8c04e53b60ba3fc43b09d5d6bf5999ca, type: 3}
       propertyPath: mapConfig
@@ -931,9 +913,17 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 11400000, guid: 8b65ffa69cfc45d47a1a37c8c5c044c1, type: 2}
     - target: {fileID: 2595365664090884219, guid: 8c04e53b60ba3fc43b09d5d6bf5999ca, type: 3}
+      propertyPath: enemyObject
+      value: 
+      objectReference: {fileID: 6697827585679079801, guid: 8da2be6b0f9d8c549a12c5fd70014252, type: 3}
+    - target: {fileID: 2595365664090884219, guid: 8c04e53b60ba3fc43b09d5d6bf5999ca, type: 3}
+      propertyPath: _enemyObject
+      value: 
+      objectReference: {fileID: 6697827585679079801, guid: 8da2be6b0f9d8c549a12c5fd70014252, type: 3}
+    - target: {fileID: 2595365664090884219, guid: 8c04e53b60ba3fc43b09d5d6bf5999ca, type: 3}
       propertyPath: enemySpawner
       value: 
-      objectReference: {fileID: 876799604}
+      objectReference: {fileID: 0}
     - target: {fileID: 2595365664090884219, guid: 8c04e53b60ba3fc43b09d5d6bf5999ca, type: 3}
       propertyPath: playerPrefab
       value: 
@@ -944,7 +934,7 @@ PrefabInstance:
       objectReference: {fileID: 1819134655}
     - target: {fileID: 2595365664090884219, guid: 8c04e53b60ba3fc43b09d5d6bf5999ca, type: 3}
       propertyPath: useStaticSeed
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2595365664090884219, guid: 8c04e53b60ba3fc43b09d5d6bf5999ca, type: 3}
       propertyPath: biomeTerrainConfig
@@ -1008,12 +998,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 4237554396071198374, guid: 8c04e53b60ba3fc43b09d5d6bf5999ca, type: 3}
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 7583651550109867487, guid: 8c04e53b60ba3fc43b09d5d6bf5999ca, type: 3}
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 7583651550109867487, guid: 8c04e53b60ba3fc43b09d5d6bf5999ca, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 876799604}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8c04e53b60ba3fc43b09d5d6bf5999ca, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:

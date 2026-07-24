@@ -23,7 +23,8 @@ public class HexMapGenerator : MonoBehaviour {
 
     [Header("UnitPrefabs")]
     [SerializeField] private PlayerSpawner playerSpawner = null;
-    [SerializeField] private OutpostSpawner enemySpawner = null;
+    // TODO : ここはいずれかは消すようにする
+    [SerializeField] private EnemyBase _enemyObject = null;
 
     [Header("一括管理マスターデータベース参照")]
     [SerializeField] private BiomeVisualDataSO mapConfig = null;
@@ -88,7 +89,7 @@ public class HexMapGenerator : MonoBehaviour {
 
         // フェーズ5: キャラクターのスポーン
         // 構築が完了したマップデータ上にプレイヤーと敵を配置
-        SpawnCharacters(playerSpawnCandidates);
+        SpawnCharacters(playerSpawnCandidates, mapRand);
 
         Debug.Log($"【マップ生成完了】シード値: {config.Seed} / 総エリア数: {areaCenters.Count} / 総タイル数: {allTileList.Count}");
     }
@@ -333,7 +334,9 @@ public class HexMapGenerator : MonoBehaviour {
 
             targetTile.SetAttributeTile(AttributeFactory.Create(eAttribute.Outpost));
             if(targetTile.attributeTile is OutpostAttribute outpostTile) {
-                outpostTile.Setup(3);
+                outpostTile.Setup(3, _enemyObject);
+                // 初期生成
+                outpostTile.FirstSpawnBySeed(targetTile, mapRand);
             }
 
             emptyTileList.RemoveAt(randIdx);
@@ -431,9 +434,8 @@ public class HexMapGenerator : MonoBehaviour {
     /// 構築が完了したマップデータに基づき、プレイヤーや敵ユニットのスポーン処理を実行する。
     /// </summary>
     /// <param name="playerSpawnCandidates">プレイヤースポーン候補地のリスト</param>
-    private void SpawnCharacters(List<HexTileObject> playerSpawnCandidates) {
-        playerSpawner.Spawn(playerSpawnCandidates);
-        enemySpawner.SpawnOutpost(playerSpawnCandidates, 3);
+    private void SpawnCharacters(List<HexTileObject> playerSpawnCandidates, System.Random mapRand) {
+        playerSpawner.Spawn(playerSpawnCandidates, mapRand);
     }
     /// <summary>
     /// 決定済みの街の中心座標を基に、中心と隣接する6方向すべての「街予定地」のグローバル座標を事前に計算して収集する。

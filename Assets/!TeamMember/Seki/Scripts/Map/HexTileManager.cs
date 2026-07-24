@@ -136,4 +136,13 @@ public class HexTileManager : MonoBehaviour {
             break;
         }
     }
+
+    /// <summary>
+    /// 全タイルデータ取得
+    /// </summary>
+    /// <returns>全タイル一覧</returns>
+    public IReadOnlyList<HexTileData> GetAllTiles()
+    {
+        return _tileDataList;
+    }
 }

@@ -48,4 +48,11 @@ public class EventAttribute : IAttributeTile{
     public void OnTickTile(HexTileData tile) {
         
     }
+    /// <summary>
+    /// プレイヤーに最初に見つかった時の処理
+    /// </summary>
+    /// <param name="tile"></param>
+    public void OnFoundThisFirst(HexTileData tile) {
+        
+    }
 }

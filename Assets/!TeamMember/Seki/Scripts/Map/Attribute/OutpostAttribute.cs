@@ -50,4 +50,11 @@ public class OutpostAttribute : IAttributeTile {
         _turnSpawnCounter = setCounter;
         _maxSpawnCounter = setCounter;
     }
+    /// <summary>
+    /// プレイヤーに見つかった時の処理
+    /// </summary>
+    /// <param name="tile"></param>
+    public void OnFoundThisFirst(HexTileData tile) {
+
+    }
 }

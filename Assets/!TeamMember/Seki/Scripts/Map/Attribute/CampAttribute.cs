@@ -56,4 +56,11 @@ public class CampAttribute : IAttributeTile {
     public void UseCamp() {
         _isUse = true;
     }
+    /// <summary>
+    /// プレイヤーに最初に見つかった時の処理
+    /// </summary>
+    /// <param name="tile"></param>
+    public void OnFoundThisFirst(HexTileData tile) {
+        
+    }
 }

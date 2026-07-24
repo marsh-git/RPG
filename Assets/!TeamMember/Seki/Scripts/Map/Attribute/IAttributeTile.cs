@@ -24,4 +24,9 @@ public interface IAttributeTile {
     /// </summary>
     /// <param name="tile"></param>
     void OnTickTile(HexTileData tile);
+    /// <summary>
+    /// プレイヤーに最初に見つかった時の処理
+    /// </summary>
+    /// <param name="tile"></param>
+    void OnFoundThisFirst(HexTileData tile);
 }

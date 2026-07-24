@@ -79,4 +79,11 @@ public class CropsAttribute : IAttributeTile {
         // IDを取り除く
         cropsID = -1;
     }
+    /// <summary>
+    /// プレイヤーに最初に見つかった時の処理
+    /// </summary>
+    /// <param name="tile"></param>
+    public void OnFoundThisFirst(HexTileData tile) {
+        
+    }
 }

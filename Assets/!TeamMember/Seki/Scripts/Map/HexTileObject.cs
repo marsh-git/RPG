@@ -67,7 +67,7 @@ public class HexTileObject : MonoBehaviour, IClickable {
     /// <summary>
     /// 見た目オブジェクトの削除
     /// </summary>
-    private void ClearDecorations() {
+    public void ClearDecorations() {
         if(_terrainObject != null) Destroy(_terrainObject);
         if(_attributeObject != null) Destroy(_attributeObject);
     }

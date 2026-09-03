@@ -70,7 +70,10 @@ public class HexTileData {
     /// タイル属性のクリア
     /// </summary>
     public void ClearAtrribute() {
+        // タイル属性をなくす
         attributeTile = AttributeFactory.Create(eAttribute.None);
+        // 見た目オブジェクトのクリア
+        GetObject()?.ClearDecorations();
     }
     /// <summary>
     /// バイオームの設定

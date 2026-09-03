@@ -115,7 +115,7 @@ public class PlayerBase : CharacterBase, IClickable
     }
 
     /// <summary>
-    /// レリックのバフを再適応する(ジョブ入れ替え時のステータスに入れ込む)
+    /// レリックのバフを再適応する
     /// </summary>
     private void ReconfigureRelicsStatus()
     {

@@ -40,7 +40,7 @@ public static class HexRouteSearcher {
         // ゴール地点そのものが進入不可能な状態（山岳・移動不可属性・別ユニットの存在）であれば即座に終了
         if(goal.terrain == eTerrain.Mountain ||
            goal.Attribute == eAttribute.CannotMove ||
-           goal.tileState == eTileState.CharacterIn) return null;
+           goal.tileState == eTileMoveState.CharacterIn) return null;
 
         // 探索候補ノード（オープンリスト）と探索完了ノード（クローズドリスト）の初期化
         List<HexTileData> openSet = new List<HexTileData> { start };
@@ -77,8 +77,8 @@ public static class HexRouteSearcher {
                 if(neighbor.terrain == eTerrain.Mountain || neighbor.Attribute == eAttribute.CannotMove) continue;
 
                 // ユニット衝突判定：道中に別のキャラクターが配置されている、または移動予約がある場合は通行不可（壁）として処理
-                if(neighbor.tileState == eTileState.CharacterIn
-                    || neighbor.tileState == eTileState.Reserved) continue;
+                if(neighbor.tileState == eTileMoveState.CharacterIn
+                    || neighbor.tileState == eTileMoveState.Reserved) continue;
 
                 // 地形に応じた移動コストの取得と安全弁チェック
                 int movementCost = (int)neighbor.GetMovementCost();
@@ -143,7 +143,7 @@ public static class HexRouteSearcher {
                 scannedAllTiles.Add(neighbor);
 
                 // ユニット衝突判定：敵や味方がいるマスは、探索の末端とする（frontierに入れないことで奥へのすり抜けを防ぐ）
-                if(neighbor.tileState == eTileState.CharacterIn || neighbor.tileState == eTileState.Reserved) {
+                if(neighbor.tileState == eTileMoveState.CharacterIn || neighbor.tileState == eTileMoveState.Reserved) {
                     continue;
                 }
 
@@ -153,7 +153,7 @@ public static class HexRouteSearcher {
                     frontier.Enqueue(neighbor);
                     movableTileList.Add(neighbor);
 
-                    neighbor.SetTileState(eTileState.Movable);
+                    neighbor.SetTileState(eTileMoveState.Movable);
                 }
             }
         }
@@ -187,7 +187,7 @@ public static class HexRouteSearcher {
                 if(neighbor == null || neighbor.terrain == eTerrain.Mountain || neighbor.Attribute == eAttribute.CannotMove) continue;
 
                 // ユニット衝突判定：他キャラや移動予約があるマスは、侵入もすり抜けも不可（壁扱い）
-                if(neighbor.tileState == eTileState.CharacterIn || neighbor.tileState == eTileState.Reserved) continue;
+                if(neighbor.tileState == eTileMoveState.CharacterIn || neighbor.tileState == eTileMoveState.Reserved) continue;
 
                 int movementCost = (int)neighbor.GetMovementCost();
                 if(movementCost < 0) continue;
@@ -202,7 +202,7 @@ public static class HexRouteSearcher {
                     movableTileList.Add(neighbor);
 
                     // UI表示などのためにタイルのステートを更新
-                    neighbor.SetTileState(eTileState.Movable);
+                    neighbor.SetTileState(eTileMoveState.Movable);
                 }
             }
         }
@@ -230,7 +230,7 @@ public static class HexRouteSearcher {
             if(tile == start) continue;
 
             // マスにキャラクターが存在する場合
-            if(tile.tileState == eTileState.CharacterIn) {
+            if(tile.tileState == eTileMoveState.CharacterIn) {
 
                 // TODO: キャラクターマネージャー等からタイル上のキャラクターデータを取得するロジック
                 // CharacterBase targetChara = CharacterManager.instance.GetCharacterOnTile(tile.ID);

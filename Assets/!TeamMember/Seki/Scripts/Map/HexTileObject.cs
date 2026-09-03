@@ -67,7 +67,7 @@ public class HexTileObject : MonoBehaviour, IClickable {
     /// <summary>
     /// 見た目オブジェクトの削除
     /// </summary>
-    private void ClearDecorations() {
+    public void ClearDecorations() {
         if(_terrainObject != null) Destroy(_terrainObject);
         if(_attributeObject != null) Destroy(_attributeObject);
     }
@@ -84,14 +84,14 @@ public class HexTileObject : MonoBehaviour, IClickable {
         // タイルデータを取得
         HexTileData targetTile = HexManager.GetTileData(ID);
         switch(targetTile.tileState) {
-            case eTileState.Normal:
+            case eTileMoveState.Normal:
             // 移動の片付け処理
             MovementManager.TeardownMovement();
             // クリック管理クラスに伝える
             ClickableHighlight.OnTileHighlight(targetTile);
             Debug.Log(targetTile.Attribute);
             break;
-            case eTileState.Movable:
+            case eTileMoveState.Movable:
             // 移動対象キャラクターの取得（プレイヤーの取得）
             CharacterBase selectChara = MovementManager.GetFirstMoveCharacter();
             if(selectChara == null) return;
@@ -102,9 +102,9 @@ public class HexTileObject : MonoBehaviour, IClickable {
                 // 移動ルートの決定
                 List<HexTileData> route = HexRouteSearcher.FindPath(startTile, targetTile, selectChara.IsEnemy());
                 // 現在のマスを通常マスに戻す
-                startTile.SetTileState(eTileState.Normal);
+                startTile.SetTileState(eTileMoveState.Normal);
                 // 移動先マスをキャラクター存在マスに変更
-                targetTile.SetTileState(eTileState.CharacterIn);
+                targetTile.SetTileState(eTileMoveState.CharacterIn);
                 // 移動ルートの設定
                 selectChara.SetMoveRoute(route);
                 // ハイライトの解除
@@ -118,7 +118,7 @@ public class HexTileObject : MonoBehaviour, IClickable {
                 MovementManager.TeardownMovement();
             }
             break;
-            case eTileState.CharacterIn:
+            case eTileMoveState.CharacterIn:
             // 移動の片付け処理
             MovementManager.TeardownMovement();
             // クリック管理クラスに伝える

@@ -28,7 +28,7 @@ public class PlayerSpawner : MonoBehaviour
         // タイル情報を取得
         HexTileData tileData = targetTile.GetTileData();
         // タイルの状態を更新
-        tileData.SetTileState(eTileState.CharacterIn);
+        tileData.SetTileState(eTileMoveState.CharacterIn);
 
         // プレイヤーを生成する
         PlayerBase player = Instantiate(playerPrefab, targetTile.transform.position, Quaternion.identity);

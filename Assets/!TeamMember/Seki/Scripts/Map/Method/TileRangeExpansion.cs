@@ -74,8 +74,8 @@ public static class TileRangeExpansion {
             validTilesInRing.RemoveAll(neighbor =>
                 neighbor == null ||
                 neighbor.Attribute == eAttribute.CannotMove ||
-                neighbor.tileState == eTileState.CharacterIn ||
-                neighbor.tileState == eTileState.Reserved
+                neighbor.tileState == eTileMoveState.CharacterIn ||
+                neighbor.tileState == eTileMoveState.Reserved
             );
 
             // この距離のリング内に1つでも有効なマスが見つかった場合
@@ -156,11 +156,11 @@ public static class TileRangeExpansion {
     /// 中心タイルから指定された半径「以内」にあるすべてのマスのリストを取得する
     /// ※中心タイル自体は含めない
     /// </summary>
-    /// <param name="center">基準となる中心のタイル</param>
+    /// <param name="centerTile">基準となる中心のタイル</param>
     /// <param name="radius">探索半径（1以上を指定、0以下の場合は空のリストを返す）</param>
     /// <returns>半径内に存在する全タイルのリスト（中心除く）</returns>
-    public static List<HexTileData> GetTilesWithinRadius(HexTileData center, int radius) {
-        if(center == null || radius <= 0) return new List<HexTileData>();
+    public static List<HexTileData> GetTilesWithinRadius(HexTileData centerTile, int radius) {
+        if(centerTile == null || radius <= 0) return new List<HexTileData>();
 
         // 中心を除外するため、初期容量から1を引く
         int estimatedSize = 3 * radius * (radius + 1);
@@ -176,8 +176,8 @@ public static class TileRangeExpansion {
                 if(q == 0 && r == 0) continue;
 
                 // 中心タイルの絶対座標に相対オフセットを加算して対象座標を特定
-                int targetQ = center.gridPosX + q;
-                int targetR = center.gridPosY + r;
+                int targetQ = centerTile.gridPosX + q;
+                int targetR = centerTile.gridPosY + r;
 
                 // マネージャーから該当する座標のタイルデータを取得
                 HexTileData tileData = HexTileManager.instance.GetTileData(targetQ, targetR);
@@ -201,8 +201,8 @@ public static class TileRangeExpansion {
         radiusTileList.RemoveAll(neighbor =>
             neighbor == null ||
             neighbor.Attribute == eAttribute.CannotMove ||
-            neighbor.tileState == eTileState.CharacterIn ||
-            neighbor.tileState == eTileState.Reserved
+            neighbor.tileState == eTileMoveState.CharacterIn ||
+            neighbor.tileState == eTileMoveState.Reserved
         );
         return radiusTileList;
     }

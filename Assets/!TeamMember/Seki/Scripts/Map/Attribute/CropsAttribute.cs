@@ -73,11 +73,14 @@ public class CropsAttribute : IAttributeTile {
     /// <summary>
     /// 収穫処理
     /// </summary>
-    public void HarvestCrops() {
-        // 収穫処理を行う
+    /// <param name="tile"></param>
+    public void HarvestCrops(HexTileData tile) {
+        // 収穫処理を行う(プレイヤーのアイテムに作物を渡す)
 
         // IDを取り除く
         cropsID = -1;
+        // 見た目のリセット
+        tile.ClearAtrribute();
     }
     /// <summary>
     /// プレイヤーに最初に見つかった時の処理

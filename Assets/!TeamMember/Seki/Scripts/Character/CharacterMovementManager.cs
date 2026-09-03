@@ -79,7 +79,7 @@ public class CharacterMovementManager : MonoBehaviour {
 
         foreach(var tile in _movableTileList) {
             if(tile == null) continue;
-            tile.SetTileState(eTileState.Normal);
+            tile.SetTileState(eTileMoveState.Normal);
         }
         _movableTileList.Clear();
     }

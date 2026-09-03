@@ -11,13 +11,13 @@ public class HexTileData {
     // エリアID
     public int areaID { get; private set; } = -1;
     // マス上にいるキャラクターID
-    public int characterID { get; private set; } = -1;
+    public bool isPlayerIn { get; private set; } = false;
     // マス上のX座標
     public int gridPosX { get; private set; } = -1;
     // マス上のY座標
     public int gridPosY { get; private set; } = -1;
     // タイルの状態
-    public eTileState tileState { get; private set; } = eTileState.Normal;
+    public eTileMoveState tileState { get; private set; } = eTileMoveState.Normal;
     // タイルの地形
     public eTerrain terrain { get; private set; } = eTerrain.Invalid;
     // タイル属性
@@ -49,7 +49,7 @@ public class HexTileData {
     /// タイル状態の設定
     /// </summary>
     /// <param name="setState"></param>
-    public void SetTileState(eTileState setState) {
+    public void SetTileState(eTileMoveState setState) {
         tileState = setState;
     }
     /// <summary>
@@ -70,7 +70,10 @@ public class HexTileData {
     /// タイル属性のクリア
     /// </summary>
     public void ClearAtrribute() {
+        // タイル属性をなくす
         attributeTile = AttributeFactory.Create(eAttribute.None);
+        // 見た目オブジェクトのクリア
+        GetObject()?.ClearDecorations();
     }
     /// <summary>
     /// バイオームの設定

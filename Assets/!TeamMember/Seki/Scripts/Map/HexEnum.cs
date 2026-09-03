@@ -80,16 +80,24 @@ public enum eTileHighlight {
     Max
 }
 /// <summary>
-/// タイルのステート
+/// タイルの移動ステート
 /// </summary>
-public enum eTileState {
+public enum eTileMoveState {
+    Invalid = -1,
     Normal,         // 通常
     Movable,        // 移動可能
-    CharacterIn,    // 選択状態
+    CharacterIn,    // キャラクターがいる状態
     Reserved,       // 他のキャラの移動予約
-    Building,       // 建物
 
     Max
+}
+/// <summary>
+/// タイルの種類
+/// </summary>
+public enum eTileType{
+    Invalid = -1,
+    Normal,         // 通常
+    Building,       // 建物
 }
 /// <summary>
 /// 数量列挙体

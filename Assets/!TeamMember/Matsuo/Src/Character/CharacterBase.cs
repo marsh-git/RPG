@@ -98,7 +98,7 @@ public abstract class CharacterBase : MonoBehaviour
             HexTileData oldTile = HexTileManager.instance.GetTileData(tileID);
             if (oldTile != null)
             {
-                oldTile.SetTileState(eTileState.Normal);
+                oldTile.SetTileState(eTileMoveState.Normal);
             }
 
             // タイルID更新
@@ -108,7 +108,7 @@ public abstract class CharacterBase : MonoBehaviour
             HexTileData newTile = HexTileManager.instance.GetTileData(tileID);
             if (newTile != null)
             {
-                newTile.SetTileState(eTileState.CharacterIn);
+                newTile.SetTileState(eTileMoveState.CharacterIn);
             }
         });
         IsMoving = false;

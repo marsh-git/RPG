@@ -3,13 +3,20 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class OutpostAttribute : IAttributeTile {
+    // 前哨基地の耐久値（破壊されると敵の生成が止まる）
+    public int baseHP { get; private set; } = 0;
+    // ターンごとに敵を生成するカウンター
     private int _turnSpawnCounter = -1;
+    // 敵を生成するまでのターンの最大数
     private int _maxSpawnCounter = -1;
+    // 敵を生成する範囲
     private int _spawnRange = -1;
+    // 生成する敵のプレハブ（そのうち種類が増えて配列型になりそう）
     private EnemyBase _enemyPrefab = null;
+    // 生成した敵のカウンター
     private int _enemySpawnCounter = -1;
+    // 生成する敵の最大数
     private int _maxEnemySpawn = -1;
-
 
     /// <summary>
     /// 自身の属性取得
@@ -75,7 +82,7 @@ public class OutpostAttribute : IAttributeTile {
         int randIndex = spawnRand.Next(0, candidates.Count);
         HexTileData spawnTile = candidates[randIndex];
         // タイル状態をキャラクターがいる状態にする
-        spawnTile.SetTileState(eTileState.CharacterIn);
+        spawnTile.SetTileState(eTileMoveState.CharacterIn);
         // 敵の生成
         EnemyBase enemy = Object.Instantiate(_enemyPrefab, spawnTile.GetTilePos(), Quaternion.identity);
         enemy.SetTile(spawnTile.ID);
@@ -100,7 +107,7 @@ public class OutpostAttribute : IAttributeTile {
         int randIndex = Random.Range(0, candidates.Count);
         HexTileData spawnTile = candidates[randIndex];
         // タイル状態をキャラクターがいる状態にする
-        spawnTile.SetTileState(eTileState.CharacterIn);
+        spawnTile.SetTileState(eTileMoveState.CharacterIn);
         // 敵の生成
         EnemyBase enemy = Object.Instantiate(_enemyPrefab, spawnTile.GetTilePos(), Quaternion.identity);
         enemy.SetTile(spawnTile.ID);

@@ -7,6 +7,8 @@ public class PlayerBase : CharacterBase, IClickable
 {
 
     public static PlayerBase instance { get; private set; }
+    private DiceInventoryUI actionInventory;
+    private ActionData actionData;
 
     //  プレイヤーレベル変数
     private int lv = 1;
@@ -45,6 +47,9 @@ public class PlayerBase : CharacterBase, IClickable
 
         //  初期職業がnullなら初期職業に変更する
         if (jobData == null) SetJob(jobManager.START_JOB);
+
+        //アクションインベントリの取得
+        actionInventory = FindObjectOfType<DiceInventoryUI>();
     }
 
     /// <summary>
@@ -115,7 +120,7 @@ public class PlayerBase : CharacterBase, IClickable
     }
 
     /// <summary>
-    /// レリックのバフを再適応する(ジョブ入れ替え時のステータスに入れ込む)
+    /// レリックのバフを再適応する
     /// </summary>
     private void ReconfigureRelicsStatus()
     {
@@ -206,9 +211,11 @@ public class PlayerBase : CharacterBase, IClickable
         return current;
     }
 
-    public void UseAction()
+    public void UseAction(int num)
     {
-        
+        actionInventory.GetAction(num);
+        actionData = actionInventory.GetAction(num);
+        int damage = DamageCalculate(actionData.Damage, GetActionStatus());
     }
 
     /// <summary>

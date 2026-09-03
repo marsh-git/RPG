@@ -7,7 +7,7 @@ public class ActionDetailUI : MonoBehaviour {
     [SerializeField] private Image icon;
 
     [SerializeField] private TMP_Text actionName;
-    [SerializeField] private TMP_Text attribute;
+    [SerializeField] private TMP_Text element;
     [SerializeField] private TMP_Text damage;
     [SerializeField] private TMP_Text statusEffect;
     [SerializeField] private TMP_Text attackRange;
@@ -18,7 +18,7 @@ public class ActionDetailUI : MonoBehaviour {
 
         actionName.text = data.ActionName;
 
-        attribute.text = $"属性：{data.Attribute}";
+        element.text = $"属性：{data.Element}";
 
         damage.text = $"ダメージ：{data.Damage}";
 
@@ -36,7 +36,7 @@ public class ActionDetailUI : MonoBehaviour {
         icon.sprite = null;
 
         actionName.text = "";
-        attribute.text = "";
+        element.text = "";
         damage.text = "";
         statusEffect.text = "";
         attackRange.text = "";

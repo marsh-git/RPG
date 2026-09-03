@@ -15,9 +15,6 @@ public class ActionSlotUI : MonoBehaviour,
     private ActionData actionData;
 
     public void Initialize(ActionData data) {
-        Debug.Log($"icon : {icon}");
-        Debug.Log($"actionName : {actionName}");
-        Debug.Log($"button : {button}");
 
         actionData = data;
 

@@ -12,7 +12,7 @@ public class DiceInventoryUI : MonoBehaviour {
 
         for (int i = 0; i < slotCount; i++) {
             DiceSlotUI slot = Instantiate(diceSlotPrefab, slotRoot);
-            slot.Initialize(i);
+            slot.Initialize(i + 1);
             slots[i] = slot;
         }
     }

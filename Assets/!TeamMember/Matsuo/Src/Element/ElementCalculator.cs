@@ -15,6 +15,9 @@ public static class ElementCalculator
     {
         switch (attack)
         {
+            case ElementType.None:
+                return 1.0f;
+
             case ElementType.Fire:
                 if (defense == ElementType.Ice || defense == ElementType.Nature)
                     return 2f;

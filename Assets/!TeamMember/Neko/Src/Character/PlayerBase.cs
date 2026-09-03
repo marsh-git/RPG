@@ -215,6 +215,7 @@ public class PlayerBase : CharacterBase, IClickable
     {
         actionInventory.GetAction(num);
         actionData = actionInventory.GetAction(num);
+        int damage = DamageCalculate(actionData.Damage, GetActionStatus());
     }
 
     /// <summary>

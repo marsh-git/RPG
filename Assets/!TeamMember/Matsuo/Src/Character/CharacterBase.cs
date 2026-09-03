@@ -127,6 +127,17 @@ public abstract class CharacterBase : MonoBehaviour
     }
 
     /// <summary>
+    /// ダメージ計算
+    /// </summary>
+    /// <param name="damage"></param>
+    /// <param name="status"></param>
+    /// <returns></returns>
+    public int DamageCalculate(int damage, CharacterStatus status)
+    {
+        return damage + status.attack;
+    }
+
+    /// <summary>
     /// 防御などのダメージ計算をしない定数ダメージを受ける
     /// </summary>
     /// <param name="damage">攻撃力</param>

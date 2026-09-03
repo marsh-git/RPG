@@ -1,17 +1,5 @@
 using UnityEngine;
 
-public enum ActionAttribute {
-    None,
-    Fire,
-    Water,
-    Ice,
-    Thunder,
-    Ground,
-    Nature,
-    Holy,
-    Dark
-}
-
 
 public enum ActionTarget {
     Enemy,
@@ -38,7 +26,7 @@ public class ActionData : ScriptableObject {
     public string Description;
 
     [Header("性能")]
-    public ActionAttribute Attribute;
+    public ElementType Element;
     public ActionTarget Target;
 
     public int Damage;

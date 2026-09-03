@@ -3,6 +3,7 @@
 /// </summary>
 public enum ElementType
 {
+    None,   // 属性無し
     Fire,   // 火
     Water,  // 水
     Ice,    // 氷

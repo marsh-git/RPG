@@ -10,7 +10,7 @@ public class RelicDataBase : ScriptableObject
     [Header("レリックのイメージ画像")]
     [SerializeField] public Sprite relicImg;
 
-    [Header("イベント説明")]
+    [Header("レリック説明")]
     [TextArea(3, 6)] public string relicDescription;
 
     [Header("ステータス代入（なければ0）")]

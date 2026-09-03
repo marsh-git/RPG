@@ -47,7 +47,7 @@ public class TitlePart : BasePart
     }
 
     /// <summary>
-    /// ホストで始める(部屋作成)
+    /// ホストで始める(部屋作成、オンライン未対応)
     /// </summary>
     public void StartIsHost()
     {
@@ -57,7 +57,7 @@ public class TitlePart : BasePart
     }
 
     /// <summary>
-    /// クライアントで始める(部屋検索)
+    /// クライアントで始める(部屋検索、オンライン未対応)
     /// </summary>
     public void StartClient()
     {

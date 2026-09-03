@@ -7,6 +7,8 @@ using UnityEngine;
 
 public class MainGamePart : BasePart
 {
+
+    private bool setuped = false;
     public override async UniTask Init()
     {
         await base.Init();
@@ -22,12 +24,18 @@ public class MainGamePart : BasePart
     {
         await base.Setup();
         if (!NetworkServer.active) return;
+        if (setuped) return;
 
         foreach(var conn in NetworkServer.connections.Values)
         {
             //プレイヤー生成はここ
-            NetworkServer.AddPlayerForConnection(conn, CustomNetworkManager.instance.playerPrefab);
+            //NetworkServer.AddPlayerForConnection(conn, CustomNetworkManager.instance.playerPrefab);
+            CustomNetworkManager.instance.PlayerConnection(conn, CustomNetworkManager.instance.playerPrefab);
+
+            //生成と同時にターン管理に登録
+            TurnManager.Instance.RegisterPlayer(conn.identity.GetComponent<PlayerBase>());
         }
+        setuped = true;
     }
 
     /// <summary>

@@ -61,15 +61,12 @@ public class CustomNetworkManager : NetworkManager
         }
         base.OnServerConnect(_conn);
 
-       
     }
 
     public override void OnServerReady(NetworkConnectionToClient _conn)
     {
         base.OnServerReady(_conn);
-        PlayerConnection(_conn, lobbyPlayerPrefab);
        
-
     }
 
     /// <summary>
@@ -79,6 +76,7 @@ public class CustomNetworkManager : NetworkManager
     /// <param name="_conn"></param>
     public override void OnServerAddPlayer(NetworkConnectionToClient _conn)
     {
+        PlayerConnection(_conn, lobbyPlayerPrefab);
         if (!ServerManager.instance.connectPlayer.Contains(_conn.identity))
         {
             ServerManager.instance.connectPlayer.Add(_conn.identity);

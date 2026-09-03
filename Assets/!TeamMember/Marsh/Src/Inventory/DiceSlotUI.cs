@@ -20,9 +20,6 @@ public class DiceSlotUI : MonoBehaviour, IDropHandler {
     }
 
     public void SetAction(ActionData action) {
-        Debug.Log($"icon : {icon}");
-        Debug.Log($"actionName : {actionName}");
-        Debug.Log($"action : {action}");
 
         actionData = action;
 

@@ -21,6 +21,6 @@ MonoBehaviour:
   Area: 1
   RangeType: 2
   Range: 3
-  StatusEffect: {fileID: 0}
+  StatusEffect: {fileID: 11400000, guid: fa127444a8ecd8c46b1d43cea5597d8f, type: 2}
   StatusChance: 50
   ActionID: 

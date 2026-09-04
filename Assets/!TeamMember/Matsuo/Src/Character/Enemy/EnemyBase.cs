@@ -61,10 +61,16 @@ public class EnemyBase : CharacterBase
     /// <summary>
     /// 死亡処理
     /// </summary>
-    protected override void Die(){
+    protected override void Die() {
+        // 現在いるタイルから敵を解除
+        RemoveFromTile();
+
+        // 基底クラスの死亡処理
         base.Die();
 
         // ここらへんにドロップ処理や経験値付与などを実装する
+
+        // 敵オブジェクトを削除
         Destroy(gameObject);
 
     }

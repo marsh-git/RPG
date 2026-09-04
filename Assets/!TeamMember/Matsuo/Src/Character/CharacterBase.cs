@@ -195,6 +195,23 @@ public abstract class CharacterBase : MonoBehaviour, IClickable {
     }
 
     /// <summary>
+    /// 現在いるタイルからキャラクター情報を解除する
+    /// </summary>
+    public virtual void RemoveFromTile() {
+        // 現在いるタイルを取得
+        HexTileData tile = HexTileManager.instance.GetTileData(tileID);
+
+        // タイルが存在する場合
+        if (tile != null) {
+            // タイルを通常状態に戻す
+            tile.SetTileState(eTileMoveState.Normal);
+        }
+
+        // タイルIDを未配置状態にする
+        tileID = -1;
+    }
+
+    /// <summary>
     /// オブジェクト破棄時の後始末を行う
     /// </summary>
     protected virtual void OnDestroy()

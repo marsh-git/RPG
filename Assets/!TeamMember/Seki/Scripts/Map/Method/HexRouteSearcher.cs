@@ -83,11 +83,8 @@ public static class HexRouteSearcher {
                 if(neighbor == null || closedSet.Contains(neighbor)) continue;
                 if(neighbor.terrain == eTerrain.Mountain || neighbor.Attribute == eAttribute.CannotMove) continue;
 
-                // 敵の場合、途中の建物（ゴール以外の建築物）は通行不可（壁）として迂回させる
-                if (isEnemy && neighbor != goal) {
-                    if (neighbor.BuildingType != eBuildingType.Invalid) continue;
-                }
-
+                // 建物はすべて壁として迂回（実質ゴールとして定義した actualGoal 自体は建物ではないため安全）
+                if (isEnemy && neighbor.BuildingType != eBuildingType.Invalid) continue;
                 // ユニット衝突判定：道中に別のキャラクターが配置されている、または移動予約がある場合は通行不可（壁）として処理
                 if (neighbor.tileState == eTileMoveState.CharacterIn
                     || neighbor.tileState == eTileMoveState.Reserved) continue;

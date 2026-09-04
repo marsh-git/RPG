@@ -204,17 +204,23 @@ public class PlayerBase : CharacterBase
     /// アクションをする際に一時バフ、デバフを含めたステータスの計算結果を返す
     /// </summary>
     /// <returns></returns>
-    private CharacterStatus GetActionStatus()
+    public CharacterStatus GetActionStatus()
     {
         CharacterStatus current = status;
         current.Add(temporaryStatus);
         return current;
     }
 
-    public void UseAction(int num)
-    {
+    public void UseAction(int num) {
         actionData = actionInventory.GetAction(num);
-        int damage = DamageCalculate(actionData.Damage, GetActionStatus());
+
+        if (actionData == null) {
+            Debug.LogWarning($"ActionDataが取得できませんでした。num:{num}");
+            return;
+        }
+
+        // 攻撃選択開始
+        AttackManager.Instance.StartAttackSelection(this, actionData);
     }
 
     /// <summary>

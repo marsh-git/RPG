@@ -7,7 +7,12 @@ public class CannotMoveAttribute : IAttributeTile {
     /// 自身の属性取得
     /// </summary>
     public eAttribute AttributeType => eAttribute.CannotMove;
-        /// <summary>
+    /// <summary>
+    /// 自身の建物タイプ取得
+    /// </summary>
+    public eBuildingType BuildingType => eBuildingType.Invalid;
+
+    /// <summary>
     /// キャラクターがこのマスを踏んだ瞬間
     /// </summary>
     /// <param name="tile"></param>

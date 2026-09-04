@@ -61,11 +61,11 @@ public class EnemyBase : CharacterBase
     /// <summary>
     /// 死亡処理
     /// </summary>
-    protected override void Die()
-    {
+    protected override void Die(){
         base.Die();
 
         // ここらへんにドロップ処理や経験値付与などを実装する
         Destroy(gameObject);
+
     }
 }

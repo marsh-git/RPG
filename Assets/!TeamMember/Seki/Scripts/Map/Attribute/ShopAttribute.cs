@@ -8,6 +8,11 @@ public class ShopAttribute : IAttributeTile {
     /// </summary>
     public eAttribute AttributeType => eAttribute.Shop;
     /// <summary>
+    /// 自身の建物タイプ取得
+    /// </summary>
+    public eBuildingType BuildingType => eBuildingType.Building;
+
+    /// <summary>
     /// キャラクターがこのマスを踏んだ瞬間
     /// </summary>
     /// <param name="tile"></param>

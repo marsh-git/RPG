@@ -11,6 +11,10 @@ public class EventAttribute : IAttributeTile{
     /// 自身の属性取得
     /// </summary>
     public eAttribute AttributeType => eAttribute.Event;
+    /// <summary>
+    /// 自身の建物タイプ取得
+    /// </summary>
+    public eBuildingType BuildingType => eBuildingType.Invalid;
 
     /// <summary>
     /// 準備処理

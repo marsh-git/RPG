@@ -30,51 +30,43 @@ MonoBehaviour:
       min: 80
       max: 120
   _biomeSettingList:
+  - biome: 0
+    terrainAmountList:
+    - terrain: 1
+      amount: 1
+    - terrain: 2
+      amount: 2
+    - terrain: 3
+      amount: 1
   - biome: 1
     terrainAmountList:
-    - terrain: 2
-      amount: 1
-    - terrain: 3
+    - terrain: 1
       amount: 2
-    - terrain: 4
+    - terrain: 2
+      amount: 0
+    - terrain: 3
       amount: 1
   - biome: 2
     terrainAmountList:
+    - terrain: 1
+      amount: 1
     - terrain: 2
-      amount: 2
+      amount: 3
     - terrain: 3
-      amount: 0
-    - terrain: 4
       amount: 1
   - biome: 3
     terrainAmountList:
+    - terrain: 1
+      amount: 3
     - terrain: 2
       amount: 1
     - terrain: 3
-      amount: 3
-    - terrain: 4
       amount: 2
   - biome: 4
     terrainAmountList:
-    - terrain: 2
+    - terrain: 1
       amount: 3
-    - terrain: 3
-      amount: 1
-    - terrain: 4
-      amount: 2
-  - biome: 4
-    terrainAmountList:
     - terrain: 2
-      amount: 3
-    - terrain: 3
-      amount: 1
-    - terrain: 4
-      amount: 2
-  - biome: 5
-    terrainAmountList:
-    - terrain: 2
-      amount: 3
-    - terrain: 3
       amount: 0
-    - terrain: 4
+    - terrain: 3
       amount: 3

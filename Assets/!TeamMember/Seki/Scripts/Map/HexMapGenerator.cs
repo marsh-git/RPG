@@ -295,7 +295,7 @@ public class HexMapGenerator : MonoBehaviour {
 
             // 該当エリア内の「属性が未割り当て」かつ「平原」マスを抽出
             List<HexTileData> emptyAreaTiles = areaTiles.FindAll(t =>
-                t.Attribute == eAttribute.None && t.terrain == eTerrain.Plain
+                t.Attribute == eAttribute.Invalid && t.terrain == eTerrain.Plain
             );
             // ショップの配置（各エリア1点）
             if(emptyAreaTiles.Count > 0) {
@@ -332,7 +332,7 @@ public class HexMapGenerator : MonoBehaviour {
     /// </summary>
     private void GenerateSpecialAttributes(List<HexTileData> allTileList, MapGenerationConfig config, System.Random mapRand) {
         // まだ何の属性も付与されていない完全な空きマスを抽出
-        List<HexTileData> emptyTileList = allTileList.FindAll(t => t.Attribute == eAttribute.None);
+        List<HexTileData> emptyTileList = allTileList.FindAll(t => t.Attribute == eAttribute.Invalid);
 
         // 敵の前哨基地を、設定された個数に達するまでランダムに配置
         int outpostsPlaced = 0;
@@ -397,7 +397,7 @@ public class HexMapGenerator : MonoBehaviour {
 
         // 残ったタイルは明確に None（何もない平坦なマス）として確定
         foreach(var tile in emptyTileList) {
-            tile.SetAttributeTile(AttributeFactory.Create(eAttribute.None));
+            tile.SetAttributeTile(AttributeFactory.Create(eAttribute.Invalid));
         }
     }
     /// <summary>
@@ -413,7 +413,7 @@ public class HexMapGenerator : MonoBehaviour {
 
         foreach(var tileData in area0Tiles) {
             // 条件: 属性がNone (街/前哨基地/イベント/作物/移動不可のいずれでもない) かつ 山脈でない
-            if(tileData.Attribute == eAttribute.None && tileData.terrain != eTerrain.Mountain) {
+            if(tileData.Attribute == eAttribute.Invalid && tileData.terrain != eTerrain.Mountain) {
                 HexTileObject tileObj = HexTileManager.instance.GetTileObject(tileData.ID);
                 if(tileObj != null) {
                     candidates.Add(tileObj);

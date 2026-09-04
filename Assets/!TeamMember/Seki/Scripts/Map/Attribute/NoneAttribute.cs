@@ -6,7 +6,12 @@ public class NoneAttribute : IAttributeTile {
     /// <summary>
     /// 自身の属性取得
     /// </summary>
-    public eAttribute AttributeType => eAttribute.None;
+    public eAttribute AttributeType => eAttribute.Invalid;
+    /// <summary>
+    /// 自身の建物タイプ取得
+    /// </summary>
+    public eBuildingType BuildingType => eBuildingType.Invalid;
+
     /// <summary>
     /// キャラクターがこのマスを踏んだ瞬間
     /// </summary>

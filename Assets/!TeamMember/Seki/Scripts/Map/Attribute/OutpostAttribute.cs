@@ -22,6 +22,10 @@ public class OutpostAttribute : IAttributeTile {
     /// 自身の属性取得
     /// </summary>
     public eAttribute AttributeType => eAttribute.Outpost;
+    /// <summary>
+    /// 自身の建物タイプ取得
+    /// </summary>
+    public eBuildingType BuildingType => eBuildingType.Attackable;
 
     /// <summary>
     /// キャラクターがこのマスを踏んだ瞬間（前哨基地の破壊処理）

@@ -22,10 +22,12 @@ public class HexTileData {
     public eTerrain terrain { get; private set; } = eTerrain.Invalid;
     // タイル属性
     public IAttributeTile attributeTile { get; private set; } = null;
-    // タイルの属性
-    public eAttribute Attribute => attributeTile?.AttributeType ?? eAttribute.None;
     // タイルのバイオーム
-    public eBiome biome { get; private set; } = eBiome.None;
+    public eBiome biome { get; private set; } = eBiome.Invalid;
+    // タイルの属性
+    public eAttribute Attribute => attributeTile?.AttributeType ?? eAttribute.Invalid;
+    // タイルの建物タイプ
+    public eBuildingType BuildingType => attributeTile?.BuildingType ?? eBuildingType.Invalid;
 
     /// <summary>
     /// 座標のセットアップ処理
@@ -71,7 +73,7 @@ public class HexTileData {
     /// </summary>
     public void ClearAtrribute() {
         // タイル属性をなくす
-        attributeTile = AttributeFactory.Create(eAttribute.None);
+        attributeTile = AttributeFactory.Create(eAttribute.Invalid);
         // 見た目オブジェクトのクリア
         GetObject()?.ClearDecorations();
     }

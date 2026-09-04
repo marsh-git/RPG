@@ -8,6 +8,10 @@ public interface IAttributeTile {
     /// </summary>
     eAttribute AttributeType { get; }
     /// <summary>
+    /// 自身の建物タイプ取得
+    /// </summary>
+    eBuildingType BuildingType { get; }
+    /// <summary>
     /// キャラクターがこのマスを踏んだ瞬間
     /// </summary>
     /// <param name="tile"></param>

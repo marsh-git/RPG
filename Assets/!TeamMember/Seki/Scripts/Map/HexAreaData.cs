@@ -10,7 +10,7 @@ public class HexAreaData {
     // エリアのY座標
     public int areaGridY { get; private set; } = -1;
     // バイオーム
-    public eBiome biome { get; private set; } = eBiome.None;
+    public eBiome biome { get; private set; } = eBiome.Invalid;
     // エリア制圧フラグ
     public bool isSubjugationArea { get; private set; } = false;
     public bool isBossArea { get; private set; }

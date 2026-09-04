@@ -13,7 +13,7 @@ public static class AttributeFactory{
     public static void Initialize() {
         _attributeRegistry = new();
         // 何もない
-        Register(eAttribute.None,       () => new NoneAttribute());
+        Register(eAttribute.Invalid,       () => new NoneAttribute());
         // イベントクラス
         Register(eAttribute.Event,      () => new EventAttribute());
         // 作物クラス

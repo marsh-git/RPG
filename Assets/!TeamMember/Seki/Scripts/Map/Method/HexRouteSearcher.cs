@@ -37,11 +37,18 @@ public static class HexRouteSearcher {
         // 事前バリデーション（境界条件の防衛）
         if(start == null || goal == null) return null;
 
-        // ゴール地点そのものが進入不可能な状態（山岳・移動不可属性・別ユニットの存在）であれば即座に終了
-        if(goal.terrain == eTerrain.Mountain ||
-           goal.Attribute == eAttribute.CannotMove ||
-           goal.tileState == eTileMoveState.CharacterIn) return null;
-
+        HexTileData actualGoal = goal;
+        bool isGoalBuilding = isEnemy && (goal.BuildingType != eBuildingType.Invalid);
+        if (isGoalBuilding) {
+            actualGoal = GetClosestWalkableNeighbor(start, goal);
+            if (actualGoal == null) return null;
+        } else {
+            // 通常のゴールチェック（建物でない場合）
+            if (goal.terrain == eTerrain.Mountain ||
+                goal.Attribute == eAttribute.CannotMove ||
+                goal.tileState == eTileMoveState.CharacterIn ||
+                goal.tileState == eTileMoveState.Reserved) return null;
+        }
         // 探索候補ノード（オープンリスト）と探索完了ノード（クローズドリスト）の初期化
         List<HexTileData> openSet = new List<HexTileData> { start };
         HashSet<HexTileData> closedSet = new HashSet<HexTileData>();
@@ -62,7 +69,7 @@ public static class HexRouteSearcher {
             }
 
             // ゴールに到達した場合、親ノードのリンクを逆引きして経路リストを構築・返却
-            if(current == goal) return RetracePath(start, goal, cameFrom);
+            if (current == actualGoal) return RetracePath(start, actualGoal, cameFrom);
 
             // 現在のノードをオープンリストから除外し、探索完了としてクローズドリストへ追加
             openSet.Remove(current);
@@ -76,8 +83,13 @@ public static class HexRouteSearcher {
                 if(neighbor == null || closedSet.Contains(neighbor)) continue;
                 if(neighbor.terrain == eTerrain.Mountain || neighbor.Attribute == eAttribute.CannotMove) continue;
 
+                // 敵の場合、途中の建物（ゴール以外の建築物）は通行不可（壁）として迂回させる
+                if (isEnemy && neighbor != goal) {
+                    if (neighbor.BuildingType != eBuildingType.Invalid) continue;
+                }
+
                 // ユニット衝突判定：道中に別のキャラクターが配置されている、または移動予約がある場合は通行不可（壁）として処理
-                if(neighbor.tileState == eTileMoveState.CharacterIn
+                if (neighbor.tileState == eTileMoveState.CharacterIn
                     || neighbor.tileState == eTileMoveState.Reserved) continue;
 
                 // 地形に応じた移動コストの取得と安全弁チェック
@@ -209,7 +221,7 @@ public static class HexRouteSearcher {
         return movableTileList;
     }
     /// <summary>
-    /// 指定された候補マスリストの中から、攻撃対象（敵ユニット）が存在するマスを抽出して返す
+    /// 指定された候補マスリストの中から、攻撃対象が存在するマスを抽出して返す
     /// </summary>
     /// <param name="start">起点となるマス（自身を除外するため）</param>
     /// <param name="searchTargetTiles">検索対象となるマスのコレクション（移動範囲、スキル範囲など）</param>
@@ -233,15 +245,42 @@ public static class HexRouteSearcher {
             if(tile.tileState == eTileMoveState.CharacterIn) {
 
                 // TODO: キャラクターマネージャー等からタイル上のキャラクターデータを取得するロジック
-                // CharacterBase targetChara = CharacterManager.instance.GetCharacterOnTile(tile.ID);
-                // if (targetChara != null && targetChara.IsEnemy() != isAttackerEnemy) { ... }
+                CharacterBase targetChara = CharacterManager.Instance.GetCharacter(tile.ID);
+                if(targetChara == null || !targetChara.IsEnemy()) continue;
 
-                // 現状は暫定的に「CharacterIn」であれば一律で対象とみなす（必要に応じて陣営チェックを有効化）
+                attackableTiles.Add(tile);
+            }
+            // マスに攻撃可能オブジェクトが存在する場合
+            else if(tile.BuildingType == eBuildingType.Attackable) {
                 attackableTiles.Add(tile);
             }
         }
 
         return attackableTiles;
+    }
+    /// <summary>
+    /// ターゲットタイルの隣接マスの中から、スタート地点から最も距離が近く、進入可能なマスを1つ取得する
+    /// </summary>
+    private static HexTileData GetClosestWalkableNeighbor(HexTileData start, HexTileData target) {
+        HexTileData bestTile = null;
+        int minDistance = int.MaxValue;
+
+        foreach (eDirectionHex dir in Directions) {
+            HexTileData neighbor = HexTileManager.instance.GetToDirTile(target.gridPosX, target.gridPosY, dir);
+
+            if (neighbor == null) continue;
+            if (neighbor.terrain == eTerrain.Mountain || neighbor.Attribute == eAttribute.CannotMove) continue;
+            if (neighbor.BuildingType != eBuildingType.Invalid) continue; // 隣接マスも建物なら不可
+            if (neighbor.tileState == eTileMoveState.CharacterIn || neighbor.tileState == eTileMoveState.Reserved) continue;
+
+            int dist = HeuristicDistance(start, neighbor);
+            if (dist < minDistance) {
+                minDistance = dist;
+                bestTile = neighbor;
+            }
+        }
+
+        return bestTile;
     }
     /// <summary>
     /// アキシアル座標系における2点間のハリスティック（直線ステップ数）距離を算出する

@@ -17,7 +17,7 @@ public enum eGameLevel {
 /// エリア内環境の種類
 /// </summary>
 public enum eBiome {
-    None,
+    Invalid = -1,   // 無効
     Grassland,      // 草原　    移動+1
     Desert,         // 砂漠      移動-1
     Rainforest,     // 熱帯雨林　視界-1
@@ -30,11 +30,11 @@ public enum eBiome {
 /// タイルの地形 移動コストに関わる
 /// </summary>
 public enum eTerrain {
-    Invalid,    // 無効
-    Plain,      // 平原マス
-    Hill,       // 丘陵マス
-    Forest,     // 森林マス
-    Mountain,   // 山岳マス
+    Invalid = -1,   // 無効
+    Plain,          // 平原マス
+    Hill,           // 丘陵マス
+    Forest,         // 森林マス
+    Mountain,       // 山岳マス
 
     Max
 }
@@ -42,14 +42,14 @@ public enum eTerrain {
 /// タイルの属性 現時点では平原、丘陵マスのみに属性付与、進行不可能マスは山岳マスに適応
 /// </summary>
 public enum eAttribute {
-    None = -1,  // 無し
-    Event,      // イベントマス
-    Crops,      // 作物マス
-    Town,       // 街マス
-    Outpost,    // 敵の前哨基地マス
-    Shop,       // ショップ
-    Camp, // チェックポイント
-    CannotMove, // 進行不可能マス
+    Invalid = -1,   // 無効
+    Event,          // イベントマス
+    Crops,          // 作物マス
+    Town,           // 街マス
+    Outpost,        // 敵の前哨基地マス
+    Shop,           // ショップ
+    Camp,           // チェックポイント
+    CannotMove,     // 進行不可能マス
 
     Max
 }
@@ -71,7 +71,7 @@ public enum eDirectionHex {
 /// タイルハイライトの種類
 /// </summary>
 public enum eTileHighlight {
-    Invalid = -1,
+    Invalid = -1,       // 無効
     LineHighlight,      // 枠線
     TileHighlight,      // 内側
     PlayerHighlight,    // プレイヤー
@@ -83,7 +83,7 @@ public enum eTileHighlight {
 /// タイルの移動ステート
 /// </summary>
 public enum eTileMoveState {
-    Invalid = -1,
+    Invalid = -1,   // 無効
     Normal,         // 通常
     Movable,        // 移動可能
     CharacterIn,    // キャラクターがいる状態
@@ -92,12 +92,12 @@ public enum eTileMoveState {
     Max
 }
 /// <summary>
-/// タイルの種類
+/// 建物の種類
 /// </summary>
-public enum eTileType{
-    Invalid = -1,
-    Normal,         // 通常
+public enum eBuildingType{
+    Invalid = -1,   // 無効
     Building,       // 建物
+    Attackable,     // 攻撃可能建物
 }
 /// <summary>
 /// 数量列挙体

@@ -26,12 +26,7 @@ public class SelectModePart : BasePart
         //ホストかどうかで分岐
         if (TitlePart.isHost)
         {
-            CustomNetworkManager.instance.StartHost();
-             this.ServerExecute().Forget();
-        }
-        else
-        {
-            CustomNetworkManager.instance.StartClient();
+            this.ServerExecute().Forget();
         }
         await UniTask.WaitUntil(() => NetworkClient.localPlayer != null);
 
@@ -70,7 +65,7 @@ public class SelectModePart : BasePart
     /// <returns></returns>
     public override async UniTask Teardown()
     {
-        foreach(var conn in NetworkServer.connections)
+        foreach (var conn in NetworkServer.connections)
         {
             //ロビープレイヤーを全削除
             if (conn.Value.identity != null)

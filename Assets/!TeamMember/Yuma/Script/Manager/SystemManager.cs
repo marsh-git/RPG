@@ -33,7 +33,7 @@ public class SystemManager : SystemObject
         }
         //スタンバイパートに遷移
 
-        UniTask task = PartManager.instance.TransitionPart(GameEnum.eGamePart.Standby);
+        UniTask task = PartManager.instance.ChangePartLocal(GameEnum.eGamePart.Standby);
     }
     
 }

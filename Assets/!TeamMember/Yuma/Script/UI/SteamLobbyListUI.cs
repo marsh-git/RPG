@@ -15,11 +15,13 @@ public class SteamLobbyListUI : MonoBehaviour
 
     private void Start()
     {
+        steamLobby = FindAnyObjectByType<SteamLobby>();
         steamLobby.OnLobbyListUpdated += UpdateLobbyList;
     }
 
     private void UpdateLobbyList(CSteamID[] _lobbyIDs)
     {
+        root.gameObject.SetActive(true);
         foreach(Transform child in root)
         {
             Destroy(child.gameObject);
@@ -27,6 +29,10 @@ public class SteamLobbyListUI : MonoBehaviour
 
         foreach(var id in _lobbyIDs)
         {
+            //フィルター掛け
+            string hostKey = SteamMatchmaking.GetLobbyData(id, "HostAddress");
+            if (hostKey != "2") continue;
+
             var button = Instantiate(buttonPrefab, root);
             button.Setup(id,OnClickJoinLobby);
         }

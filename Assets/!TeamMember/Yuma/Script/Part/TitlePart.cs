@@ -26,8 +26,15 @@ public class TitlePart : BasePart
     public override async UniTask Setup()
     {
         await base.Setup();
-        startHostButton.onClick.AddListener(() =>StartIsHost());
-        startClientButton.onClick.AddListener(() => StartClient());
+        startHostButton.onClick.AddListener(() => {
+            isHost = true;
+            CustomNetworkManager.instance.StartSteamHost();
+        });
+        startClientButton.onClick.AddListener( () =>{
+            isHost = false;
+            
+            CustomNetworkManager.instance.SearchSteamLobby(); 
+        });
 
     }
 
@@ -41,28 +48,6 @@ public class TitlePart : BasePart
         await FadeManeger.instance.FadeIn(1.0f);
 
         await UniTask.WaitUntil(()=>goToSelectPart);
-
         await FadeManeger.instance.FadeOut(1.0f);
-        await PartManager.instance.TransitionPart(GameEnum.eGamePart.SelectStage);
-    }
-
-    /// <summary>
-    /// ホストで始める(部屋作成、オンライン未対応)
-    /// </summary>
-    public void StartIsHost()
-    {
-        Debug.Log("StartHost");
-        isHost = true;
-        goToSelectPart = true;
-    }
-
-    /// <summary>
-    /// クライアントで始める(部屋検索、オンライン未対応)
-    /// </summary>
-    public void StartClient()
-    {
-        Debug.Log("StartClient");
-        isHost = false;
-        goToSelectPart = true;
     }
 }

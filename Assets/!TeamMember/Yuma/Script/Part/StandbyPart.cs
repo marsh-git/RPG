@@ -17,6 +17,6 @@ public class StandbyPart : BasePart
     public override async UniTask Execute()
     {
         UniTask task = PartManager.instance.TransitionPart(GameEnum.eGamePart.Title);
-        await UniTask.CompletedTask;
+        await FadeManeger.instance.FadeIn(1.0f);
     }
 }

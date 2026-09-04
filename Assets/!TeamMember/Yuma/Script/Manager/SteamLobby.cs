@@ -1,5 +1,6 @@
 using Mirror;
 using Steamworks;
+using System.Threading.Tasks;
 using UnityEngine;
 
 namespace Custom.Network
@@ -22,7 +23,7 @@ namespace Custom.Network
 
         private CSteamID currentLobbyID;
 
-        private NetworkManager networkManager;
+        private CustomNetworkManager networkManager;
 
         private void Awake()
         {
@@ -40,11 +41,12 @@ namespace Custom.Network
         /// <summary>
         /// SteamLobby作成(フレンド限定)
         /// </summary>
-        public void CreateLobby()
+        public async void CreateLobby()
         {
             if (networkManager == null) return;
 
             SteamMatchmaking.CreateLobby(ELobbyType.k_ELobbyTypeFriendsOnly, networkManager.maxConnections);
+            await PartManager.instance.TransitionPart(GameEnum.eGamePart.SelectMode);
         }
 
         /// <summary>
@@ -96,7 +98,7 @@ namespace Custom.Network
         /// Lobby参加完了時コールバック
         /// </summary>
         /// <param name="_callback"></param>
-        private void OnLobbyEntered(LobbyEnter_t _callback)
+        private async void OnLobbyEntered(LobbyEnter_t _callback)
         {
             currentLobbyID = new CSteamID(_callback.m_ulSteamIDLobby);
 
@@ -116,6 +118,8 @@ namespace Custom.Network
 
             networkManager.networkAddress = hostAddress;
             networkManager.StartClient();
+
+            await PartManager.instance.TransitionPart(GameEnum.eGamePart.SelectMode);
         }
 
         private void OnLobbyMatchList(LobbyMatchList_t _callback)

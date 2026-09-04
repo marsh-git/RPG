@@ -74,7 +74,7 @@ public class PartManager : SystemObject
 
         //実行処理
         currentPart.ServerExecute().Forget();
-
+        currentPart.Execute().Forget();
 
         PartNetworkGame.instance.SetPart(_nextPart);
     }
@@ -97,7 +97,19 @@ public class PartManager : SystemObject
 
         //実行処理
         currentPart.ClientExecute().Forget();
+    }
+
+    public async UniTask ChangePartLocal(GameEnum.eGamePart _nextPart)
+    {
+        //現在のパートの片付け
+        if (currentPart != null)
+        {
+            await currentPart.Teardown();
+        }
+        //次のパートに移動
+        currentPart = partList[(int)_nextPart];
+        await currentPart.Setup();
+
         currentPart.Execute().Forget();
-        
     }
 }

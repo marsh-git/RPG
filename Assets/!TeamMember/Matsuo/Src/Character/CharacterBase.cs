@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
 
-public abstract class CharacterBase : MonoBehaviour
-{
+public abstract class CharacterBase : MonoBehaviour, IClickable {
     // ネットワークID
     protected int id;
     // 現在いるタイル
@@ -225,5 +224,10 @@ public abstract class CharacterBase : MonoBehaviour
     public virtual bool IsEnemy()
     {
         return true;
+    }
+
+
+    //マップ内選択時の処理
+    public virtual void OnClick() {
     }
 }

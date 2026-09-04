@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using static HexRouteSearcher;
 
-public class PlayerBase : CharacterBase, IClickable
+public class PlayerBase : CharacterBase
 {
 
     public static PlayerBase instance { get; private set; }
@@ -213,7 +213,6 @@ public class PlayerBase : CharacterBase, IClickable
 
     public void UseAction(int num)
     {
-        actionInventory.GetAction(num);
         actionData = actionInventory.GetAction(num);
         int damage = DamageCalculate(actionData.Damage, GetActionStatus());
     }
@@ -228,7 +227,7 @@ public class PlayerBase : CharacterBase, IClickable
     /// <summary>
     /// クリックされたときの処理（移動範囲・攻撃可能範囲の計算とハイライト制御）
     /// </summary>
-    public void OnClick() {
+    public override void OnClick() {
         var ClickableHighlight = ClickableSelectionManager.instance;
         var MovementManager = CharacterMovementManager.instance;
         // ハイライト削除

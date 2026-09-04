@@ -2,24 +2,25 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "NewBiomeData", menuName = "ScriptableObject/Map/BiomeTerrainData")]
+[System.Serializable]
+public struct AmountRangeMap {
+    public eAmount amount;
+    public IntRange range;
+}
+[System.Serializable]
+public struct TerrainAmountSetting {
+    public eTerrain terrain;
+    public eAmount amount;
+}
+[System.Serializable]
+public struct BiomeSetting {
+    public eBiome biome;
+    [Tooltip("各地形の生成量設定")]
+    public List<TerrainAmountSetting> terrainAmountList;
+}
+
+[CreateAssetMenu(fileName = "NewBiomeData", menuName = "ScriptableObject/Map/BiomeTerrain DataBase")]
 public class BiomeTerrainDataSO : ScriptableObject {
-    [System.Serializable]
-    public struct AmountRangeMap {
-        public eAmount amount;
-        public IntRange range;
-    }
-    [System.Serializable]
-    public struct TerrainAmountSetting {
-        public eTerrain terrain;
-        public eAmount amount;
-    }
-    [System.Serializable]
-    public struct BiomeSetting {
-        public eBiome biome;
-        [Tooltip("各地形の生成量設定")]
-        public List<TerrainAmountSetting> terrainAmountList;
-    }
     [Header("eAmountに対応する生成数の最小・最大範囲定義")]
     [SerializeField] private List<AmountRangeMap> _amountRangeTable = new List<AmountRangeMap>();
 
@@ -39,7 +40,7 @@ public class BiomeTerrainDataSO : ScriptableObject {
     /// </summary>
     public eAmount GetTerrainAmount(eBiome biome, eTerrain terrain) {
         var biomeData = _biomeSettingList.Find(x => x.biome == biome);
-        if(biomeData.terrainAmountList != null) {
+        if (biomeData.terrainAmountList != null) {
             var terrainData = biomeData.terrainAmountList.Find(x => x.terrain == terrain);
             return terrainData.amount;
         }

@@ -1,10 +1,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "CropsDatabase", menuName = "ScriptableObject/Map/Crops Database")]
+[CreateAssetMenu(fileName = "CropsData", menuName = "ScriptableObject/Map/Crops DataBase")]
 public class CropsVisualDataSO : ScriptableObject {
     [Header("全バイオーム共通の作物設定 (種/苗/収穫)")]
-    public List<CropsVisual> cropsDataList = new List<CropsVisual>();
+    [SerializeField] private List<CropsVisual> cropsDataList = new List<CropsVisual>();
 
     /// <summary>
     /// 指定した作物IDと成長段階に応じたPrefabを取得する

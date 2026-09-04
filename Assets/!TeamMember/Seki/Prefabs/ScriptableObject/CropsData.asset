@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f76dfe20005a2e24fbfe54f7e55d79ba, type: 3}
-  m_Name: CropsDataBase
+  m_Name: CropsData
   m_EditorClassIdentifier: 
   cropsDataList:
   - ID: 0

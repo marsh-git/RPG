@@ -202,6 +202,7 @@ public static class TileRangeExpansion {
         radiusTileList.RemoveAll(neighbor =>
             neighbor == null ||
             neighbor.Attribute == eAttribute.CannotMove ||
+            neighbor.BuildingType != eBuildingType.Invalid ||
             neighbor.tileState == eTileMoveState.CharacterIn ||
             neighbor.tileState == eTileMoveState.Reserved
         );

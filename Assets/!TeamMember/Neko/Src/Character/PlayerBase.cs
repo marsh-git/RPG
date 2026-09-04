@@ -37,6 +37,16 @@ public class PlayerBase : CharacterBase
     // プレイヤーのダイス
     private DiceManager diceManager;
 
+    /// <summary>
+    /// アクションのテスト用にUpdate作成。ターン処理完成時に削除予定
+    /// </summary>
+    private void Update() {
+        if (Input.GetKeyDown(KeyCode.K)) {
+            UseAction(1);
+        }
+    }
+
+
     protected override void Awake()
     {
         base.Awake();
@@ -49,7 +59,7 @@ public class PlayerBase : CharacterBase
         if (jobData == null) SetJob(jobManager.START_JOB);
 
         //アクションインベントリの取得
-        actionInventory = FindObjectOfType<DiceInventoryUI>();
+        actionInventory = DiceInventoryUI.Instance;
     }
 
     /// <summary>
@@ -214,12 +224,6 @@ public class PlayerBase : CharacterBase
     public void UseAction(int num) {
         actionData = actionInventory.GetAction(num);
 
-        if (actionData == null) {
-            Debug.LogWarning($"ActionDataが取得できませんでした。num:{num}");
-            return;
-        }
-
-        // 攻撃選択開始
         AttackManager.Instance.StartAttackSelection(this, actionData);
     }
 

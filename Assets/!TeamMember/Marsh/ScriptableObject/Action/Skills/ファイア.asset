@@ -15,7 +15,7 @@ MonoBehaviour:
   ActionName: "\u30D5\u30A1\u30A4\u30A2"
   Icon: {fileID: 21300000, guid: 203ab28c29e69bd4a9564916af36eaee, type: 3}
   Description: "\u4EEE\u30C7\u30FC\u30BF"
-  Attribute: 1
+  Element: 1
   Target: 0
   Damage: 5
   Area: 1

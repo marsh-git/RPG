@@ -92,7 +92,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   icon: {fileID: 1466470484027093356}
   actionName: {fileID: 6677614813499042119}
-  attribute: {fileID: 3359427624757508945}
+  element: {fileID: 3359427624757508945}
   damage: {fileID: 2066386682076210280}
   statusEffect: {fileID: 1954528583251893487}
   attackRange: {fileID: 6291959454846762593}
@@ -1323,7 +1323,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   diceSlotPrefab: {fileID: 1619480375450810035, guid: a4a01e1dabbd50d44847a93b5636062c, type: 3}
   slotRoot: {fileID: 6665201109898107247}
-  slotCount: 12
+  slotCount: 6
 --- !u!1 &4599025451244060724
 GameObject:
   m_ObjectHideFlags: 0

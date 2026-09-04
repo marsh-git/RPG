@@ -5,10 +5,11 @@ public class AttackManager : MonoBehaviour {
     public static AttackManager Instance { get; private set; }
 
     private PlayerBase attacker;
-    private ActionData currentAction;
+    private ActionData actionData;
 
-    // 現在選択可能なTile
-    private List<HexTileData> attackableTiles = new();
+    private readonly List<HexTileData> attackableTiles = new();
+
+    private bool isAttackSelecting = false;
 
     private void Awake() {
         if (Instance == null) {
@@ -19,235 +20,147 @@ public class AttackManager : MonoBehaviour {
         }
     }
 
-    /// <summary>
-    /// 攻撃選択開始
-    /// </summary>
-    public void StartAttackSelection(
-        PlayerBase player,
-        ActionData action) {
-        if (player == null || action == null)
-            return;
+    public bool IsAttackSelecting() {
+        return isAttackSelecting;
+    }
+
+    public void StartAttackSelection(PlayerBase player, ActionData action) {
+        if (player == null || action == null) return;
 
         attacker = player;
-        currentAction = action;
+        actionData = action;
+
+        isAttackSelecting = true;
+
+        CalculateAttackRange();
 
         ClickableSelectionManager.instance.ClearHighlights();
 
-        HexTileData playerTile =
-            HexTileManager.instance.GetTileData(
-                player.GetTileID()
-            );
-
-        if (playerTile == null)
-            return;
-
-        // 攻撃範囲取得
-        attackableTiles =
-            GetAttackableTiles(playerTile, action);
-
-        // ハイライト
         ClickableSelectionManager.instance.HighlightRangeTile(
             attackableTiles,
             false,
             eTileHighlight.BattleHighlight
         );
 
-        Debug.Log(
-            $"攻撃選択：{action.ActionName}"
-        );
-        Debug.Log(
-            $"攻撃範囲：{action.AttackRange}"
-        );
+        Debug.Log($"攻撃選択開始：{action.ActionName}");
     }
 
-    /// <summary>
-    /// 攻撃対象を選択
-    /// </summary>
-    public void SelectTarget(HexTileData targetTile) {
-        if (attacker == null ||
-            currentAction == null ||
-            targetTile == null) {
-            return;
-        }
+    private void CalculateAttackRange() {
+        attackableTiles.Clear();
 
-        // 範囲外
+        HexTileData center =
+            HexTileManager.instance.GetTileData(attacker.GetTileID());
+
+        if (center == null) return;
+
+        switch (actionData.RangeType) {
+            case AttackRangeType.Adjacent:
+                attackableTiles.AddRange(
+                    TileRangeExpansion.GetTilesWithinRadius(
+                        center,
+                        1
+                    )
+                );
+                break;
+
+            case AttackRangeType.Circle:
+                attackableTiles.AddRange(
+                    TileRangeExpansion.GetTilesWithinRadius(
+                        center,
+                        actionData.Range
+                    )
+                );
+                break;
+
+            case AttackRangeType.Line:
+                foreach (eDirectionHex dir in new[]
+                {
+                    eDirectionHex.UpRight,
+                    eDirectionHex.Right,
+                    eDirectionHex.DownRight,
+                    eDirectionHex.DownLeft,
+                    eDirectionHex.Left,
+                    eDirectionHex.UpLeft
+                }) {
+                    attackableTiles.AddRange(
+                        TileRangeExpansion.GetNumDirTile(
+                            center,
+                            dir,
+                            actionData.Range
+                        )
+                    );
+                }
+                break;
+        }
+    }
+
+    public void SelectTarget(HexTileData targetTile) {
+        if (!isAttackSelecting) return;
+        if (targetTile == null) return;
+
         if (!attackableTiles.Contains(targetTile)) {
             Debug.Log("攻撃範囲外です");
             return;
         }
 
         CharacterBase target =
-            CharacterManager.Instance.GetCharacter(
-                targetTile.ID
-            );
+            CharacterManager.Instance.GetCharacter(targetTile.ID);
 
         if (target == null) {
-            Debug.Log("対象がいません");
+            Debug.Log("攻撃対象がいません");
             return;
         }
 
-        // 今回は敵のみ
-        if (currentAction.Target == ActionTarget.Enemy) {
-            if (!target.IsEnemy()) {
-                Debug.Log("敵ではありません");
-                return;
-            }
+        // 敵攻撃なら敵以外は対象外
+        if (actionData.Target == ActionTarget.Enemy &&
+            !target.IsEnemy()) {
+            Debug.Log("敵ではありません");
+            return;
         }
 
         ExecuteAttack(target);
     }
 
-    /// <summary>
-    /// 攻撃実行
-    /// </summary>
     private void ExecuteAttack(CharacterBase target) {
-        if (target == null || target.IsDead)
-            return;
-
-        // 技ダメージ + 攻撃力
         int damage =
             attacker.DamageCalculate(
-                currentAction.Damage,
+                actionData.Damage,
                 attacker.GetActionStatus()
             );
 
-        Debug.Log(
-            $"{currentAction.ActionName} → {target.name}"
-        );
-
-        Debug.Log(
-            $"攻撃ダメージ：{damage}"
-        );
-
-        // 防御力・属性相性を適用
         target.TakeDamage(
             damage,
-            currentAction.Element
+            actionData.Element
         );
 
-        // TODO：状態異常
-        // currentAction.StatusEffect
-        // currentAction.StatusChance
+        Debug.Log(
+            $"{attacker.name} → {target.name} : {damage}ダメージ"
+        );
 
         EndAttack();
     }
 
-    /// <summary>
-    /// 攻撃範囲取得
-    /// </summary>
-    private List<HexTileData> GetAttackableTiles(
-        HexTileData playerTile,
-        ActionData action) {
-        List<HexTileData> result = new();
-
-        switch (action.RangeType) {
-            case AttackRangeType.Adjacent:
-
-                result =
-                    TileRangeExpansion.GetTilesWithinRadius(
-                        playerTile,
-                        1
-                    );
-
-                break;
-
-            case AttackRangeType.Circle:
-
-                result =
-                    TileRangeExpansion.GetTilesWithinRadius(
-                        playerTile,
-                        action.Range
-                    );
-
-                break;
-
-            case AttackRangeType.Line:
-
-                result =
-                    GetLineTiles(
-                        playerTile,
-                        action.Range
-                    );
-
-                break;
-
-            case AttackRangeType.Cone:
-
-                // 現在は仮
-                result =
-                    TileRangeExpansion.GetFanShapedTile(
-                        playerTile,
-                        eDirectionHex.UpRight
-                    );
-
-                break;
-
-            case AttackRangeType.Cross:
-
-                // 後で実装
-                break;
-
-            case AttackRangeType.Custom:
-
-                // 後で実装
-                break;
-        }
-
-        return result;
-    }
-
-    /// <summary>
-    /// 6方向への直線
-    /// ※現在は向きを持っていないため仮
-    /// </summary>
-    private List<HexTileData> GetLineTiles(
-        HexTileData startTile,
-        int range) {
-        List<HexTileData> result = new();
-
-        eDirectionHex[] directions =
-        {
-            eDirectionHex.UpRight,
-            eDirectionHex.Right,
-            eDirectionHex.DownRight,
-            eDirectionHex.DownLeft,
-            eDirectionHex.Left,
-            eDirectionHex.UpLeft
-        };
-
-        foreach (eDirectionHex direction in directions) {
-            result.AddRange(
-                TileRangeExpansion.GetNumDirTile(
-                    startTile,
-                    direction,
-                    range
-                )
-            );
-        }
-
-        return result;
-    }
-
-    /// <summary>
-    /// 攻撃終了
-    /// </summary>
     private void EndAttack() {
+        isAttackSelecting = false;
+
+        attackableTiles.Clear();
+
         ClickableSelectionManager.instance.ClearHighlights();
 
         attacker = null;
-        currentAction = null;
-        attackableTiles.Clear();
+        actionData = null;
+
+        TurnManager.Instance.EndPlayerTurn();
     }
 
-    /// <summary>
-    /// 攻撃選択キャンセル
-    /// </summary>
     public void CancelAttackSelection() {
-        EndAttack();
-    }
+        isAttackSelecting = false;
 
-    public bool IsAttackSelecting() {
-        return attacker != null &&
-               currentAction != null;
+        attackableTiles.Clear();
+
+        ClickableSelectionManager.instance.ClearHighlights();
+
+        attacker = null;
+        actionData = null;
     }
 }

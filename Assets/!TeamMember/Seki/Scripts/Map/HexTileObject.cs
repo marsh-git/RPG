@@ -77,7 +77,14 @@ public class HexTileObject : MonoBehaviour, IClickable {
     public void OnClick() {
         // プレイヤーターン以外は操作禁止
         if (!TurnManager.Instance.IsPlayerTurn()) return;
-        
+
+        // 攻撃選択中なら攻撃対象として処理
+        if (AttackManager.Instance != null &&
+            AttackManager.Instance.IsAttackSelecting()) {
+            AttackManager.Instance.SelectTarget(GetTileData());
+            return;
+        }
+
         var ClickableHighlight = ClickableSelectionManager.instance;
         var MovementManager = CharacterMovementManager.instance;
         var HexManager = HexTileManager.instance;

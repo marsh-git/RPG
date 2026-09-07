@@ -98,20 +98,39 @@ public class AttackManager : MonoBehaviour {
         if (!isAttackSelecting) return;
         if (targetTile == null) return;
 
+        // 自分中心の範囲攻撃
+        if (actionData.AreaType == ActionAreaType.SelfAround) {
+            HexTileData selfTile =
+                HexTileManager.instance.GetTileData(attacker.GetTileID());
+
+            ExecuteAreaAttack(selfTile);
+            return;
+        }
+
         if (!attackableTiles.Contains(targetTile)) {
             Debug.Log("攻撃範囲外です");
             return;
         }
 
+        // 指定地点を中心とした範囲攻撃
+        if (actionData.AreaType == ActionAreaType.Around) {
+            ExecuteAreaAttack(targetTile);
+            return;
+        }
+
+        // 単体攻撃
         CharacterBase target =
             CharacterManager.Instance.GetCharacter(targetTile.ID);
 
         if (target == null) {
-            Debug.Log("攻撃対象がいません");
+            Debug.Log(
+                $"「{actionData.ActionName}」：攻撃対象がいないため攻撃をスキップします。"
+            );
+
+            EndAttack();
             return;
         }
 
-        // 敵攻撃なら敵以外は対象外
         if (actionData.Target == ActionTarget.Enemy &&
             !target.IsEnemy()) {
             Debug.Log("敵ではありません");
@@ -136,6 +155,66 @@ public class AttackManager : MonoBehaviour {
         Debug.Log(
             $"{attacker.name} → {target.name} : {damage}ダメージ"
         );
+
+        EndAttack();
+    }
+
+    private void ExecuteAreaAttack(HexTileData centerTile) {
+        List<HexTileData> areaTiles =
+            TileRangeExpansion.GetTilesWithinRadius(
+                centerTile,
+                actionData.Area
+            );
+
+        // 中心マスも対象にする
+        areaTiles.Add(centerTile);
+
+        List<EnemyBase> targets = new();
+
+        foreach (HexTileData tile in areaTiles) {
+            CharacterBase character =
+                CharacterManager.Instance.GetCharacter(tile.ID);
+
+            if (character == null)
+                continue;
+
+            if (actionData.Target == ActionTarget.Enemy &&
+                !character.IsEnemy())
+                continue;
+
+            EnemyBase enemy = character as EnemyBase;
+
+            if (enemy != null) {
+                targets.Add(enemy);
+            }
+        }
+
+        // 範囲内に対象がいない
+        if (targets.Count == 0) {
+            Debug.Log(
+                $"「{actionData.ActionName}」：範囲内に攻撃対象がいないため攻撃をスキップします。"
+            );
+
+            EndAttack();
+            return;
+        }
+
+        int damage =
+            attacker.DamageCalculate(
+                actionData.Damage,
+                attacker.GetActionStatus()
+            );
+
+        foreach (EnemyBase target in targets) {
+            target.TakeDamage(
+                damage,
+                actionData.Element
+            );
+
+            Debug.Log(
+                $"{attacker.name} → {target.name} : {damage}ダメージ"
+            );
+        }
 
         EndAttack();
     }

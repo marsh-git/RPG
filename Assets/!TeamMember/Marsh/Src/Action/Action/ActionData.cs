@@ -17,6 +17,12 @@ public enum AttackRangeType {
     Custom
 }
 
+public enum ActionAreaType {
+    Single,     // 指定した1体
+    Around,     // 指定地点の周囲
+    SelfAround, // 自分の周囲
+}
+
 [CreateAssetMenu(fileName = "ActionData", menuName = "RPG/Action")]
 public class ActionData : ScriptableObject {
     [Header("基本情報")]
@@ -30,11 +36,14 @@ public class ActionData : ScriptableObject {
     public ActionTarget Target;
 
     public int Damage;
-    public int Area;
 
     [Header("攻撃範囲")]
     public AttackRangeType RangeType;
     public int Range;
+
+    [Header("攻撃対象")]
+    public ActionAreaType AreaType = ActionAreaType.Single;
+    public int Area = 1;
 
     [Header("状態異常")]
     public StatusEffectData StatusEffect;

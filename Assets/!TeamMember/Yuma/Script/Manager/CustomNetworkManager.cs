@@ -61,15 +61,12 @@ public class CustomNetworkManager : NetworkManager
         }
         base.OnServerConnect(_conn);
 
-       
     }
 
     public override void OnServerReady(NetworkConnectionToClient _conn)
     {
         base.OnServerReady(_conn);
         PlayerConnection(_conn, lobbyPlayerPrefab);
-       
-
     }
 
     /// <summary>
@@ -79,6 +76,7 @@ public class CustomNetworkManager : NetworkManager
     /// <param name="_conn"></param>
     public override void OnServerAddPlayer(NetworkConnectionToClient _conn)
     {
+        
         if (!ServerManager.instance.connectPlayer.Contains(_conn.identity))
         {
             ServerManager.instance.connectPlayer.Add(_conn.identity);
@@ -93,7 +91,8 @@ public class CustomNetworkManager : NetworkManager
     public override void OnClientConnect()
     {
         base.OnClientConnect();
-        
+        if(!NetworkClient.ready)
+        NetworkClient.Ready();
     }
 
     /// <summary>
@@ -160,7 +159,7 @@ public class CustomNetworkManager : NetworkManager
     /// SteamLobbyを使ってホストを開始
     /// UIから呼べるよ
     /// </summary>
-    public void StartSteamHost()
+    public void  StartSteamHost()
     {
         var steamLobby = GetComponent<SteamLobby>();
 
@@ -188,5 +187,6 @@ public class CustomNetworkManager : NetworkManager
         }
 
         steamLobby.ShowRequesetLobbyList();
+       
     }
 }

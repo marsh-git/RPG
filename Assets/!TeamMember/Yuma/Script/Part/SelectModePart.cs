@@ -1,6 +1,8 @@
 using Cysharp.Threading.Tasks;
 using Mirror;
+using Steamworks;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -26,17 +28,15 @@ public class SelectModePart : BasePart
         //ホストかどうかで分岐
         if (TitlePart.isHost)
         {
-            CustomNetworkManager.instance.StartHost();
-             this.ServerExecute().Forget();
-        }
-        else
-        {
-            CustomNetworkManager.instance.StartClient();
+            this.ServerExecute().Forget();
         }
         await UniTask.WaitUntil(() => NetworkClient.localPlayer != null);
 
 
         GameObject localPlayerName = Instantiate(nameObj, rect);
+        string myName = SteamFriends.GetPersonaName();
+
+        localPlayerName.GetComponentInChildren<TextMeshProUGUI>().text = myName;
         Toggle checkBox = localPlayerName.GetComponent<Toggle>();
 
         checkBox.onValueChanged.AddListener(ToggleReady);
@@ -47,7 +47,9 @@ public class SelectModePart : BasePart
 
     public override async UniTask Execute()
     {
-        await UniTask.CompletedTask;
+        await FadeManeger.instance.FadeIn(1.0f);
+        await UniTask.WaitUntil(() => startGame);
+        await FadeManeger.instance.FadeOut(1.0f);
     }
 
     /// <summary>
@@ -68,7 +70,7 @@ public class SelectModePart : BasePart
     /// <returns></returns>
     public override async UniTask Teardown()
     {
-        foreach(var conn in NetworkServer.connections)
+        foreach (var conn in NetworkServer.connections)
         {
             //ロビープレイヤーを全削除
             if (conn.Value.identity != null)

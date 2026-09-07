@@ -4,5 +4,8 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/!TeamMember/Yuma/Scene/YumaTestScene.unity
+    guid: 09dcadd1ed9f4f24a93894435a80d162
   m_configObjects: {}

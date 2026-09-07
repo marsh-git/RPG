@@ -1,5 +1,6 @@
 using Mirror;
 using Steamworks;
+using System.Threading.Tasks;
 using UnityEngine;
 
 namespace Custom.Network
@@ -22,7 +23,7 @@ namespace Custom.Network
 
         private CSteamID currentLobbyID;
 
-        private NetworkManager networkManager;
+        private CustomNetworkManager networkManager;
 
         private void Awake()
         {
@@ -40,11 +41,12 @@ namespace Custom.Network
         /// <summary>
         /// SteamLobby作成(フレンド限定)
         /// </summary>
-        public void CreateLobby()
+        public async void CreateLobby()
         {
             if (networkManager == null) return;
 
             SteamMatchmaking.CreateLobby(ELobbyType.k_ELobbyTypeFriendsOnly, networkManager.maxConnections);
+            await PartManager.instance.TransitionPart(GameEnum.eGamePart.SelectMode);
         }
 
         /// <summary>
@@ -72,15 +74,23 @@ namespace Custom.Network
             currentLobbyID = new CSteamID(_callback.m_ulSteamIDLobby);
 
             string hostSteamID = SteamUser.GetSteamID().ToString();
+            Debug.Log(hostSteamID);
             bool setDataSuccess = SteamMatchmaking.SetLobbyData(currentLobbyID, HOST_ADDRESS_KEY, hostSteamID);
-
             if (!setDataSuccess)
             {
-                Debug.LogError("Failed to set lobby data");
+                Debug.LogError("Failed to set HostAddress");
+                return;
+            }
+
+            setDataSuccess = SteamMatchmaking.SetLobbyData(currentLobbyID, "game_name", "MultiRPG");
+            if (!setDataSuccess)
+            {
+                Debug.LogError("Failed to set game_name");
                 return;
             }
 
             networkManager.StartHost();
+            Debug.Log("Successed Lobby Creating");
         }
 
         /// <summary>
@@ -96,7 +106,7 @@ namespace Custom.Network
         /// Lobby参加完了時コールバック
         /// </summary>
         /// <param name="_callback"></param>
-        private void OnLobbyEntered(LobbyEnter_t _callback)
+        private async void OnLobbyEntered(LobbyEnter_t _callback)
         {
             currentLobbyID = new CSteamID(_callback.m_ulSteamIDLobby);
 
@@ -116,8 +126,14 @@ namespace Custom.Network
 
             networkManager.networkAddress = hostAddress;
             networkManager.StartClient();
+
+            await PartManager.instance.TransitionPart(GameEnum.eGamePart.SelectMode);
         }
 
+        /// <summary>
+        /// ロビー一覧が揃ったときに発火するコールバック
+        /// </summary>
+        /// <param name="_callback"></param>
         private void OnLobbyMatchList(LobbyMatchList_t _callback)
         {
             uint lobbyCount = _callback.m_nLobbiesMatching;

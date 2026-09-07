@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Dice/DiceSpriteDatabase")]
+[CreateAssetMenu(menuName = "ScriptableObject/Dice/DiceSpriteDatabase")]
 public class DiceSpriteDatabase : ScriptableObject {
     public Sprite[] DiceSprites;
 }

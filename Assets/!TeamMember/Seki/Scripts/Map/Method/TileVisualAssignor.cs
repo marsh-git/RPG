@@ -4,12 +4,12 @@ using UnityEngine;
 
 public static class TileVisualAssignor {
     private static BiomeVisualDataSO _biomeData = null;
-    private static CropsVisualDataSO _cropsData = null;
+    private static CropsDataSO _cropsData = null;
 
     /// <summary>
     /// データベースの初期設定（マップ生成開始時等に呼ぶ）
     /// </summary>
-    public static void Initialize(BiomeVisualDataSO biomeData, CropsVisualDataSO cropsData) {
+    public static void Initialize(BiomeVisualDataSO biomeData, CropsDataSO cropsData) {
         _biomeData = biomeData;
         _cropsData = cropsData;
     }

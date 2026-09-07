@@ -29,8 +29,9 @@ public class HexMapGenerator : MonoBehaviour {
 
     [Header("一括管理マスターデータベース参照")]
     [SerializeField] private BiomeVisualDataSO mapConfig = null;
-    [SerializeField] private CropsVisualDataSO cropsConfig = null;
+    [SerializeField] private CropsDataSO cropsConfig = null;
     [SerializeField] private BiomeTerrainDataSO biomeTerrainConfig = null;
+    [SerializeField] private OutpostDataSO outpostConfig = null;
 
     [Header("Debug Settings")]
     [Tooltip("チェックを入れると、下の debugSeed で指定したシード値で固定されます")]
@@ -255,7 +256,7 @@ public class HexMapGenerator : MonoBehaviour {
         }
     }
     /// <summary>
-    /// 決定済みの街マスの中心座標を基に、各エリアの7マス（中心+周囲6方向）へ「街属性」データを付与する。
+    /// 決定済みの街マスの中心座標を「街属性」データを付与する。
     /// </summary>
     private void GenerateTowns(List<Vector2Int> townCenters, Dictionary<int, List<HexTileData>> areaTileMap) {
         for(int areaId = 0; areaId < townCenters.Count; areaId++) {
@@ -272,18 +273,6 @@ public class HexMapGenerator : MonoBehaviour {
             townCenter.SetAttributeTile(AttributeFactory.Create(eAttribute.Town));
             // 管理クラスに追加
             HexTileManager.instance.AddEnableAttributeTile(townCenter.attributeTile);
-
-            // 周囲6方向の隣接マスに対しても街属性を設定
-            foreach(eDirectionHex dir in Directions) {
-                HexTileData neighbor = HexTileManager.instance.GetToDirTile(townCenter.gridPosX, townCenter.gridPosY, dir);
-
-                // 隣接マスが存在し、かつ自エリア内に収まっている場合のみ属性を付与
-                if(neighbor != null && areaTiles.Contains(neighbor)) {
-                    neighbor.SetAttributeTile(AttributeFactory.Create(eAttribute.Town));
-                    // 管理クラスに追加
-                    HexTileManager.instance.AddEnableAttributeTile(neighbor.attributeTile);
-                }
-            }
         }
     }
     /// <summary>
@@ -342,7 +331,9 @@ public class HexMapGenerator : MonoBehaviour {
 
             targetTile.SetAttributeTile(AttributeFactory.Create(eAttribute.Outpost));
             if(targetTile.attributeTile is OutpostAttribute outpostTile) {
-                outpostTile.Setup(3, _enemyObject);
+                // TODO : 本番は設定された難易度、プレイヤー人数を代入するようにする
+                OutpostResultData resultData = outpostConfig.CalculateOutpostData(eGameLevel.Normal, targetTile.areaID, 1);
+                outpostTile.Setup(resultData, _enemyObject);
                 // 初期生成
                 outpostTile.FirstSpawnBySeed(targetTile, mapRand);
                 // 管理クラスに追加

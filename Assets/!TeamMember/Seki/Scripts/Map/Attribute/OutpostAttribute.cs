@@ -1,3 +1,4 @@
+using Mirror.BouncyCastle.Security;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -17,6 +18,9 @@ public class OutpostAttribute : IAttributeTile {
     private int _enemySpawnCounter = -1;
     // 生成する敵の最大数
     private int _maxEnemySpawn = -1;
+
+    private const int _TURN_SPAWN_COUNT = 3; // 敵を生成するターン数
+    private const int _DEFAULT_SPAWN_RANGE = 2; // 敵を生成する範囲
 
     /// <summary>
     /// 自身の属性取得
@@ -61,16 +65,16 @@ public class OutpostAttribute : IAttributeTile {
     /// <summary>
     /// 準備処理
     /// </summary>
-    /// <param name="setCounter">スポーンまでのターンカウント</param>
-    /// <param name="enemyPrefab">スポーンさせる敵のプレハブ</param>
-    /// <param name="spawnRange">生成範囲（デフォルト: 2）</param>
-    public void Setup(int setCounter, EnemyBase enemyPrefab = null, int spawnRange = 2, int spawnCount = 10) {
-        _turnSpawnCounter = setCounter;
-        _maxSpawnCounter = setCounter;
+    /// <param name="setData"></param>
+    /// <param name="enemyPrefab"></param>
+    public void Setup(OutpostResultData setData, EnemyBase enemyPrefab = null) {
+        baseHP = setData.HP;
+        _maxEnemySpawn = setData.maxSpawnNum;
         _enemyPrefab = enemyPrefab;
-        _spawnRange = spawnRange;
-        _enemySpawnCounter = spawnCount;
-        _maxEnemySpawn = spawnCount;
+        _turnSpawnCounter = _TURN_SPAWN_COUNT;
+        _maxSpawnCounter = _TURN_SPAWN_COUNT;
+        _spawnRange = _DEFAULT_SPAWN_RANGE;
+        Debug.Log($" 前哨地生成完了 : HP {baseHP}");
     }
     /// <summary>
     /// シード値での生成
@@ -100,6 +104,7 @@ public class OutpostAttribute : IAttributeTile {
     /// <summary>
     /// 敵の生成処理
     /// </summary>
+    /// <param name="tile"></param>
     private void SpawnEnemy(HexTileData tile) {
         if(tile == null || _enemyPrefab == null) return;
         // 一定以上生成した場合、新たに生成しない
@@ -121,5 +126,14 @@ public class OutpostAttribute : IAttributeTile {
         _enemySpawnCounter++;
 
         Debug.Log($"[OutpostAttribute] 敵生成完了 : TileID {spawnTile.ID}");
+    }
+    /// <summary>
+    /// 前哨地のHPを計算
+    /// </summary>
+    /// <param name="data"></param>
+    /// <returns></returns>
+    public int CalcOutpostHP(OutpostData data) {
+
+        return 0;
     }
 }

@@ -21,11 +21,14 @@ MonoBehaviour:
       HP: 50
     - level: 2
       HP: 100
-    areaHPList:
+    areaDataList:
     - areaID: 0
       HP: 0
+      maxSpawnNum: 5
     - areaID: 1
       HP: 100
+      maxSpawnNum: 5
     - areaID: 2
       HP: 200
+      maxSpawnNum: 5
     playerNumHP: 0000000064000000c80000002c010000

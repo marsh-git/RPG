@@ -55,6 +55,7 @@ public class MainGamePart : BasePart
     /// <returns></returns>
     public override async UniTask ServerExecute()
     {
+        //ターンループ開始
         await UniTask.CompletedTask;
     }
 
@@ -65,6 +66,7 @@ public class MainGamePart : BasePart
     /// <returns></returns>
     public override async UniTask ClientExecute()
     {
+        //入力待ち
         await UniTask.CompletedTask;
     }
 }

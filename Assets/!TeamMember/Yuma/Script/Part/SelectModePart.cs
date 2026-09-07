@@ -59,7 +59,7 @@ public class SelectModePart : BasePart
     public override async UniTask ServerExecute()
     {
         await UniTask.WaitUntil(() => startGame);
-
+        await FadeManeger.instance.FadeOut(1.0f);
         //ゲーム開始
         await PartManager.instance.TransitionPart(GameEnum.eGamePart.MainGame);
     }

@@ -118,10 +118,10 @@ public class AttackManager : MonoBehaviour {
             return;
         }
 
-        ExecuteAttack(target);
+        ExecuteAttack((EnemyBase)target);
     }
 
-    private void ExecuteAttack(CharacterBase target) {
+    private void ExecuteAttack(EnemyBase target) {
         int damage =
             attacker.DamageCalculate(
                 actionData.Damage,

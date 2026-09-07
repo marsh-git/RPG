@@ -13,15 +13,15 @@ MonoBehaviour:
   m_Name: Dice Sprite Database
   m_EditorClassIdentifier: 
   DiceSprites:
-  - {fileID: 21300000, guid: acff33d5742907d42ad293fe77117c4a, type: 3}
-  - {fileID: 21300000, guid: acff33d5742907d42ad293fe77117c4a, type: 3}
-  - {fileID: 21300000, guid: acff33d5742907d42ad293fe77117c4a, type: 3}
-  - {fileID: 21300000, guid: acff33d5742907d42ad293fe77117c4a, type: 3}
-  - {fileID: 21300000, guid: acff33d5742907d42ad293fe77117c4a, type: 3}
-  - {fileID: 21300000, guid: acff33d5742907d42ad293fe77117c4a, type: 3}
-  - {fileID: 21300000, guid: acff33d5742907d42ad293fe77117c4a, type: 3}
-  - {fileID: 21300000, guid: acff33d5742907d42ad293fe77117c4a, type: 3}
-  - {fileID: 21300000, guid: acff33d5742907d42ad293fe77117c4a, type: 3}
-  - {fileID: 21300000, guid: acff33d5742907d42ad293fe77117c4a, type: 3}
-  - {fileID: 21300000, guid: acff33d5742907d42ad293fe77117c4a, type: 3}
-  - {fileID: 21300000, guid: acff33d5742907d42ad293fe77117c4a, type: 3}
+  - {fileID: 21300000, guid: f740b1c556a8ed246a2bdb9355e98dce, type: 3}
+  - {fileID: 21300000, guid: aeb2d7214a7455f48a6ff308d71d467c, type: 3}
+  - {fileID: 21300000, guid: e082553060dab0b40a38f3a334763f74, type: 3}
+  - {fileID: 21300000, guid: 541dd5b82d6b0d84982e108c74ae78ad, type: 3}
+  - {fileID: 21300000, guid: f266a00d63ff71b4e89094542a9104e6, type: 3}
+  - {fileID: 21300000, guid: f34acbc2822a00e4abe62c27edce6ef8, type: 3}
+  - {fileID: 21300000, guid: 8978573f392f69248a786e7833015834, type: 3}
+  - {fileID: 21300000, guid: 9129b46638743f1449d49001077c5745, type: 3}
+  - {fileID: 21300000, guid: 90f8f6f8b4408c44f8fddb2c82e3b564, type: 3}
+  - {fileID: 21300000, guid: 878c3c42a39461a48a669aafaa038c69, type: 3}
+  - {fileID: 21300000, guid: 2db2b26d97fb6fb438094d6998d3754b, type: 3}
+  - {fileID: 21300000, guid: ed63b582dddfdf34384a42e15f3e52c8, type: 3}

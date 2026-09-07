@@ -1323,7 +1323,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   diceSlotPrefab: {fileID: 1619480375450810035, guid: a4a01e1dabbd50d44847a93b5636062c, type: 3}
   slotRoot: {fileID: 6665201109898107247}
-  slotCount: 6
+  slotCount: 12
 --- !u!1 &4599025451244060724
 GameObject:
   m_ObjectHideFlags: 0

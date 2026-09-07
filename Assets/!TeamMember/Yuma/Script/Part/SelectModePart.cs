@@ -1,6 +1,8 @@
 using Cysharp.Threading.Tasks;
 using Mirror;
+using Steamworks;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -32,6 +34,9 @@ public class SelectModePart : BasePart
 
 
         GameObject localPlayerName = Instantiate(nameObj, rect);
+        string myName = SteamFriends.GetPersonaName();
+
+        localPlayerName.GetComponentInChildren<TextMeshProUGUI>().text = myName;
         Toggle checkBox = localPlayerName.GetComponent<Toggle>();
 
         checkBox.onValueChanged.AddListener(ToggleReady);

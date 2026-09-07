@@ -91,6 +91,7 @@ public class CustomNetworkManager : NetworkManager
     public override void OnClientConnect()
     {
         base.OnClientConnect();
+        if(!NetworkClient.ready)
         NetworkClient.Ready();
     }
 

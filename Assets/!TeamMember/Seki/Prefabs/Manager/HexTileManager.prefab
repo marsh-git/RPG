@@ -31,7 +31,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4970192142869630553}
-  - {fileID: 7591382933600607991}
   m_Father: {fileID: 3212008869848674931}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2595365664090884219
@@ -48,9 +47,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _spawnTile: {fileID: 1027954200922897724, guid: e7779f7551533e24f8d6004aa8546d53, type: 3}
   playerSpawner: {fileID: 2155969094092179325}
-  enemySpawner: {fileID: 3919919912482775474}
+  _enemyObject: {fileID: 6697827585679079801, guid: 8da2be6b0f9d8c549a12c5fd70014252, type: 3}
   mapConfig: {fileID: 11400000, guid: bea8557d1e6566b4295906b706264ef7, type: 2}
-  useStaticSeed: 0
+  cropsConfig: {fileID: 11400000, guid: 8b65ffa69cfc45d47a1a37c8c5c044c1, type: 2}
+  biomeTerrainConfig: {fileID: 11400000, guid: f032eae8e3dfb05449a91b7c50428766, type: 2}
+  outpostConfig: {fileID: 11400000, guid: 9018ffde7bbdca942a19accbab11081d, type: 2}
+  useStaticSeed: 1
   debugSeed: 12345
 --- !u!1 &4508912418598723066
 GameObject:
@@ -143,48 +145,3 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mapGenerator: {fileID: 2595365664090884219}
---- !u!1 &7583651550109867487
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 7591382933600607991}
-  - component: {fileID: 3919919912482775474}
-  m_Layer: 0
-  m_Name: EnemySpawner
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &7591382933600607991
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7583651550109867487}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 8761524683004981651}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3919919912482775474
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7583651550109867487}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 68e5bcd7c5b80bf469cf95b89737de80, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  outpostPrefab: {fileID: -7664422670795588050, guid: 6271264ce28ca92419a8799041688170, type: 3}

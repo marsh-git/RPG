@@ -10,18 +10,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 73eabe609443c96499c3a74156c65a38, type: 3}
-  m_Name: "\u6247\u5F62\u653B\u6483"
+  m_Name: "\u76F4\u7DDA1\u4F53\u653B\u6483"
   m_EditorClassIdentifier: 
-  ActionName: "\u6247\u5F62\u653B\u6483"
+  ActionName: "\u76F4\u7DDA1\u4F53\u653B\u6483"
   Icon: {fileID: 21300000, guid: 203ab28c29e69bd4a9564916af36eaee, type: 3}
-  Description: "\u6247\u5F62\u653B\u6483"
-  Element: 0
+  Description: "\u4EEE\u30C7\u30FC\u30BF"
+  Element: 1
   Target: 0
-  Damage: 100
-  RangeType: 3
+  Damage: 50
+  RangeType: 2
   Range: 3
-  AreaType: 4
+  AreaType: 3
   Area: 1
-  StatusEffect: {fileID: 0}
-  StatusChance: 0
+  StatusEffect: {fileID: 11400000, guid: fa127444a8ecd8c46b1d43cea5597d8f, type: 2}
+  StatusChance: 50
   ActionID: 

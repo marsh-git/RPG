@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: ActionDatabase
   m_EditorClassIdentifier: 
   Actions:
-  - {fileID: 11400000, guid: 21498c2528df24f488092069e6437ac0, type: 2}
   - {fileID: 11400000, guid: aadcb70cfc30a764bad179185d9c5828, type: 2}
+  - {fileID: 11400000, guid: 9222ff8d840bc3e4aa2e581eadc84ef1, type: 2}
+  - {fileID: 11400000, guid: ac886f062d7ecd2438ff611cbf35e297, type: 2}
+  - {fileID: 11400000, guid: 21498c2528df24f488092069e6437ac0, type: 2}
   - {fileID: 11400000, guid: 2da3c346b09b1f84981ff118d9a0e7b6, type: 2}

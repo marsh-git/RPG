@@ -12,15 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 73eabe609443c96499c3a74156c65a38, type: 3}
   m_Name: "\u4F53\u5F53\u305F\u308A"
   m_EditorClassIdentifier: 
-  ActionName: "\u4F53\u5F53\u305F\u308A"
+  ActionName: "\u5468\u56F21\u4F53\u653B\u6483"
   Icon: {fileID: 21300000, guid: d743c5f6fc3f35848bc936ce7178b85f, type: 3}
   Description: "\u4F53\u5F53\u305F\u308A"
-  Attribute: 0
+  Element: 0
   Target: 0
-  Damage: 15
-  Area: 0
+  Damage: 20
   RangeType: 0
   Range: 1
+  AreaType: 0
+  Area: 0
   StatusEffect: {fileID: 11400000, guid: 7ed26d70056036d4b8a09b47559b59ae, type: 2}
   StatusChance: 30
   ActionID: 

@@ -21,6 +21,9 @@ public enum ActionAreaType {
     Single,     // 指定した1体
     Around,     // 指定地点の周囲
     SelfAround, // 自分の周囲
+    DirectionLine, // 指定方向の直線
+    DirectionCone, // 指定方向の扇形
+    Cross, // 十字
 }
 
 [CreateAssetMenu(fileName = "ActionData", menuName = "RPG/Action")]

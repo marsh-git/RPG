@@ -32,27 +32,50 @@ public static class TileRangeExpansion {
     /// <summary>
     /// 指定方向の扇形範囲内のタイル取得
     /// ※startTile自体は含めない
+    /// 1マス目：1マス
+    /// 2マス目：3マス
+    /// 3マス目：5マス
     /// </summary>
-    /// <param name="startTile"></param>
-    /// <param name="dir"></param>
-    /// <returns></returns>
-    public static List<HexTileData> GetFanShapedTile(HexTileData startTile, eDirectionHex dir) {
-        if(startTile == null || dir == eDirectionHex.Invalid) return new List<HexTileData>();
-        List<HexTileData> rangeTileList = new List<HexTileData>(3);
-        // 方向の取得
-        eDirectionHex forward = dir;
+    public static List<HexTileData> GetFanShapedTile(
+        HexTileData startTile,
+        eDirectionHex dir,
+        int range) {
+        List<HexTileData> rangeTileList = new List<HexTileData>();
+
+        if (startTile == null ||
+            dir == eDirectionHex.Invalid ||
+            range <= 0) {
+            return rangeTileList;
+        }
+
         eDirectionHex left = dir.GetLeftDir();
         eDirectionHex right = dir.GetRightDir();
 
-        // 前方タイルの取得
-        HexTileData forwardTile = HexTileManager.instance.GetToDirTile(startTile.gridPosX, startTile.gridPosY, forward);
-        if(forwardTile != null) rangeTileList.Add(forwardTile);
-        // 左タイルの取得
-        HexTileData leftTile = HexTileManager.instance.GetToDirTile(startTile.gridPosX, startTile.gridPosY, left);
-        if(leftTile != null) rangeTileList.Add(leftTile);
-        // 右タイルの取得
-        HexTileData rightTile = HexTileManager.instance.GetToDirTile(startTile.gridPosX, startTile.gridPosY, right);
-        if(rightTile != null) rangeTileList.Add(rightTile);
+        for (int distance = 1; distance <= range; distance++) {
+            // 自分から見て正面にあるタイル
+            List<HexTileData> forwardTiles =
+                GetNumDirTile(startTile, dir, distance);
+
+            if (forwardTiles.Count == 0)
+                continue;
+
+            HexTileData centerTile =
+                forwardTiles[forwardTiles.Count - 1];
+
+            AddTile(rangeTileList, centerTile);
+
+            // 正面タイルから左右に広げる
+            HexTileData leftTile = centerTile;
+            HexTileData rightTile = centerTile;
+
+            for (int width = 1; width < distance; width++) {
+                leftTile = GetToDirection(leftTile, left);
+                rightTile = GetToDirection(rightTile, right);
+
+                AddTile(rangeTileList, leftTile);
+                AddTile(rangeTileList, rightTile);
+            }
+        }
 
         return rangeTileList;
     }
@@ -215,5 +238,29 @@ public static class TileRangeExpansion {
         int dq = q1 - q2;
         int dr = r1 - r2;
         return (Mathf.Abs(dq) + Mathf.Abs(dr) + Mathf.Abs(dq + dr)) / 2;
+    }
+
+
+    //古谷追加物
+
+    private static HexTileData GetToDirection(
+     HexTileData tile,
+     eDirectionHex dir) {
+        if (tile == null)
+            return null;
+
+        return HexTileManager.instance.GetToDirTile(
+            tile.gridPosX,
+            tile.gridPosY,
+            dir
+        );
+    }
+
+    private static void AddTile(
+        List<HexTileData> tileList,
+        HexTileData tile) {
+        if (tile != null && !tileList.Contains(tile)) {
+            tileList.Add(tile);
+        }
     }
 }
